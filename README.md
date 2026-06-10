@@ -12,6 +12,7 @@
 |---------|------|-------------|
 | 1.4.2 | 2026-06-10 | LemonSqueezy webhook integration: subscription renewal with ACA cold-start retry. License expiry logic: expired → 30 days from payment, not expired → 30 days from current expiry. Bilingual README and usage guide. |
 | 1.4.1 | 2026-06-09 | Secure onboarding: email verification before trial, manual license entry only, auto-saves to local config. Dashboard redirects to /settings if config is incomplete. |
+| 1.4.0 | 2026-06-08 | Initial commercial release: new users can activate a 7-day free trial via email verification; existing users can directly enter their license key and email. Connects to Charles Schwab brokerage via Web API. With sufficient configuration, enables long-term unattended connection. |
 | 1.3.2 | 2026-06-07 | Code standards enforcement + Code obfuscation for release builds. |
 | 1.3.0 | 2026-06-06 | Unattended breakthrough: Automated browser login, MFA detection notification, SSL auto-renew, 30-hour retry buffer. 5 limiting factors solved. |
 | 1.2.5 | 2026-06-06 | Settings page — browser UI for License Key, Schwab credentials, RedirectUri. |
