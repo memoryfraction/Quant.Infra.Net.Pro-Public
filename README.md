@@ -95,7 +95,7 @@
 ## Community & Support
 
 - **Telegram Group**: https://t.me/+VPy-VLis8gVmYWM1
-- **Business licensing & custom development**: rex.fan18@gmail.com
+- **Business licensing & custom development**: alphawealthlab@outlook.com
 - **Product website**: www.alpha-wealth-lab.com
 
 ## License
@@ -179,7 +179,7 @@
 ## 社区与支持
 
 - **Telegram 群组**: https://t.me/+VPy-VLis8gVmYWM1
-- **商业授权与定制开发**: rex.fan18@gmail.com
+- **商业授权与定制开发**: alphawealthlab@outlook.com
 - **产品官网**: www.alpha-wealth-lab.com
 
 ## License
@@ -189,3 +189,4 @@ Quant.Infra.Net.Pro 是一款商业软件。7 天免费试用期后需要有效�
 ---
 
 (c) 2026 AlphaWealthLab. All rights reserved. [www.alpha-wealth-lab.com](https://www.alpha-wealth-lab.com)
+
