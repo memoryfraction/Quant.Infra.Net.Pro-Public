@@ -13,7 +13,7 @@
 | 1.4.2 | 2026-06-10 | LemonSqueezy webhook integration: subscription renewal with ACA cold-start retry. License expiry logic: expired → 30 days from payment, not expired → 30 days from current expiry. Bilingual README and usage guide. |
 | 1.4.1 | 2026-06-09 | Secure onboarding: email verification before trial, manual license entry only, auto-saves to local config. Dashboard redirects to /settings if config is incomplete. |
 | 1.3.2 | 2026-06-07 | Code standards enforcement + Code obfuscation for release builds. |
-| 1.3.0 | 2026-06-06 | Unattended breakthrough: Automated browser login, MFA recovery, SSL auto-renew, 30-hour retry buffer. 5 limiting factors solved. |
+| 1.3.0 | 2026-06-06 | Unattended breakthrough: Automated browser login, MFA detection notification, SSL auto-renew, 30-hour retry buffer. 5 limiting factors solved. |
 | 1.2.5 | 2026-06-06 | Settings page — browser UI for License Key, Schwab credentials, RedirectUri. |
 | 1.2.3 | 2026-06-06 | Unattended architecture: Token encryption, 15-min background refresh, exponential backoff retry. |
 | 1.0.0 | 2025-05-29 | Initial release: Schwab OAuth, account management, quotes, orders, LicenseForge validation, EULA, HTTPS, single-file deploy. |
@@ -30,9 +30,9 @@
 |-----------|--------------------------|
 | Schwab access token expires every 30 minutes, refresh token expires every 7 days | Fully automatic token lifecycle: background refresh every 15 min + automated browser login on day 6.5 |
 | OAuth re-authorization requires a browser (breaks headless trading) | Automated browser re-login with 30-hour retry window |
-| MFA / 2FA blocks automated login | Dashboard MFA recovery banner: one-click manual re-authorize or paste authorization code |
+| MFA / 2FA blocks automated login after credentials are submitted | App detects MFA and suspends auto-reauth for manual intervention. MFA cannot be automated - user must authorize via browser when prompted. |
 | API credentials are complex and error-prone to configure | Browser-based Settings UI: configure all credentials through web interface |
-| No visibility into whether unattended trading is working | Auto-refreshing Dashboard: token status, re-auth heartbeat, cookie status, MFA alerts every 60 seconds |
+| No visibility into whether unattended trading is working | Auto-refreshing Dashboard: token status, re-auth heartbeat, cookie status every 60 seconds |
 | SSL certificate management is a hassle for local apps | Auto-generated 5-year cert, auto-renewed if less than 30 days remaining |
 
 ## What You Get
@@ -116,9 +116,9 @@
 |------|---------------------|
 | Schwab Access Token 每 30 分钟过期，Refresh Token 每 7 天过期 | 全自动 Token 生命周期管理：每 15 分钟后台刷新 + 第 6.5 天代码操控浏览器重新登录 |
 | OAuth 重授权需要浏览器操作（破坏无人值守） | 代码操控浏览器重新登录，内置 30 小时重试窗口 |
-| MFA / 二步验证阻断自动化登录 | 仪表盘 MFA 恢复横幅：一键手动重授权或粘贴授权码 |
+| MFA / 二步验证阻断自动化登录 | 应用可检测到 MFA 并暂停自动重授权，等待用户手动处理。MFA 无法自动化绕过，需用户在浏览器中完成授权。 |
 | API 凭据配置繁琐易错 | 浏览器 UI 配置页面：所有凭据通过网页设置 |
-| 无人值守运行状态不可见 | 每 60 秒自动刷新仪表盘：Token 状态、重授权心跳、Cookie 状态、MFA 告警一目了然 |
+| 无人值守运行状态不可见 | 每 60 秒自动刷新仪表盘：Token 状态、重授权心跳、Cookie 状态一目了然 |
 | 本地 SSL 证书管理麻烦 | 自动生成 5 年有效证书，到期前 30 天自动续期 |
 
 ## 功能总览
