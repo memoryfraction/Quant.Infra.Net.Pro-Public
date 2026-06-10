@@ -10,7 +10,7 @@
 
 | Version | Date | Description |
 |---------|------|-------------|
-| **1.4.2** | 2026-06-10 | LemonSqueezy webhook integration: subscription renewal with ACA cold-start retry. License expiry logic: expired → 30 days from payment, not expired → 30 days from current expiry. Bilingual README and usage guide. |
+| 1.4.2 | 2026-06-10 | LemonSqueezy webhook integration: subscription renewal with ACA cold-start retry. License expiry logic: expired → 30 days from payment, not expired → 30 days from current expiry. Bilingual README and usage guide. |
 | 1.4.1 | 2026-06-09 | Secure onboarding: email verification before trial, manual license entry only, auto-saves to local config. Dashboard redirects to /settings if config is incomplete. |
 | 1.3.2 | 2026-06-07 | Code standards enforcement + Code obfuscation for release builds. |
 | 1.3.0 | 2026-06-06 | Unattended breakthrough: Automated browser login, MFA recovery, SSL auto-renew, 30-hour retry buffer. 5 limiting factors solved. |
@@ -104,7 +104,7 @@
 
 ---
 
-# Chinese
+# 中文版
 
 ## Quant.Infra.Net.Pro — Charles Schwab 无人值守交易网关
 
@@ -187,6 +187,3 @@
 Quant.Infra.Net.Pro 是一款商业软件。7 天免费试用期后需要有效的授权码才能继续使用。
 
 ---
-
-(c) 2026 AlphaWealthLab. All rights reserved. [www.alpha-wealth-lab.com](https://www.alpha-wealth-lab.com)
-
