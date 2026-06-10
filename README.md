@@ -42,7 +42,7 @@
 | Account Dashboard | Real-time summary: total value, cash balance, buying power, unrealized/realized P&L |
 | Positions View | Current holdings with cost basis and unrealized P&L |
 | Real-Time Quotes | Stock quotes (AAPL, MSFT, etc.) with auto-refresh |
-| Options Chain | Options data with Greeks (Delta, Gamma, Theta, Vega, Rho, IV, OI) |
+| Options Chain | Options data (strike, expiration, type, bid/ask, last price, volume, open interest) |
 | Order History | Last 60 days of orders with execution details |
 | Price History API | OHLCV candlestick data for US equities and options, intraday to monthly |
 | License Validation | LicenseForge-backed periodic verification with offline-tolerant cache |
@@ -128,7 +128,7 @@
 | 账户仪表盘 | 实时总览：账户总值、现金余额、购买力、未实现/已实现盈亏 |
 | 持仓视图 | 当前持仓及成本价、未实现盈亏 |
 | 实时行情 | 股票实时报价（AAPL、MSFT 等），自动刷新 |
-| 期权链 | 完整希腊字母数据（Delta、Gamma、Theta、Vega、Rho、IV、OI） |
+| 期权链 | 期权数据（行权价、到期日、类型、买卖价、最新价、成交量、持仓量） |
 | 订单历史 | 最近 60 天订单记录 |
 | 历史行情 API | 美股/期权 OHLCV 蜡烛图，支持分钟级到月级 |
 | License 验证 | LicenseForge 驱动的定期验证，离线缓存容错 |
