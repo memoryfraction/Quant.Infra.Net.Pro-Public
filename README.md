@@ -1,4 +1,4 @@
-# Quant.Infra.Net.Pro
+﻿# Quant.Infra.Net.Pro
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-blueviolet)](https://dotnet.microsoft.com/download/dotnet/8.0)
 
@@ -12,10 +12,10 @@
 |---------|------|-------------|
 | **1.4.2** | 2026-06-10 | LemonSqueezy webhook integration: subscription renewal with ACA cold-start retry. License expiry logic: expired → 30 days from payment, not expired → 30 days from current expiry. Bilingual README and usage guide. |
 | 1.4.1 | 2026-06-09 | Secure onboarding: email verification before trial, manual license entry only, auto-saves to local config. Dashboard redirects to /settings if config is incomplete. |
-| 1.3.2 | 2026-06-07 | Code standards enforcement + Obfuscar code obfuscation for Release builds. |
-| 1.3.0 | 2026-06-06 | Unattended breakthrough: Playwright auto-re-auth, MFA recovery, SSL auto-renew, cookie persistence, 30-hour retry buffer. 5 limiting factors solved. |
+| 1.3.2 | 2026-06-07 | Code standards enforcement + Code obfuscation for release builds. |
+| 1.3.0 | 2026-06-06 | Unattended breakthrough: Automated browser login, MFA recovery, SSL auto-renew, 30-hour retry buffer. 5 limiting factors solved. |
 | 1.2.5 | 2026-06-06 | Settings page — browser UI for License Key, Schwab credentials, RedirectUri. |
-| 1.2.3 | 2026-06-06 | Unattended architecture: DPAPI token store, 15-min background refresh, Polly ACA cold-start retry. |
+| 1.2.3 | 2026-06-06 | Unattended architecture: Token encryption, 15-min background refresh, exponential backoff retry. |
 | 1.0.0 | 2025-05-29 | Initial release: Schwab OAuth, account management, quotes, orders, LicenseForge validation, EULA, HTTPS, single-file deploy. |
 
 ---
@@ -28,8 +28,8 @@
 
 | Challenge | How Pro Edition Solves It |
 |-----------|--------------------------|
-| Schwab access token expires every 30 minutes, refresh token expires every 7 days | Fully automatic token lifecycle: background refresh every 15 min + Playwright auto-re-auth on day 6.5 |
-| OAuth re-authorization requires a browser (breaks headless trading) | Headless Playwright automation: multi-selector fallback, 30-hour retry window |
+| Schwab access token expires every 30 minutes, refresh token expires every 7 days | Fully automatic token lifecycle: background refresh every 15 min + automated browser login on day 6.5 |
+| OAuth re-authorization requires a browser (breaks headless trading) | Automated browser re-login with 30-hour retry window |
 | MFA / 2FA blocks automated login | Dashboard MFA recovery banner: one-click manual re-authorize or paste authorization code |
 | API credentials are complex and error-prone to configure | Browser-based Settings UI: configure all credentials through web interface |
 | No visibility into whether unattended trading is working | Auto-refreshing Dashboard: token status, re-auth heartbeat, cookie status, MFA alerts every 60 seconds |
@@ -46,7 +46,7 @@
 | Order History | Last 60 days of orders with execution details |
 | Price History API | OHLCV candlestick data for US equities and options, intraday to monthly |
 | License Validation | LicenseForge-backed periodic verification with offline-tolerant cache |
-| Swagger API | Full RESTful API for programmatic access |
+| Web API | Full RESTful API for programmatic access |
 
 ## Who Is This For
 
@@ -114,8 +114,8 @@
 
 | 痛点 | Pro Edition 如何解决 |
 |------|---------------------|
-| Schwab Access Token 每 30 分钟过期，Refresh Token 每 7 天过期 | 全自动 Token 生命周期管理：每 15 分钟后台刷新 + 第 6.5 天 Playwright 自动重授权 |
-| OAuth 重授权需要浏览器操作（破坏无人值守） | 无头 Playwright 自动化：多层选择器回退，30 小时重试窗口 |
+| Schwab Access Token 每 30 分钟过期，Refresh Token 每 7 天过期 | 全自动 Token 生命周期管理：每 15 分钟后台刷新 + 第 6.5 天代码操控浏览器重新登录 |
+| OAuth 重授权需要浏览器操作（破坏无人值守） | 代码操控浏览器重新登录，内置 30 小时重试窗口 |
 | MFA / 二步验证阻断自动化登录 | 仪表盘 MFA 恢复横幅：一键手动重授权或粘贴授权码 |
 | API 凭据配置繁琐易错 | 浏览器 UI 配置页面：所有凭据通过网页设置 |
 | 无人值守运行状态不可见 | 每 60 秒自动刷新仪表盘：Token 状态、重授权心跳、Cookie 状态、MFA 告警一目了然 |
