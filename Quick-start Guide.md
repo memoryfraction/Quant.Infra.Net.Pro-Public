@@ -1,6 +1,8 @@
-# Quant.Infra.Net.Pro 使用说明 / User Manual
+# Quant.Infra.Net.Pro 快速开始指南 / Quick Start Guide
 
 > **Document Version:** 1.4.2 | **Applies to:** Quant.Infra.Net.Pro v1.4.2+
+>
+> Free download, free 7-day in-app trial. This guide replaces the old in-package `UserManual.md`.
 
 ---
 
@@ -16,11 +18,11 @@ The core problem it solves: Schwab API tokens expire frequently (access token: 3
 
 | Step | Action | Details |
 |------|--------|---------|
-| 1 | Download | Get the ZIP for your OS from [GitHub Releases](https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases) |
+| 1 | Download for free | Get the ZIP for your OS from [GitHub Releases](https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases) |
 | 2 | Extract | Unzip to any folder |
 | 3 | Run | Windows: `Quant.Infra.Net.Pro.Web.exe`. macOS/Linux: `./Quant.Infra.Net.Pro.Web` |
 | 4 | Open browser | Navigate to **https://127.0.0.1:8443** |
-| 5 | Activate | Follow the on-screen /start flow — verify email, activate trial or enter license |
+| 5 | Activate free trial | Follow the on-screen /start flow — verify email, activate the 7-day trial, or enter an existing license |
 | 6 | Configure | Go to /settings, enter Schwab App Key, App Secret, Account Number |
 | 7 | Trade | Dashboard shows your account, positions, quotes, and order history |
 
@@ -39,7 +41,7 @@ The core problem it solves: Schwab API tokens expire frequently (access token: 3
 
 **Existing Users:** Go directly to /settings and enter your License Key and Email manually.
 
-**Free Trial:** 7 days, full functionality, 1 device. One trial per email per product (even after expiry, no new trial). Email verification required before activation.
+**Free Trial:** The app is free to download and includes a 7-day in-app trial with full functionality on 1 device. One trial per email per product (even after expiry, no new trial). Email verification required before activation.
 
 **Renewal:** After successful payment via purchase link, license auto-extends. If expired: +30 days from payment time. If active: +30 days from current expiry.
 
@@ -126,11 +128,11 @@ Full API documentation available in-app when the application is running.
 
 | 步骤 | 操作 | 说明 |
 |------|------|------|
-| 1 | 下载 | 从 [GitHub Releases](https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases) 下载对应操作系统的 ZIP 包 |
+| 1 | 免费下载 | 从 [GitHub Releases](https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases) 下载对应操作系统的 ZIP 包 |
 | 2 | 解压 | 解压到任意文件夹 |
 | 3 | 运行 | Windows：`Quant.Infra.Net.Pro.Web.exe`。macOS/Linux：`./Quant.Infra.Net.Pro.Web` |
 | 4 | 打开浏览器 | 访问 **https://127.0.0.1:8443** |
-| 5 | 激活 | 按 /start 页面指引验证邮箱，激活试用或输入 License |
+| 5 | 激活免费试用 | 按 /start 页面指引验证邮箱，激活 7 天免费试用或输入已有 License |
 | 6 | 配置 | 前往 /settings 输入 Schwab App Key、App Secret、Account Number |
 | 7 | 开始交易 | 仪表盘显示账户、持仓、行情、订单历史 |
 
@@ -149,7 +151,7 @@ Full API documentation available in-app when the application is running.
 
 **已有用户：** 直接前往 /settings 手动输入 License Key 和 Email。
 
-**免费试用：** 7 天，全部功能，1 台设备。同一邮箱同一产品仅可领取一次（过期后不再签发）。试用前需完成邮箱验证。
+**免费试用：** 应用可免费下载，并内置 7 天免费试用；试用期内开放全部功能，限 1 台设备。同一邮箱同一产品仅可领取一次（过期后不再签发）。试用前需完成邮箱验证。
 
 **续费：** 通过购买链接付款成功后 License 自动延长。已过期：从付款时间 +30 天。未过期：从当前过期时间 +30 天。
 

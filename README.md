@@ -2,7 +2,7 @@
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-blueviolet)](https://dotnet.microsoft.com/download/dotnet/8.0)
 
-> **Quant.Infra.Net.Pro** — Charles Schwab unattended trading gateway. Runs on your machine, data never leaves your computer.
+> **Quant.Infra.Net.Pro** — Charles Schwab unattended trading gateway. Free to download, free to try, and runs on your machine so trading data never leaves your computer.
 
 ---
 
@@ -62,15 +62,15 @@
 | Charles Schwab brokerage account | Required to trade. Open at schwab.com |
 | Schwab API credentials (Client ID & Secret) | Apply via Schwab Developer Portal (2-5 business days) |
 | .NET 8 Runtime | Download from dotnet.microsoft.com |
-| License key | Purchased separately or activate a 7-day free trial in-app |
+| License activation | Activate a 7-day free trial in-app, or enter an existing license for continued use |
 
 ## Quick Start
 
-1. **Download** the ZIP package for your OS from [GitHub Releases](https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases)
+1. **Download for free** the ZIP package for your OS from [GitHub Releases](https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases)
 2. **Extract** to any folder
 3. **Run** the executable (Windows: `Quant.Infra.Net.Pro.Web.exe`, macOS/Linux: `./Quant.Infra.Net.Pro.Web`)
 4. **Open** your browser at **https://127.0.0.1:8443**
-5. **Activate**: Follow the on-screen /start flow — verify your email, activate a 7-day trial or enter an existing license
+5. **Activate a free trial**: Follow the on-screen /start flow — verify your email, activate a 7-day trial, or enter an existing license
 6. **Configure**: Go to /settings and enter your Schwab App Key, App Secret, and Account Number
 7. **Start trading**: The Dashboard shows your account, positions, quotes, and order history
 
@@ -82,7 +82,7 @@
 |------|-----------|----------------|
 | 1 | Open /start, enter your email | Go directly to /settings |
 | 2 | Verify email via inbox link | Enter License Key and Email manually |
-| 3 | Activate 7-day free trial or enter purchased license | Click Save |
+| 3 | Activate 7-day free trial or enter existing license | Click Save |
 | 4 | App saves License:Key and License:Email to config | Dashboard is ready |
 | 5 | Go to /settings to enter Schwab API credentials | |
 
@@ -102,7 +102,7 @@
 
 ## License
 
-**Quant.Infra.Net.Pro** is a commercial software product. A valid license key is required for continued use beyond the 7-day free trial period.
+**Quant.Infra.Net.Pro** is free to download and free to try. A valid license key is required only for continued use beyond the 7-day free trial period.
 
 ---
 
@@ -148,15 +148,15 @@
 | Charles Schwab 交易账户 | 前往 schwab.com 开户 |
 | Schwab API 凭据（Client ID & Secret） | 通过 Schwab Developer Portal 申请，审核需 2-5 个工作日 |
 | .NET 8 Runtime | 从 dotnet.microsoft.com 下载 |
-| License Key | 购买或在应用内激活 7 天免费试用 |
+| License 激活 | 应用内可激活 7 天免费试用；继续使用时输入已有 License |
 
 ## 快速开始
 
-1. 从 [GitHub Releases](https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases) 下载对应操作系统的 ZIP 包
+1. 从 [GitHub Releases](https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases) 免费下载对应操作系统的 ZIP 包
 2. 解压到任意文件夹
 3. 运行可执行文件（Windows：`Quant.Infra.Net.Pro.Web.exe`，macOS/Linux：`./Quant.Infra.Net.Pro.Web`）
 4. 在浏览器中访问 **https://127.0.0.1:8443**
-5. 按照 /start 页面指引：验证邮箱 → 激活 7 天试用或输入已有 License
+5. 按照 /start 页面指引：验证邮箱 → 激活 7 天免费试用或输入已有 License
 6. 前往 /settings 输入 Schwab API 凭据
 
 > 首次启动浏览器会显示安全警告——本地自签名证书的正常现象，按控制台提示信任一次即可。
@@ -167,7 +167,7 @@
 |------|--------|---------|
 | 1 | 打开 /start 输入邮箱 | 直接前往 /settings |
 | 2 | 点击邮箱中的验证链接，返回验证 | 手动输入 License Key 和 Email |
-| 3 | 激活 7 天试用或输入已购 License | 点击保存 |
+| 3 | 激活 7 天免费试用或输入已有 License | 点击保存 |
 | 4 | 应用自动保存 License 信息到本地配置 | 仪表盘就绪 |
 | 5 | 前往 /settings 配置 Schwab API 凭据 | |
 
@@ -187,6 +187,6 @@
 
 ## License
 
-Quant.Infra.Net.Pro 是一款商业软件。7 天免费试用期后需要有效的授权码才能继续使用。
+Quant.Infra.Net.Pro 可免费下载并免费试用。7 天免费试用期后，继续使用才需要有效授权码。
 
 ---
