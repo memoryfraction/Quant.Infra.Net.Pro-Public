@@ -98,6 +98,7 @@
 - **Telegram Group**: https://t.me/+VPy-VLis8gVmYWM1
 - **Business licensing & custom development**: alphawealthlab@outlook.com
 - **Product website**: www.alpha-wealth-lab.com
+- **Risk disclaimer**: [Charles Schwab Risk Disclaimer](CHARLES_SCHWAB_DISCLAIMER.md)
 
 ## License
 
@@ -182,6 +183,7 @@
 - **Telegram 群组**: https://t.me/+VPy-VLis8gVmYWM1
 - **商业授权与定制开发**: alphawealthlab@outlook.com
 - **产品官网**: www.alpha-wealth-lab.com
+- **风险免责声明**: [Charles Schwab 风险免责声明](CHARLES_SCHWAB_DISCLAIMER.md)
 
 ## License
 

@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Quant.Infra.Net.Pro-Public.slnx/FileContentIndex
+/.vs/Quant.Infra.Net.Pro-Public.slnx/v18/.wsuo
+/.vs/slnx.sqlite
