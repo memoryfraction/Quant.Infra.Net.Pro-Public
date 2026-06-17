@@ -22,7 +22,7 @@ The core problem it solves: Schwab API tokens expire frequently (access token: 3
 | 2 | Extract | Unzip to any folder |
 | 3 | Run | Windows: `Quant.Infra.Net.Pro.Web.exe`. macOS/Linux: `./Quant.Infra.Net.Pro.Web` |
 | 4 | Open browser | Navigate to **https://127.0.0.1:8443** |
-| 5 | Activate free trial | Follow the on-screen /start flow — verify email, activate the 7-day trial, or enter an existing license |
+| 5 | Activate free trial | Follow the on-screen /start flow — verify email, activate the 3-month trial, or enter an existing license |
 | 6 | Configure | Go to /settings, enter Schwab App Key, App Secret, Account Number |
 | 7 | Trade | Dashboard shows your account, positions, quotes, and order history |
 
@@ -41,7 +41,7 @@ The core problem it solves: Schwab API tokens expire frequently (access token: 3
 
 **Existing Users:** Go directly to /settings and enter your License Key and Email manually.
 
-**Free Trial:** The app is free to download and includes a 7-day in-app trial with full functionality on 1 device. One trial per email per product (even after expiry, no new trial). Email verification required before activation.
+**Free Trial:** The app is free to download and includes a 3-month in-app trial with full functionality on 1 device. One trial per email per product (even after expiry, no new trial). Email verification required before activation.
 
 **Renewal:** After successful payment via purchase link, license auto-extends. If expired: +30 days from payment time. If active: +30 days from current expiry.
 
@@ -132,7 +132,7 @@ Full API documentation available in-app when the application is running.
 | 2 | 解压 | 解压到任意文件夹 |
 | 3 | 运行 | Windows：`Quant.Infra.Net.Pro.Web.exe`。macOS/Linux：`./Quant.Infra.Net.Pro.Web` |
 | 4 | 打开浏览器 | 访问 **https://127.0.0.1:8443** |
-| 5 | 激活免费试用 | 按 /start 页面指引验证邮箱，激活 7 天免费试用或输入已有 License |
+| 5 | 激活免费试用 | 按 /start 页面指引验证邮箱，激活 3 个月免费试用或输入已有 License |
 | 6 | 配置 | 前往 /settings 输入 Schwab App Key、App Secret、Account Number |
 | 7 | 开始交易 | 仪表盘显示账户、持仓、行情、订单历史 |
 
@@ -143,7 +143,7 @@ Full API documentation available in-app when the application is running.
 **新用户：**
 1. 打开 /start 输入邮箱
 2. 点击"发送验证链接"，查看收件箱（含垃圾邮件），点击验证链接后返回 /start 再次点击"验证邮箱"
-3. 选择 **7 天免费试用**（立即激活）或 **我有 License**（手动输入授权码）
+3. 选择 **3 个月免费试用**（立即激活）或 **我有 License**（手动输入授权码）
 4. 激活成功后应用自动保存 License Key 和 Email 到本地配置
 5. 前往 /settings 输入 Schwab API 凭据
 
@@ -151,7 +151,7 @@ Full API documentation available in-app when the application is running.
 
 **已有用户：** 直接前往 /settings 手动输入 License Key 和 Email。
 
-**免费试用：** 应用可免费下载，并内置 7 天免费试用；试用期内开放全部功能，限 1 台设备。同一邮箱同一产品仅可领取一次（过期后不再签发）。试用前需完成邮箱验证。
+**免费试用：** 应用可免费下载，并内置 3 个月免费试用；试用期内开放全部功能，限 1 台设备。同一邮箱同一产品仅可领取一次（过期后不再签发）。试用前需完成邮箱验证。
 
 **续费：** 通过购买链接付款成功后 License 自动延长。已过期：从付款时间 +30 天。未过期：从当前过期时间 +30 天。
 

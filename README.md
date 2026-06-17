@@ -12,7 +12,7 @@
 |---------|------|-------------|
 | 1.4.2 | 2026-06-10 | LemonSqueezy webhook integration: subscription renewal with ACA cold-start retry. License expiry logic: expired → 30 days from payment, not expired → 30 days from current expiry. Bilingual README and usage guide. |
 | 1.4.1 | 2026-06-09 | Secure onboarding: email verification before trial, manual license entry only, auto-saves to local config. Dashboard redirects to /settings if config is incomplete. |
-| 1.4.0 | 2026-06-08 | Initial commercial release: new users can activate a 7-day free trial via email verification; existing users can directly enter their license key and email. Connects to Charles Schwab brokerage via Web API. With sufficient configuration, enables long-term unattended connection. |
+| 1.4.0 | 2026-06-08 | Initial commercial release: new users can activate a 3-month free trial via email verification; existing users can directly enter their license key and email. Connects to Charles Schwab brokerage via Web API. With sufficient configuration, enables long-term unattended connection. |
 | 1.3.2 | 2026-06-07 | Code standards enforcement + Code obfuscation for release builds. |
 | 1.3.0 | 2026-06-06 | Unattended breakthrough: Automated browser login, MFA detection notification, SSL auto-renew, 30-hour retry buffer. 5 limiting factors solved. |
 | 1.2.5 | 2026-06-06 | Settings page — browser UI for License Key, Schwab credentials, RedirectUri. |
@@ -62,7 +62,7 @@
 | Charles Schwab brokerage account | Required to trade. Open at schwab.com |
 | Schwab API credentials (Client ID & Secret) | Apply via Schwab Developer Portal (2-5 business days) |
 | .NET 8 Runtime | Download from dotnet.microsoft.com |
-| License activation | Activate a 7-day free trial in-app, or enter an existing license for continued use |
+| License activation | Activate a 3-month free trial in-app, or enter an existing license for continued use |
 
 ## Quick Start
 
@@ -70,7 +70,7 @@
 2. **Extract** to any folder
 3. **Run** the executable (Windows: `Quant.Infra.Net.Pro.Web.exe`, macOS/Linux: `./Quant.Infra.Net.Pro.Web`)
 4. **Open** your browser at **https://127.0.0.1:8443**
-5. **Activate a free trial**: Follow the on-screen /start flow — verify your email, activate a 7-day trial, or enter an existing license
+5. **Activate a free trial**: Follow the on-screen /start flow — verify your email, activate a 3-month trial, or enter an existing license
 6. **Configure**: Go to /settings and enter your Schwab App Key, App Secret, and Account Number
 7. **Start trading**: The Dashboard shows your account, positions, quotes, and order history
 
@@ -82,7 +82,7 @@
 |------|-----------|----------------|
 | 1 | Open /start, enter your email | Go directly to /settings |
 | 2 | Verify email via inbox link | Enter License Key and Email manually |
-| 3 | Activate 7-day free trial or enter existing license | Click Save |
+| 3 | Activate 3-month free trial or enter existing license | Click Save |
 | 4 | App saves License:Key and License:Email to config | Dashboard is ready |
 | 5 | Go to /settings to enter Schwab API credentials | |
 
@@ -90,7 +90,7 @@
 
 | Feature | Details |
 |---------|---------|
-| Free Trial | 7 days, full functionality, 1 device. One trial per email per product. Email verification required. |
+| Free Trial | 3 months, full functionality, 1 device. One trial per email per product. Email verification required. |
 | Renewal | After successful payment via purchase link, license auto-extends. Expired: +30 days from payment. Active: +30 days from current expiry. |
 
 ## Community & Support
@@ -102,7 +102,7 @@
 
 ## License
 
-**Quant.Infra.Net.Pro** is free to download and free to try. A valid license key is required only for continued use beyond the 7-day free trial period.
+**Quant.Infra.Net.Pro** is free to download and free to try. A valid license key is required only for continued use beyond the 3-month free trial period.
 
 ---
 
@@ -148,7 +148,7 @@
 | Charles Schwab 交易账户 | 前往 schwab.com 开户 |
 | Schwab API 凭据（Client ID & Secret） | 通过 Schwab Developer Portal 申请，审核需 2-5 个工作日 |
 | .NET 8 Runtime | 从 dotnet.microsoft.com 下载 |
-| License 激活 | 应用内可激活 7 天免费试用；继续使用时输入已有 License |
+| License 激活 | 应用内可激活 3 个月免费试用；继续使用时输入已有 License |
 
 ## 快速开始
 
@@ -156,7 +156,7 @@
 2. 解压到任意文件夹
 3. 运行可执行文件（Windows：`Quant.Infra.Net.Pro.Web.exe`，macOS/Linux：`./Quant.Infra.Net.Pro.Web`）
 4. 在浏览器中访问 **https://127.0.0.1:8443**
-5. 按照 /start 页面指引：验证邮箱 → 激活 7 天免费试用或输入已有 License
+5. 按照 /start 页面指引：验证邮箱 → 激活 3 个月免费试用或输入已有 License
 6. 前往 /settings 输入 Schwab API 凭据
 
 > 首次启动浏览器会显示安全警告——本地自签名证书的正常现象，按控制台提示信任一次即可。
@@ -167,7 +167,7 @@
 |------|--------|---------|
 | 1 | 打开 /start 输入邮箱 | 直接前往 /settings |
 | 2 | 点击邮箱中的验证链接，返回验证 | 手动输入 License Key 和 Email |
-| 3 | 激活 7 天免费试用或输入已有 License | 点击保存 |
+| 3 | 激活 3 个月免费试用或输入已有 License | 点击保存 |
 | 4 | 应用自动保存 License 信息到本地配置 | 仪表盘就绪 |
 | 5 | 前往 /settings 配置 Schwab API 凭据 | |
 
@@ -175,7 +175,7 @@
 
 | 功能 | 说明 |
 |------|------|
-| 免费试用 | 7 天，全部功能，1 台设备。同一产品同一邮箱仅可领取一次。试用前需验证邮箱。 |
+| 免费试用 | 3 个月，全部功能，1 台设备。同一产品同一邮箱仅可领取一次。试用前需验证邮箱。 |
 | 续费 | 通过购买链接付款后 License 自动延长。已过期：+30 天从付款时间。未过期：+30 天从当前过期时间。 |
 
 ## 社区与支持
@@ -187,6 +187,6 @@
 
 ## License
 
-Quant.Infra.Net.Pro 可免费下载并免费试用。7 天免费试用期后，继续使用才需要有效授权码。
+Quant.Infra.Net.Pro 可免费下载并免费试用。3 个月免费试用期后，继续使用才需要有效授权码。
 
 ---
