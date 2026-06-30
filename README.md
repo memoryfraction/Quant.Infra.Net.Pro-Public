@@ -43,9 +43,9 @@
 | Account Dashboard | Real-time summary: total value, cash balance, buying power, unrealized/realized P&L |
 | Positions View | Current holdings with cost basis and unrealized P&L |
 | Real-Time Quotes | Stock quotes (AAPL, MSFT, etc.) with auto-refresh |
-| Options Chain | Options data (strike, expiration, type, bid/ask, last price, volume, open interest) |
+| Options Chain | Current options chain data (strike, expiration, type, bid/ask, last price, volume, open interest); not historical option chains |
 | Order History | Last 60 days of orders with execution details |
-| Price History API | OHLCV candlestick data for US equities and options, intraday to monthly |
+| Price History API | OHLCV candlestick data for US equities and ETFs only, intraday to monthly. Schwab does not provide price history for options or futures. |
 | License Validation | LicenseForge-backed periodic verification with offline-tolerant cache |
 | Web API | Full RESTful API for programmatic access |
 
@@ -130,9 +130,9 @@
 | 账户仪表盘 | 实时总览：账户总值、现金余额、购买力、未实现/已实现盈亏 |
 | 持仓视图 | 当前持仓及成本价、未实现盈亏 |
 | 实时行情 | 股票实时报价（AAPL、MSFT 等），自动刷新 |
-| 期权链 | 期权数据（行权价、到期日、类型、买卖价、最新价、成交量、持仓量） |
+| 期权链 | 当前期权链数据（行权价、到期日、类型、买卖价、最新价、成交量、持仓量），不是历史期权链 |
 | 订单历史 | 最近 60 天订单记录 |
-| 历史行情 API | 美股/期权 OHLCV 蜡烛图，支持分钟级到月级 |
+| 历史行情 API | 仅支持美股和 ETF 的 OHLCV 蜡烛图，支持分钟级到月级。Schwab 不提供期权或期货的 price history。 |
 | License 验证 | LicenseForge 驱动的定期验证，离线缓存容错 |
 
 ## 适用人群

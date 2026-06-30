@@ -69,7 +69,7 @@ The Dashboard at /dashboard auto-refreshes every 60 seconds.
 | Account Summary | Total value, cash balance, buying power, unrealized/realized P&L |
 | Positions | Current holdings with cost basis and unrealized P&L |
 | Real-Time Quotes | Stock quotes with bid/ask, last price, volume, change |
-| Options Chain | Options data (strike, expiration, type, bid/ask, last, volume, OI) |
+| Options Chain | Current options chain data (strike, expiration, type, bid/ask, last, volume, OI); not historical option chains |
 | Order History | Last 60 days of orders with execution details |
 | Token Status | Access token expiry, refresh token status, next re-auth due |
 | MFA Status | Detected during re-auth: auto-reauth suspended, manual intervention needed |
@@ -83,9 +83,9 @@ The Dashboard at /dashboard auto-refreshes every 60 seconds.
 | /api/v1/accounts | GET | List all linked accounts |
 | /api/v1/accounts/{accountNumber}/positions | GET | Current positions with P&L |
 | /api/v1/marketdata/quotes | GET | Real-time quotes |
-| /api/v1/marketdata/chains | GET | Options chain (strike, expiration, type, bid/ask, last, volume, OI) |
+| /api/v1/marketdata/chains | GET | Current options chain (strike, expiration, type, bid/ask, last, volume, OI); not historical option chains |
 | /api/v1/accounts/{accountNumber}/orders | GET/POST | Order history / Place order |
-| /api/v1/marketdata/pricehistory | GET | OHLCV candlestick data |
+| /api/v1/marketdata/pricehistory | GET | OHLCV candlestick data for US equities and ETFs only; not options or futures |
 
 Full API documentation available in-app when the application is running.
 
@@ -179,7 +179,7 @@ Full API documentation available in-app when the application is running.
 | 账户摘要 | 账户总值、现金余额、购买力、未实现/已实现盈亏 |
 | 持仓 | 当前持仓及成本价、未实现盈亏 |
 | 实时行情 | 股票实时报价（买卖价、最新价、成交量、涨跌幅） |
-| 期权链 | 期权数据（行权价、到期日、类型、买卖价、最新价、成交量、持仓量） |
+| 期权链 | 当前期权链数据（行权价、到期日、类型、买卖价、最新价、成交量、持仓量），不是历史期权链 |
 | 订单历史 | 最近 60 天订单记录 |
 | Token 状态 | Access Token 过期时间、Refresh Token 状态、下次重授权时间 |
 | MFA 状态 | 重授权时检测到 MFA：自动重授权已暂停，需手动处理 |
@@ -193,9 +193,9 @@ Full API documentation available in-app when the application is running.
 | /api/v1/accounts | GET | 查询所有关联账户 |
 | /api/v1/accounts/{accountNumber}/positions | GET | 当前持仓及盈亏 |
 | /api/v1/marketdata/quotes | GET | 实时行情报价 |
-| /api/v1/marketdata/chains | GET | 期权链（行权价、到期日、类型、买卖价、最新价、成交量、持仓量） |
+| /api/v1/marketdata/chains | GET | 当前期权链（行权价、到期日、类型、买卖价、最新价、成交量、持仓量），不是历史期权链 |
 | /api/v1/accounts/{accountNumber}/orders | GET/POST | 订单历史 / 下单 |
-| /api/v1/marketdata/pricehistory | GET | OHLCV 蜡烛图数据 |
+| /api/v1/marketdata/pricehistory | GET | 仅限美股和 ETF 的 OHLCV 蜡烛图数据，不支持期权或期货 |
 
 应用运行时可通过 **/api** 查看完整 API 文档。
 
