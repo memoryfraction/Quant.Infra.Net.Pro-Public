@@ -1,8 +1,8 @@
 # Quant.Infra.Net.Pro 快速开始指南 / Quick Start Guide
 
-> **Document Version:** 1.4.2 | **Applies to:** Quant.Infra.Net.Pro v1.4.2+
+> **Document Version:** 1.5.1 | **Applies to:** Quant.Infra.Net.Pro v1.5.1+
 >
-> Free download, free 7-day in-app trial. This guide replaces the old in-package `UserManual.md`.
+> Free download, free 3-month in-app trial. This guide replaces the old in-package `UserManual.md`.
 
 ---
 
@@ -13,6 +13,12 @@
 **Quant.Infra.Net.Pro** is a local web application that provides an unattended trading gateway for Charles Schwab brokerage accounts. It runs entirely on your own machine, with no cloud intermediaries and no data leaving your computer.
 
 The core problem it solves: Schwab API tokens expire frequently (access token: 30 min, refresh token: 7 days), making 24/7 automated trading impossible without constant manual intervention. This application automates the entire token lifecycle, handles OAuth re-authorization, MFA detection notification, and SSL certificate management — all without user interaction.
+
+## 1.1 Financial Compliance Update in v1.5.1
+
+Version **1.5.1** includes financial compliance logging hardening. Sensitive Schwab and trading fields are centrally redacted before normal logs and user-facing errors are produced. OAuth authorization codes, token fragments, token refresh response bodies, order identifiers, account value amounts, cookie storage paths, and raw exception details are no longer exposed through logs, API errors, redirects, or Blazor error banners.
+
+This does not change the local-first privacy model: trading data, Schwab credentials, OAuth tokens, and application logs stay on your machine. License validation sends only limited licensing fields as described in [Data Privacy Statement](DATA_PRIVACY.md).
 
 ## 2. Quick Start
 
@@ -123,6 +129,12 @@ Full API documentation available in-app when the application is running.
 **Quant.Infra.Net.Pro** 是一款本地运行的 Web 应用，为 Charles Schwab（嘉信理财）交易账户提供无人值守的交易网关。它完全运行在您自己的电脑上，没有云中间商，数据不离开您的计算机。
 
 它解决的核心问题：Schwab API Token 过期频繁（Access Token 30 分钟，Refresh Token 7 天），如果没有持续的手动干预，7x24 自动化交易几乎不可能。该应用自动化了整个 Token 生命周期，自动处理 OAuth 重授权、MFA 检测通知和 SSL 证书管理——全程无需用户操作。
+
+## 1.1 1.5.1 金融合规更新
+
+**1.5.1** 版本包含金融合规日志加固。应用会在普通日志写入和用户可见错误展示前统一脱敏 Schwab 与交易相关敏感字段，OAuth 授权码、Token 片段、Token 刷新响应体、订单标识、账户金额、Cookie 存储路径和原始异常详情不再通过日志、API 错误、重定向参数或 Blazor 错误提示暴露。
+
+这不会改变本地优先的隐私模型：交易数据、Schwab 凭据、OAuth Token 和应用日志仍保留在用户本机。License 验证仅发送 [数据隐私声明](DATA_PRIVACY.md) 中列出的有限授权字段。
 
 ## 2. 快速入门
 

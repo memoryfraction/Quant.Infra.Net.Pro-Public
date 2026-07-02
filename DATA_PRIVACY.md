@@ -1,10 +1,10 @@
 # Data Privacy Statement / 数据隐私声明
 
-> **Document Version:** 1.0.0 | **Last Updated:** 2026-06-10
+> **Document Version:** 1.1.0 | **Last Updated:** 2026-07-02
 >
-> **Applies to:** Quant.Infra.Net.Pro (all versions)
+> **Applies to:** Quant.Infra.Net.Pro v1.5.1+
 >
-> **适用于：** Quant.Infra.Net.Pro（全部版本）
+> **适用于：** Quant.Infra.Net.Pro v1.5.1+
 
 ---
 
@@ -48,6 +48,10 @@ The following data is sent over HTTPS to our license validation server, LicenseF
 | App configuration | All contents of `appsettings.json` | Stored only locally |
 | Log files | All application logs | Written only to local disk |
 
+### v1.5.1 Logging Compliance Hardening
+
+Starting with version **1.5.1**, normal logs and user-facing error surfaces use centralized sensitive-data redaction. OAuth authorization codes, token fragments, token refresh response bodies, order identifiers, account value amounts, cookie storage paths, and raw exception details are redacted before they can appear in application logs, API errors, query-string redirects, or Blazor error banners.
+
 ## 2. How Data Is Stored
 
 ### Local Storage
@@ -76,6 +80,7 @@ The following data is sent over HTTPS to our license validation server, LicenseF
 | Zero upload of trading data | Balances, positions, orders, P&L, and all other trading data never leave your machine |
 | Zero upload of API credentials | Schwab App Key, App Secret, username, and password stay on your machine only |
 | Token encryption | OAuth tokens are persisted using OS-level encryption on Windows DPAPI, unreadable by other users or programs |
+| Sensitive log redaction | v1.5.1 centrally redacts OAuth codes, token fragments, order identifiers, account amounts, cookie paths, and raw exception details before normal logging or user-facing error display |
 | Local deployment | No cloud intermediary. All trading requests go directly from your machine to Schwab API |
 
 ### Your Responsibilities
@@ -111,6 +116,7 @@ Your Machine
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-07-02 | Updated for v1.5.1 financial compliance logging hardening and sensitive-data redaction |
 | 1.0.0 | 2026-06-10 | Initial release: comprehensive data privacy statement |
 
 ## Contact
@@ -162,6 +168,10 @@ Quant.Infra.Net.Pro 是一款本地运行的应用，设计原则是**你的数�
 | 应用配置文件 | `appsettings.json` 的全部内容 | 仅存储在本地 |
 | 日志文件 | 所有应用日志 | 仅写入本地磁盘 |
 
+### v1.5.1 日志合规加固
+
+从 **1.5.1** 版本开始，普通日志和用户可见错误展示统一使用敏感信息脱敏层。OAuth 授权码、Token 片段、Token 刷新响应体、订单标识、账户金额、Cookie 存储路径和原始异常详情会在进入应用日志、API 错误、重定向参数或 Blazor 错误提示前被脱敏。
+
 ## 2. 数据存储方式
 
 ### 本地存储
@@ -190,6 +200,7 @@ Quant.Infra.Net.Pro 是一款本地运行的应用，设计原则是**你的数�
 | 交易数据零上传 | 你的账户余额、持仓、订单、盈亏等所有交易数据从不离开你的计算机 |
 | API 凭据零上传 | Schwab App Key、App Secret、用户名和密码仅保存在你自己的机器上 |
 | Token 加密存储 | OAuth Token 在 Windows 上使用操作系统级 DPAPI 加密持久化，其他用户或程序无法读取 |
+| 敏感日志脱敏 | v1.5.1 会在普通日志和用户可见错误展示前统一脱敏 OAuth 授权码、Token 片段、订单标识、账户金额、Cookie 路径和原始异常详情 |
 | 本地部署 | 应用不包含云中间件，所有交易请求直接从你的机器发往 Schwab API |
 
 ### 你的责任
@@ -225,6 +236,7 @@ Quant.Infra.Net.Pro 是一款本地运行的应用，设计原则是**你的数�
 
 | 版本 | 日期 | 变更说明 |
 |------|------|----------|
+| 1.1.0 | 2026-07-02 | 补充 v1.5.1 金融合规日志加固与敏感信息脱敏说明 |
 | 1.0.0 | 2026-06-10 | 初始版本：完整的数据隐私声明 |
 
 ## 联系方式

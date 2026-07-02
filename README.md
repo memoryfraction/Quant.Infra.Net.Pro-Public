@@ -10,6 +10,7 @@
 
 | Version | Date | Description |
 |---------|------|-------------|
+| **1.5.1** *(current)* | 2026-07-02 | **Financial compliance logging hardening**: Added centralized sensitive-data redaction for logs and user-facing error surfaces. OAuth codes, token fragments, token refresh response bodies, order identifiers, account value amounts, cookie storage paths, and raw exception messages are no longer emitted through normal logs, API errors, query-string redirects, or Blazor error banners. |
 | 1.4.2 | 2026-06-10 | LemonSqueezy webhook integration: subscription renewal with ACA cold-start retry. License expiry logic: expired → 30 days from payment, not expired → 30 days from current expiry. Bilingual README and usage guide. |
 | 1.4.1 | 2026-06-09 | Secure onboarding: email verification before trial, manual license entry only, auto-saves to local config. Dashboard redirects to /settings if config is incomplete. |
 | 1.4.0 | 2026-06-08 | Initial commercial release: new users can activate a 3-month free trial via email verification; existing users can directly enter their license key and email. Connects to Charles Schwab brokerage via Web API. With sufficient configuration, enables long-term unattended connection. |
@@ -48,6 +49,12 @@
 | Price History API | OHLCV candlestick data for US equities and ETFs only, intraday to monthly. Schwab does not provide price history for options or futures. |
 | License Validation | LicenseForge-backed periodic verification with offline-tolerant cache |
 | Web API | Full RESTful API for programmatic access |
+
+## Financial Compliance & Privacy Update
+
+Version **1.5.1** adds financial compliance logging hardening. The application now applies centralized redaction before writing normal logs or showing user-facing errors, so OAuth authorization codes, token fragments, token refresh response bodies, order identifiers, account value amounts, cookie storage paths, and raw exception details are not exposed through logs, API errors, redirects, or Blazor error banners.
+
+Trading data, Schwab credentials, OAuth tokens, and application logs remain local to your machine. License validation still sends only the limited licensing fields described in [Data Privacy Statement](DATA_PRIVACY.md).
 
 ## Who Is This For
 
@@ -134,6 +141,12 @@
 | 订单历史 | 最近 60 天订单记录 |
 | 历史行情 API | 仅支持美股和 ETF 的 OHLCV 蜡烛图，支持分钟级到月级。Schwab 不提供期权或期货的 price history。 |
 | License 验证 | LicenseForge 驱动的定期验证，离线缓存容错 |
+
+## 金融合规与隐私更新
+
+**1.5.1** 版本已完成金融合规日志加固。应用现在会在普通日志写入和用户可见错误展示前统一执行敏感信息脱敏，OAuth 授权码、Token 片段、Token 刷新响应体、订单标识、账户金额、Cookie 存储路径和原始异常详情不会再通过日志、API 错误、重定向参数或 Blazor 错误提示暴露。
+
+交易数据、Schwab 凭据、OAuth Token 和应用日志仍保留在用户本机。License 验证仅发送 [数据隐私声明](DATA_PRIVACY.md) 中列出的有限授权字段。
 
 ## 适用人群
 
