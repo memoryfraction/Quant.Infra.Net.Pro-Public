@@ -2,7 +2,7 @@
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-blueviolet)](https://dotnet.microsoft.com/download/dotnet/8.0)
 
-> **Quant.Infra.Net.Pro** — Charles Schwab unattended trading gateway. Free to download, free to try, and runs on your machine so trading data never leaves your computer.
+> **Quant.Infra.Net.Pro** — The only Schwab API client that survives the 7-day refresh token expiry. Free to download, free to try, and runs on your machine so trading data never leaves your computer.
 
 ---
 
