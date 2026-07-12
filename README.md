@@ -1,4 +1,4 @@
-﻿# Quant.Infra.Net.Pro
+# Quant.Infra.Net.Pro
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-blueviolet)](https://dotnet.microsoft.com/download/dotnet/8.0)
 
@@ -10,12 +10,23 @@
 
 | Version | Date | Description |
 |---------|------|-------------|
-| **1.5.1** *(current)* | 2026-07-02 | **Financial compliance logging hardening**: Added centralized sensitive-data redaction for logs and user-facing error surfaces. OAuth codes, token fragments, token refresh response bodies, order identifiers, account value amounts, cookie storage paths, and raw exception messages are no longer emitted through normal logs, API errors, query-string redirects, or Blazor error banners. |
-| 1.4.2 | 2026-06-10 | LemonSqueezy webhook integration: subscription renewal with ACA cold-start retry. License expiry logic: expired → 30 days from payment, not expired → 30 days from current expiry. Bilingual README and usage guide. |
-| 1.4.1 | 2026-06-09 | Secure onboarding: email verification before trial, manual license entry only, auto-saves to local config. Dashboard redirects to /settings if config is incomplete. |
-| 1.4.0 | 2026-06-08 | Initial commercial release: new users can activate a 3-month free trial via email verification; existing users can directly enter their license key and email. Connects to Charles Schwab brokerage via Web API. With sufficient configuration, enables long-term unattended connection. |
-| 1.3.2 | 2026-06-07 | Code standards enforcement + Code obfuscation for release builds. |
-| 1.3.0 | 2026-06-06 | Unattended breakthrough: Automated browser login, MFA detection notification, SSL auto-renew, 30-hour retry buffer. 5 limiting factors solved. |
+| **1.6.3** *(current)* | 2026-07-11 | **Privacy mask for financial data**: added eye-toggle icon on Dashboard and Rebalance pages. Sensitive amounts and account numbers are masked as '****' by default. Users click the eye icon to reveal actual values. **Connection recovery with instant token refresh**: centralized SchwabConnectionRecoveryService handles token refresh on failed reads with short backoff after network loss. **EULA acceptance flow**: one-time End User License Agreement acceptance persisted per machine, re-prompted when EULA version changes. |
+| 1.6.0 | 2026-07-03 | **Dashboard account data correction**: NetLiquidateValue now uses the authoritative Schwab liquidationValue field instead of equity. Unrealized/Realized P&L now come from account-level totalUnrealizedGainsLosses/totalRealizedGainsLosses instead of position-level daily P&L, fixing the bug where RealizedPnL always equaled UnrealizedPnL. |
+| 1.5.4 | 2026-07-03 | **Rebalance basis correction**: target portfolio percentages and suggested actions now use the Charles Schwab Total Accounts Value basis, include cash and money market positions consistently, show calculated target holdings in the table, and allow 100% core allocation when no free allocation is desired. |
+| 1.5.3 | 2026-07-02 | **macOS/Linux runtime compatibility**: SchwabTokenStore now uses Windows DPAPI on Windows and AES-GCM with a local per-user key on macOS/Linux, avoiding non-Windows ProtectedData runtime failures. |
+| 1.5.2 | 2026-07-02 | **macOS HTTPS certificate onboarding fix**: startup guidance now instructs users to trust the generated public .cer certificate in the System keychain instead of importing the private-key .pfx. Linux trust-store guidance also uses the public .cer file. |
+| 1.5.1 | 2026-07-02 | **Financial compliance logging hardening**: Added centralized sensitive-data redaction for logs and user-facing error surfaces. OAuth codes, token fragments, token refresh response bodies, order identifiers, account value amounts, cookie storage paths, and raw exception messages are no longer emitted through normal logs, API errors, query-string redirects, or Blazor error banners. |
+| 1.5.0 | 2026-06-28 | **Options API and code quality upgrade**: new OptionsController with historical price download (CSV/JSON/batch), Swagger-documented option chain endpoint, fixed XML doc warnings, and bilingual Chinese/English comments compliance audit. |
+| 1.4.9 | 2026-06-28 | **Schwab API JSON serialization hardening**: Quotes and Accounts now return explicit Web response DTOs, and price history maps broker models to Web DTOs before JSON serialization to avoid Release/obfuscated 500 responses. |
+| 1.4.8 | 2026-06-24 | **Code quality and safety improvements**: fixed realized P/L calculation, removed blocking async patterns, reduced Playwright install churn, fixed license telemetry race conditions, unified persistent storage paths, and implemented auto-execution safety guardrails. |
+| 1.4.6 | 2026-06-22 | **Rebalance and reliability update**: editable target portfolio holdings, external position drift display, manual/auto execution modes, NetLiquidateValue terminology alignment, and shared LicenseForge Polly retry pipeline. |
+| 1.4.4 | 2026-06-18 | **Unattended Schwab recovery**: centralized connection recovery (SchwabConnectionRecoveryService), immediate token refresh on failed reads, configurable auto re-auth checks (SchwabAutoReauthBackgroundService), persisted MFA state. |
+| 1.4.3 | 2026-06-18 | Packaging release aligned with Quant.Infra.Net.Pro.Web deployment artifacts. |
+| 1.4.2 | 2026-06-14 | Schwab API JSON serialization fix: Accounts, positions, and quotes now return Web API DTOs to avoid 500 errors in Release/obfuscated builds. |
+| 1.4.1 | 2026-06-09 | Secure onboarding hardening: email verification before trial activation and stricter settings completion checks. |
+| 1.4.0 | 2026-06-08 | Initial commercial release: new users can activate a 3-month free trial via email verification; existing users can directly enter their license key and email. Connects to Charles Schwab brokerage via Web API. Architecture migration: removed all .cshtml, fully migrated to Blazor Server .razor components. |
+| 1.3.7 | 2026-06-08 | Logging unification & obfuscation hardening. Replaced ILogger&lt;T&gt; with UtilityService.LogAndWriteLine(). |
+| 1.3.2 | 2026-06-07 | Code standards enforcement + Code obfuscation for release builds. Network retry: Polly retry for OAuth token exchange. |
 | 1.2.5 | 2026-06-06 | Settings page — browser UI for License Key, Schwab credentials, RedirectUri. |
 | 1.2.3 | 2026-06-06 | Unattended architecture: Token encryption, 15-min background refresh, exponential backoff retry. |
 | 1.0.0 | 2025-05-29 | Initial release: Schwab OAuth, account management, quotes, orders, LicenseForge validation, EULA, HTTPS, single-file deploy. |
@@ -47,14 +58,24 @@
 | Options Chain | Current options chain data (strike, expiration, type, bid/ask, last price, volume, open interest); not historical option chains |
 | Order History | Last 60 days of orders with execution details |
 | Price History API | OHLCV candlestick data for US equities and ETFs only, intraday to monthly. Schwab does not provide price history for options or futures. |
+| Options API | Historical options price download in CSV and JSON formats, batch query support |
+| Portfolio Rebalance | Multi-asset target rebalancing with editable holdings, drift calculation, manual/auto execution modes |
+| Privacy Mask | Eye-toggle icon on Dashboard and Rebalance pages — sensitive amounts and account numbers masked as '****' by default |
+| Connection Recovery | Centralized Schwab connection self-healing with instant token refresh on failed reads, short backoff after network loss |
+| Automated Re-auth | Playwright browser automation for silent OAuth re-authorization before 7-day refresh token expiry, with 30-hour retry window |
 | License Validation | LicenseForge-backed periodic verification with offline-tolerant cache |
-| Web API | Full RESTful API for programmatic access |
+| Version Badge | Current version displayed in-app navigation bar, linking to full version history page |
+| Cross-Platform | Windows, macOS, and Linux support with platform-aware token storage (DPAPI vs AES-GCM) |
+| Web API | Full RESTful API with Swagger documentation and API versioning |
 
 ## Financial Compliance & Privacy Update
 
-Version **1.5.1** adds financial compliance logging hardening. The application now applies centralized redaction before writing normal logs or showing user-facing errors, so OAuth authorization codes, token fragments, token refresh response bodies, order identifiers, account value amounts, cookie storage paths, and raw exception details are not exposed through logs, API errors, redirects, or Blazor error banners.
+Version **1.5.1** introduced centralized financial compliance logging hardening. The application applies centralized redaction before writing normal logs or showing user-facing errors, so OAuth authorization codes, token fragments, token refresh response bodies, order identifiers, account value amounts, cookie storage paths, and raw exception details are not exposed through logs, API errors, redirects, or Blazor error banners.
+
+Version **1.6.3** adds a **Privacy Mask** toggle: sensitive financial amounts and account numbers are masked as `****` by default on the Dashboard and Rebalance pages. Users can click the eye icon to reveal actual values. This feature is part of ongoing financial data protection improvements.
 
 Trading data, Schwab credentials, OAuth tokens, and application logs remain local to your machine. License validation still sends only the limited licensing fields described in [Data Privacy Statement](DATA_PRIVACY.md).
+
 
 ## Who Is This For
 
@@ -140,11 +161,21 @@ Trading data, Schwab credentials, OAuth tokens, and application logs remain loca
 | 期权链 | 当前期权链数据（行权价、到期日、类型、买卖价、最新价、成交量、持仓量），不是历史期权链 |
 | 订单历史 | 最近 60 天订单记录 |
 | 历史行情 API | 仅支持美股和 ETF 的 OHLCV 蜡烛图，支持分钟级到月级。Schwab 不提供期权或期货的 price history。 |
+| 期权 API | 历史期权数据下载（CSV/JSON），批量查询支持 |
+| 组合再平衡 | 多标的再平衡策略管理：可编辑目标持仓、偏离度计算、手动/自动执行模式 |
+| 隐私脱敏 | 仪表盘和再平衡页面上眼睛图标切换——敏感金额与账号默认遮盖为 '****' |
+| 连接自愈 | 集中式 Schwab 连接恢复，失败读取时即时 Token 刷新，网络中断后短退避 |
+| 自动重授权 | Playwright 浏览器自动化静默重授权，在 7 天 refresh token 过期前自动触发，内置 30 小时重试窗口 |
 | License 验证 | LicenseForge 驱动的定期验证，离线缓存容错 |
+| 版本徽标 | 导航栏显示当前版本号，链接到完整版本历史页面 |
+| 跨平台支持 | Windows、macOS、Linux 全平台支持，Token 存储自动适配平台（DPAPI / AES-GCM） |
+| Web API | 完整 RESTful API，支持 Swagger 文档和 API 版本管理 |
 
 ## 金融合规与隐私更新
 
 **1.5.1** 版本已完成金融合规日志加固。应用现在会在普通日志写入和用户可见错误展示前统一执行敏感信息脱敏，OAuth 授权码、Token 片段、Token 刷新响应体、订单标识、账户金额、Cookie 存储路径和原始异常详情不会再通过日志、API 错误、重定向参数或 Blazor 错误提示暴露。
+
+**1.6.3** 版本新增**隐私脱敏开关**：敏感金额和账号在仪表盘和再平衡页面上默认遮盖为 `****`，用户可点击眼睛图标切换显示实际数值。这是金融数据保护持续优化的一部分。
 
 交易数据、Schwab 凭据、OAuth Token 和应用日志仍保留在用户本机。License 验证仅发送 [数据隐私声明](DATA_PRIVACY.md) 中列出的有限授权字段。
 
@@ -203,3 +234,7 @@ Trading data, Schwab credentials, OAuth tokens, and application logs remain loca
 Quant.Infra.Net.Pro 可免费下载并免费试用。3 个月免费试用期后，继续使用才需要有效授权码。
 
 ---
+
+
+
+
