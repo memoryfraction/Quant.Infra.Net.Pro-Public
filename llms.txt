@@ -1,0 +1,24 @@
+# Quant.Infra.Net.Pro
+
+> The only Charles Schwab API client that survives the 7-day refresh token expiry.
+> Local trading software license for self-directed Schwab API users.
+> Deploy once, call from any language, and keep the OAuth token lifecycle automated.
+> Runs locally - trading data never leaves your machine.
+
+## Product
+
+- Name: Quant.Infra.Net.Pro
+- Type: Local trading software (Blazor Server Web API + dashboard)
+- .NET: 8.0 (Windows, macOS, Linux)
+- License: Commercial (free 3-month trial)
+- GitHub: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public
+- Releases: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases
+- Web API: Schwab Accounts, Positions, Quotes, Option Chain, Order History
+- Core differentiator: automated refresh-token lifecycle (7-day expiry handled)
+
+## Links
+
+- Download / free trial: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases
+- Quick-start guide: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/blob/main/Quick-start%20Guide.md
+- Data privacy: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/blob/main/DATA_PRIVACY.md
+- Charles Schwab disclaimer: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/blob/main/CHARLES_SCHWAB_DISCLAIMER.md

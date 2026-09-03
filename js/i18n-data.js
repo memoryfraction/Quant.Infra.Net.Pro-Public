@@ -1,0 +1,695 @@
+window.i18nData = window.i18nData || {};
+window.i18nData.en = {
+  "nav": {
+    "pricing": "Pricing",
+    "about": "About",
+    "disclaimer": "Disclaimer",
+    "faq": "FAQ",
+    "galleryTrigger": "Gallery",
+    "cta": "Download Now"
+  },
+  "gallery": {
+    "title": "Product Gallery",
+    "items": {
+      "reg0": {
+        "title": "Charles Schwab Developer Portal",
+        "desc": "Register your application in the Schwab Developer Portal to get started."
+      },
+      "reg1": {
+        "title": "Application Ready for Production",
+        "desc": "Your application has been approved and is ready for production use."
+      },
+      "acct": {
+        "title": "Account Dashboard",
+        "desc": "Comprehensive account overview with portfolio summary."
+      },
+      "opt": {
+        "title": "Current Options Chain",
+        "desc": "Current options chain with strike prices and Greeks; not historical options-chain data."
+      },
+      "ord": {
+        "title": "Order History",
+        "desc": "Complete trade history with detailed execution reports."
+      },
+      "pos": {
+        "title": "Positions Overview",
+        "desc": "Real-time position tracking with P&L analysis."
+      },
+      "qte": {
+        "title": "Live Quotes",
+        "desc": "Streaming real-time quotes with full market data."
+      },
+      "swag": {
+        "title": "Web API Swagger Documentation",
+        "desc": "Interactive API documentation with try-it-out functionality."
+      }
+    }
+  },
+  "footer": {
+    "tagline": "Local trading software license for self-directed Schwab API users. Write in any language. Deploy in minutes.",
+    "links": "Links",
+    "legal": "Legal",
+    "refund": "Refund Policy",
+    "privacy": "Privacy Policy",
+    "tos": "Terms of Service"
+  },
+  "hero": {
+    "badge": "Quant.Infra.Net.Pro",
+    "title": "Your Charles Schwab API <span class=\"gradient-text\">Infrastructure</span><br>Any Language. Production-Ready.",
+    "subtitle": "Weeks or Monthes debugging API integration? Tokens expiring weekly?\nJust make HTTP calls — it runs indefinitely.",
+    "desc": "Quant.Infra.Net.Pro is a local trading software license for self-directed users. It helps you connect your own Schwab account and API credentials; we do not custody funds, open accounts, place trades for you, manage assets, or provide investment advice.",
+    "cta1": "Download Free Trial",
+    "cta2": "Start 3-Month Free Trial",
+    "badgeLabel": "Swagger API",
+    "early": "Version 1.5.1 update: <strong>financial compliance logging hardened</strong>. Sensitive OAuth, account, and order details are now redacted from normal logs and user-facing errors."
+  },
+  "scenario": {
+    "label": "Does This Sound Like You?",
+    "title": "If Any of These Ring True, We've Got You Covered",
+    "sub": "You want to use Schwab data for your strategies. You don't want to become an API integration expert.",
+    "c0": "Schwab OAuth, callback URLs, and token refresh keep eating your time before your strategy even starts",
+    "c1": "You finally got it running, but tokens expire every week — no vacations, no weekends off, always watching",
+    "c2": "You don't want to wrestle with integration layers — you want reliable Schwab data, continuous, stable, zero maintenance"
+  },
+  "pain": {
+    "label": "The Real Cost of Going Without Quant.Infra.Net.Pro",
+    "title": "Your Strategy Should Be Running on the Market, Not Stuck on API Problems",
+    "0": {
+      "title": "Weeks of Engineering, Not Hours",
+      "desc": "Think it's just a simple API call? Schwab's auth involves multi-layered token mechanisms with complex expiry policies. Most developers spend weeks or months getting it stable — time you could have spent writing strategies, running backtests, and going live."
+    },
+    "1": {
+      "title": "The 7-Day Curse That Chains You to Your Desk",
+      "desc": "Schwab's token expires every 7 days. Without automatic renewal, your pipeline stops dead weekly — no orders, no quotes, no signals. No vacations, no weekends off, always watching. Quant.Infra.Net.Pro is the solution that breaks this wall."
+    },
+    "tagline": "You're not buying a brokerage, custody, or advisory service. You're licensing local software that helps you operate your own Schwab API connection."
+  },
+  "solution": {
+    "label": "Your Pain, Our Solution",
+    "title": "Deploy Once, Call from Any Language — We Handle the Rest",
+    "sub": "Deploy the Web API once. Call our endpoints from any language. Never think about token management again.",
+    "0": {
+      "title": "Your Language, Your Pace",
+      "f0": "Python, Java, Go, Node.js, C# — write in your language of choice, an HTTP call is all it takes",
+      "f1": "Accounts, quotes, orders, positions, current option chains, and equity/ETF price history — RESTful endpoints with Swagger docs",
+      "f2": "No .NET SDK, no compilation, no integration library — just HTTP requests",
+      "f3": "Price history follows Schwab limits: equities and ETFs only. Options, futures, and historical option chains are not provided."
+    },
+    "1": {
+      "title": "Never Chained to the 7-Day Curse Again",
+      "f0": "Tokens stay valid — take vacations, sleep soundly, your pipeline keeps running",
+      "f1": "Zero manual intervention — deploy it and forget it, the system handles everything",
+      "f2": "Instant recovery after restarts — server reboots and migrations? No problem"
+    },
+    "2": {
+      "title": "Production-Ready, Right Out of the Box",
+      "f0": "Graceful error recovery — your pipeline keeps running through any disruption",
+      "f1": "Built-in redacted logging and license telemetry for monitoring integration health without exposing sensitive Schwab data in normal logs",
+      "f2": "Ready out of the box with production defaults"
+    },
+    "conclusion": "Don't rebuild Schwab API plumbing. License the local software, connect your own Schwab credentials, and keep full responsibility for your trading decisions."
+  },
+  "stats": {
+    "0": {
+      "label": "API Endpoints",
+      "desc": "Schwab endpoints exposed via REST, with price history limited to equities and ETFs"
+    },
+    "1": {
+      "label": "Unattended Operation",
+      "desc": "Continuous unattended operation — tokens stay valid, never interrupted"
+    },
+    "2": {
+      "label": "Setup Time",
+      "desc": "From GitHub to first API call in under 30 minutes"
+    },
+    "3": {
+      "label": "Language Support",
+      "desc": "Python, Java, Go, Node.js, C# — any HTTP client works"
+    }
+  },
+  "how": {
+    "label": "Getting Started",
+    "title": "From Zero to Production in 3 Steps",
+    "sub": "Deploy, configure, and start building. No .NET/C# knowledge required on your side.",
+    "s0": {
+      "title": "Deploy & Configure",
+      "desc": "Deploy the Pro Web API. Configure your Schwab developer credentials."
+    },
+    "s1": {
+      "title": "License Activation",
+      "desc": "Activate with your license key. The heartbeat service validates your subscription automatically."
+    },
+    "s2": {
+      "title": "Integrate from Any Language",
+      "desc": "Use Swagger UI to explore endpoints, then call our RESTful API from Python, Java, Go, or any language. Token lifecycle runs automatically in the background."
+    }
+  },
+  "about": {
+    "title": "About Alpha Wealth Lab",
+    "intro": "We build local software for Charles Schwab API integration. Quant.Infra.Net.Pro is our flagship product — used by independent developers, trading teams, and quantitative researchers who need reliable self-directed Schwab access without the integration headache.",
+    "email": "Contact us: ",
+    "substack": "Follow our analysis and updates on Substack",
+    "vision": {
+      "title": "What We Build",
+      "text": "Production-grade Schwab API software. It handles OAuth complexity, token lifecycle management, and deployment readiness while you remain in control of your own Schwab account, credentials, and trading decisions."
+    },
+    "products": {
+      "title": "Open Source + Pro",
+      "text": "Our Free version (Quant.Infra.Net on GitHub) is an open-source .NET class library — ideal for learning the internals and building trust. Quant.Infra.Net.Pro is the deployment-ready Web API: same Schwab integration, packaged as language-agnostic infrastructure. Use Free to understand. Use Pro to ship."
+    },
+    "closing": "Local trading software for developers who trade. Built by engineers who build trading systems.",
+    "signoff": "— The Alpha Wealth Lab Team"
+  },
+  "tos": {
+    "label": "TERMS OF SERVICE",
+    "title": "Terms of Service",
+    "f0": "Acceptance of Terms",
+    "f1": "By accessing or using the Quant.Infra.Net.Pro software and related services (\"Services\"), you agree to be bound by these Terms of Service. If you do not agree, do not use the Services.",
+    "f2": "License Grant. Upon confirmed payment, you are granted a non-exclusive, non-transferable license to use the local software in accordance with your selected plan (Personal Pro or Enterprise). Redistribution, resale, or sharing of the software is strictly prohibited.",
+    "f3": "User Responsibilities. You are responsible for maintaining the confidentiality of your own Schwab account, API credentials, and license keys. You agree to comply with all applicable laws and regulations when using the software, including securities regulations in your jurisdiction.",
+    "f4": "Intellectual Property. All intellectual property rights in the Services and associated documentation remain the property of Alpha Wealth Lab. These Terms do not grant you any rights to use our trademarks, logos, or brand names.",
+    "f5": "Disclaimer of Warranties. The software is provided \"as is\" without warranties of any kind. Alpha Wealth Lab does not provide investment advice, brokerage, custody, asset management, account opening, or trade execution on your behalf. You assume full responsibility for any trading decisions made using the software.",
+    "f6": "Limitation of Liability. To the maximum extent permitted by law, Alpha Wealth Lab shall not be liable for any indirect, incidental, special, or consequential damages arising out of or relating to the use of the Services, including but not limited to trading losses or data inaccuracies."
+  },
+  "privacy": {
+    "label": "PRIVACY POLICY",
+    "title": "Privacy Policy",
+    "f0": "Information We Collect",
+    "f1": "When you purchase a software license or contact us, we may collect your name, email address, payment confirmation details, and IP address. We also collect limited license telemetry for activation, validation, and service continuity.",
+    "f2": "How We Use Your Information. We use your information to confirm payments, deliver license access, send important license notifications, and respond to your inquiries. We do not sell, trade, or rent your personal information to third parties.",
+    "f3": "Data Security. We implement industry-standard security measures to protect your personal information. All data transmissions are encrypted using TLS, and sensitive credentials are stored using AES-256 encryption at rest.",
+    "f4": "Telemetry Data. The Services may collect limited license telemetry such as product version, license validation status, activation timestamps, and related license-compliance metadata. This data is used for access control, service continuity, and product quality improvements.",
+    "f5": "Third-Party Services. Payments may be confirmed manually or processed through third-party payment providers. Provider use of your information is governed by their own privacy policies. We do not store credit card numbers on our servers.",
+    "f6": "Contact. If you have questions about this Privacy Policy, please contact us at alphawealthlab@outlook.com."
+  },
+  "disclaimer": {
+    "label": "DISCLAIMER",
+    "title": "Disclaimer",
+    "general": {
+      "title": "General Disclaimer",
+      "f0": "Quant.Infra.Net.Pro is a <strong>local trading software license</strong> that provides API integration capabilities for the Charles Schwab platform. It is <strong>not</strong> investment advice, a brokerage service, custody, account opening, asset management, or an investment platform.",
+      "f1": "The software is provided \"as is\" for integration and development purposes. Alpha Wealth Lab does not guarantee the accuracy, completeness, or timeliness of any market data, quotes, or financial information transmitted through the Services.",
+      "f2": "Any trading or investment decisions made using the Services are <strong>solely at your own risk</strong>. Alpha Wealth Lab and its affiliates are not responsible for any financial losses incurred through the use of this software.",
+      "f3": "Past performance of any trading strategy or system does not guarantee future results. You should consult a qualified financial advisor before making investment decisions."
+    },
+    "cs": {
+      "title": "Charles Schwab API Disclaimer",
+      "f0": "Quant.Infra.Net.Pro integrates with the Charles Schwab Developer API. Use of the Charles Schwab API is subject to Charles Schwab's own terms of service and developer agreements.",
+      "f1": "You are responsible for obtaining and maintaining your own Charles Schwab account, developer account, and API credentials. Alpha Wealth Lab does not have access to, custody of, or control over your Schwab account or funds.",
+      "f2": "Any issues related to the Charles Schwab API, including but not limited to API outages, rate limits, or account restrictions, are outside the scope of Alpha Wealth Lab's support.",
+      "warn": "By using this software, you acknowledge that you are solely responsible for your credentials, orders, trading decisions, and compliance with all applicable securities laws and regulations in your jurisdiction."
+    },
+    "privacy": {
+      "title": "Data Collection & Privacy Statement",
+      "f0": "<strong>Information We Collect</strong>. To provide and improve our services, we automatically collect the following technical data when you visit our website: IP address, geographic location (city level), pages visited, visit time and duration, browser type and version, referring website, and interaction events (button clicks, navigation actions, purchases). This telemetry data is collected via a session cookie and client-side heartbeat mechanism.",
+      "f1": "<strong>Credential Usage</strong>. Any Charles Schwab API credentials (App Key, App Secret, Refresh Token, Access Token) that you configure or generate while using our software are used <strong>exclusively</strong> for facilitating communication between your application and the Charles Schwab platform. We do not store, transmit, or have access to your Schwab credentials on our servers.",
+      "f2": "<strong>Service Data Usage</strong>. Technical service data — including license validation records, trial registration emails, and license telemetry — is used solely for <strong>access control</strong> (verifying license entitlements and device bindings) and <strong>improving our business services</strong> (analyzing user needs, optimizing product features, and enhancing service quality). Version 1.5.1 additionally hardens log redaction so sensitive OAuth, account, and order details are not exposed through normal logs or user-facing error surfaces.",
+      "f3": "We do not sell, trade, or share your personal or technical data with third parties. Collected data is used exclusively for business analysis and service improvement.",
+      "f4": "By continuing to use this website and our services, you consent to the data collection and usage practices described above. For more details, please refer to our <a href=\"/privacy\" style=\"color:var(--accent-cyan);text-decoration:underline\">Privacy Policy</a>."
+    }
+  },
+  "refund": {
+    "label": "REFUND POLICY",
+    "title": "Refund Policy",
+    "monthly": {
+      "title": "Monthly Subscriptions",
+      "f0": "Monthly subscription plans can be cancelled at any time. Your access will continue until the end of the current billing period.",
+      "f1": "No partial-month refunds are provided for monthly subscriptions. You may continue using the Services until your current billing cycle ends.",
+      "f2": "To cancel your subscription, contact us at alphawealthlab@outlook.com with your license key and account details."
+    },
+    "protection": {
+      "title": "First-Purchase Protection (7-Day)",
+      "f0": "If you are unsatisfied with the product within 7 days of your first purchase, you may request a full refund.",
+      "f1": "Refund requests must be submitted via email to alphawealthlab@outlook.com with your order confirmation and reason for the refund.",
+      "f2": "Refunds are typically processed within 5-10 business days through the original payment method or the manually agreed refund method."
+    },
+    "exclusion": {
+      "title": "Non-Refundable Situations",
+      "f0": "Refunds will not be issued for purchases made after the 7-day first-purchase protection period has expired.",
+      "f1": "Requests based on dissatisfaction with third-party services (e.g., Charles Schwab API changes, outages, or restrictions) are not eligible for refund.",
+      "f2": "Chargebacks initiated without first contacting our support team may result in license revocation and account suspension."
+    },
+    "process": {
+      "title": "Refund Process",
+      "f0": "Send an email to alphawealthlab@outlook.com with your order ID, license key, and reason for the refund request.",
+      "f1": "Our team will review your request and respond within 2 business days.",
+      "f2": "If approved, the refund will be processed to the original payment method or the manually agreed refund method within 5-10 business days."
+    },
+    "note": {
+      "title": "A Note from the Developer",
+      "text": "We are both developers and users ourselves. If you encounter any technical issues or have concerns about the software, please reach out to us first — we are committed to resolving issues and ensuring your satisfaction."
+    }
+  },
+  "faq": {
+    "label": "FAQ",
+    "title": "Frequently Asked Questions",
+    "q0": "What is Quant.Infra.Net.Pro?",
+    "a0": "Quant.Infra.Net.Pro is a local trading software license that wraps Charles Schwab's developer API into language-agnostic integration infrastructure. Deploy it locally or in your own environment, call RESTful endpoints from any programming language, and let the software handle OAuth, token management, and session continuity. It is not a trading bot, signal service, brokerage, custody, or financial advisory product.",
+    "q1": "Do I need a Charles Schwab developer account?",
+    "a1": "Yes. You register your application in the Schwab Developer Portal and obtain your own API credentials. Schwab Developer registration may require a +1 U.S. phone number. Quant.Infra.Net.Pro provides the integration software — you provide and control the Schwab account connection.",
+    "q2": "Do I need to use C# / .NET to use the Pro version?",
+    "a2": "No. The Pro version exposes a RESTful Web API with Swagger/OpenAPI documentation. You can integrate from Python, Java, Go, Node.js, C#, or any language with HTTP client support. The underlying SDK is built in C#/.NET, but you never need to interact with it directly.",
+    "q3": "What's the difference between Free (open source) and Pro?",
+    "a3": "Free (Quant.Infra.Net on GitHub) is a .NET class library — great for learning, evaluation, and inspecting the internals. Pro (Quant.Infra.Net.Pro) is a deployment-ready Web API infrastructure with automated token lifecycle management, cross-language RESTful access, production-grade error recovery, and priority support. Free = SDK. Pro = deployed infrastructure.",
+    "q4": "Is there a trial or money-back guarantee?",
+    "a4": "We offer a 3-month free trial so you can evaluate the product before subscribing. We also provide complete documentation and the open-source Free version for deeper technical review before you buy.",
+    "q5": "How do I get support after purchasing Pro?",
+    "a5": "Contact us at alphawealthlab@outlook.com. Pro subscribers receive priority technical support for integration issues, setup assistance, and troubleshooting. We respond within 1-2 business days.",
+    "q6": "Can I use Quant.Infra.Net.Pro with Python / Java / Node.js / Go?",
+    "a6": "Yes — this is exactly what Pro is designed for. It exposes accounts, quotes, orders, positions, current option chains, and equity/ETF price history as RESTful calls with Swagger documentation. Schwab does not provide price history for options, futures, or historical option chains through this endpoint.",
+    "q7": "How does Quant.Infra.Net.Pro achieve indefinite unattended operation?",
+    "a7": "This is our breakthrough feature. Schwab's refresh token expires every 7 days — in a DIY setup, your pipeline stops dead weekly. With Quant.Infra.Net.Pro, tokens stay valid and your pipeline never stops. The entire process is fully automated and requires zero manual intervention. You can literally run unattended for months.",
+    "q8": "What if my account has two-factor authentication (MFA) enabled?",
+    "a8": "The system handles this gracefully. When MFA verification is needed, you simply complete it once — everything else is fully automated, no additional configuration required."
+  },
+  "pricing": {
+    "label": "Pricing",
+    "title": "Choose Your Path: Development or Production",
+    "free": {
+      "badge": "Free (Open Source)",
+      "period": "",
+      "sub": "Development & evaluation phase — learn, explore, contribute",
+      "f0": "Quant.Infra.Net open-source .NET class library (GitHub)",
+      "f1": "Schwab API integration capabilities — accounts, quotes, orders",
+      "f2": "Completely open source — transparent code for reviewing internal implementation",
+      "f3": "Community support & documentation",
+      "cta": "View on GitHub"
+    },
+    "monthly": {
+      "badge": "Personal Pro",
+      "sub": "Local software license for self-directed individual developers and traders",
+      "f0": "Broad Schwab API coverage with Swagger/OpenAPI docs; price history is limited to equities and ETFs",
+      "f1": "Language-agnostic Web API for Python, Java, Go, Node.js, and C#",
+      "f2": "Automated OAuth re-authorization and long-running unattended operation",
+      "f3": "Production reliability with technical support",
+      "f4": "Payment is confirmed before license activation; manual payment instructions are available",
+      "cta": "Request Monthly Purchase",
+      "footnote": "After payment is confirmed, an active license key is issued to your email."
+    },
+    "yearly": {
+      "badge": "Personal Pro Annual",
+      "sub": "Best value for long-running production workflows",
+      "f0": "Everything in Personal Pro Monthly",
+      "f1": "Annual billing at $999.99 per year",
+      "f2": "Ideal for uninterrupted Schwab API operations",
+      "f3": "Lower effective monthly cost for committed users",
+      "f4": "Payment is confirmed before license activation; manual payment instructions are available",
+      "cta": "Request Yearly Purchase",
+      "footnote": "After payment is confirmed, an active license key is issued to your email."
+    },
+    "enterprise": {
+      "badge": "Enterprise",
+      "price": "Custom",
+      "period": "custom",
+      "sub": "Enterprise pricing is customized by deployment scope, seats, and support needs",
+      "f0": "Pricing aligned with deployment size, environments, and support requirements",
+      "f1": "Custom onboarding, deployment, and integration support",
+      "f2": "Join the waitlist or contact us directly by email",
+      "cta": "Join Waitlist",
+      "waitlistSuccess": "Thank you! We'll be in touch soon.",
+      "contact": "Or email us:"
+    },
+    "consulting": {
+      "badge": "Consulting",
+      "period": "/ hour",
+      "sub": "One-on-one integration assistance",
+      "f0": "1-on-1 screen-sharing session",
+      "f1": "Custom integration guidance",
+      "f2": "Architecture review & optimization",
+      "f3": "Troubleshooting & debugging support",
+      "cta": "Book a Session"
+    },
+    "checkoutNotice": "Free trial is available before purchase. When you're ready, request purchase instructions; access is activated only after payment is confirmed. Quant.Infra.Net.Pro is licensed software, not brokerage, custody, asset management, account opening, or investment advice.",
+    "protection": {
+      "text1": "We provide complete ",
+      "link": "documentation",
+      "text2": " plus a free trial and open-source version, so you can evaluate the product before subscribing."
+    },
+    "waitlist": {
+      "invalidEmail": "Please enter a valid email address.",
+      "success": "Thank you! We'll be in touch soon.",
+      "error": "Something went wrong. Please try again.",
+      "networkError": "Network error. Please try again later.",
+      "cta": "Join Waitlist"
+    }
+  },
+  "pricingPage": {
+    "deliverables": {
+      "label": "What's Included",
+      "title": "Plan Inclusions",
+      "subtitle": "Every plan comes with production-ready components designed for real-world trading.",
+      "placeholder": "Full details coming soon. All plans include documentation and deployment guides."
+    }
+  }
+}
+
+
+
+
+;
+window.i18nData.zh = {
+  "nav": {
+    "pricing": "价格",
+    "about": "关于",
+    "disclaimer": "免责声明",
+    "faq": "常见问题",
+    "galleryTrigger": "图库",
+    "cta": "立即下载"
+  },
+  "gallery": {
+    "title": "产品图库",
+    "items": {
+      "reg0": {
+        "title": "Charles Schwab 开发者门户",
+        "desc": "在 Schwab 开发者门户注册您的应用以开始使用。"
+      },
+      "reg1": {
+        "title": "应用已就绪可上线",
+        "desc": "您的应用已获批，准备投入生产环境使用。"
+      },
+      "acct": {
+        "title": "账户仪表盘",
+        "desc": "全面的账户概览及投资组合摘要。"
+      },
+      "opt": {
+        "title": "当前期权链",
+        "desc": "当前期权链，包含行权价和 Greeks 参数；不是历史期权链数据。"
+      },
+      "ord": {
+        "title": "订单历史",
+        "desc": "完整的交易历史及详细的执行报告。"
+      },
+      "pos": {
+        "title": "持仓概览",
+        "desc": "实时持仓追踪及盈亏分析。"
+      },
+      "qte": {
+        "title": "实时行情",
+        "desc": "流式实时报价，包含完整市场数据。"
+      },
+      "swag": {
+        "title": "Web API Swagger 文档",
+        "desc": "交互式 API 文档，支持在线测试。"
+      }
+    }
+  },
+  "footer": {
+    "tagline": "面向自主管理 Schwab API 用户的本地交易软件许可证。任意语言，分钟级部署。",
+    "links": "链接",
+    "legal": "法律",
+    "refund": "退款政策",
+    "privacy": "隐私政策",
+    "tos": "服务条款"
+  },
+  "hero": {
+    "badge": "Quant.Infra.Net.Pro",
+    "title": "您的 Charles Schwab API <span class=\"gradient-text\">基础设施</span><br>任意语言，生产就绪",
+    "subtitle": "花数周调试 API 集成？每周被令牌过期打断？\n不如 HTTP 调用——长期运行",
+    "desc": "Quant.Infra.Net.Pro 是面向自主用户的本地交易软件许可证。它帮助您连接自己的 Schwab 账户和 API 凭据；我们不托管资金、不代客开户、不代客下单、不管理资产，也不提供投资建议。",
+    "cta1": "免费下载试用",
+    "cta2": "开始 3 个月免费试用",
+    "badgeLabel": "Swagger API",
+    "early": "1.5.1 版本更新：<strong>金融合规日志进一步加固</strong>。敏感的 OAuth、账户与订单信息，现已不会出现在普通日志和面向用户的错误提示中。"
+  },
+  "scenario": {
+    "label": "这是你的困境吗？",
+    "title": "如果以下任何一条戳中你，我们来解决",
+    "sub": "你只是想用 Schwab 数据跑策略，专注Alpha策略，而不是成为 API 集成专家。",
+    "c0": "Schwab OAuth、回调地址、令牌刷新反复踩坑——策略还没开始，时间先被基础设施集成层耗光",
+    "c1": "好不容易跑通了，结果令牌每周过期——你不敢休假，生怕管道停摆",
+    "c2": "你要的不是折腾集成层，而是可靠的 Schwab 数据——持续、稳定、零操心"
+  },
+  "pain": {
+    "label": "没有 Quant.Infra.Net.Pro 的真实代价",
+    "title": "你的策略本应跑在市场上，而不是卡在 API 问题上",
+    "0": {
+      "title": "数周工程，而非数小时",
+      "desc": "你以为只是简单调用 API？Schwab 的认证机制涉及多层令牌和复杂的过期策略。多数开发者花数周甚至数月才能稳定运行——那段时间你本可以写完策略、跑通回测、上线赚钱。"
+    },
+    "1": {
+      "title": "不敢离开电脑的 7 天魔咒",
+      "desc": "Schwab 的令牌每 7 天过期一次。没有自动续期，你的管道每周准时停摆——没有订单、没有行情、没有信号。你不敢出差、不敢休假、周末也要盯着。Quant.Infra.Net.Pro 是突破这堵墙的解决方案。"
+    },
+    "tagline": "你购买的不是券商、托管或投顾服务，而是一套帮助你运行自己 Schwab API 连接的本地软件许可证。"
+  },
+  "solution": {
+    "label": "你的痛点，我们提供解决方案",
+    "title": "部署一次，从任意语言调用——剩下的交给我们",
+    "sub": "部署一次 Web API。从任意语言调用我们的端点。再也不用操心令牌管理。",
+    "0": {
+      "title": "你的语言，你的节奏",
+      "f0": "Python、Java、Go、Node.js、C#——用你最熟悉的语言写策略，HTTP 调用就够了",
+      "f1": "账户、行情、订单、持仓、当前期权链，以及股票/ETF 历史价格——通过 RESTful API 暴露并配 Swagger 文档",
+      "f2": "无需 .NET SDK、无需编译、无需集成——只需 HTTP 请求",
+      "f3": "历史价格遵循 Schwab 限制：仅支持股票和 ETF；不提供期权、期货或历史期权链。"
+    },
+    "1": {
+      "title": "再也不被 7 天魔咒困扰",
+      "f0": "令牌持续有效——你可以出差、休假、安心睡觉，管道一直跑",
+      "f1": "零人工干预——部署后不用再碰它，系统自动维护一切",
+      "f2": "重启后即时恢复——服务器重启和迁移？没问题"
+    },
+    "2": {
+      "title": "生产就绪，开箱即用",
+      "f0": "优雅错误恢复 — 管道持续运行，不受任何干扰",
+      "f1": "内置脱敏日志与 License 遥测，在不暴露敏感 Schwab 数据的前提下监控集成运行状况",
+      "f2": "开箱即用，默认生产就绪"
+    },
+    "conclusion": "不用重复搭建 Schwab API 管道。许可使用本地软件，连接你自己的 Schwab 凭据，并继续对自己的交易决策完全负责。"
+  },
+  "stats": {
+    "0": {
+      "label": "API 端点",
+      "desc": "Schwab 端点通过 REST 暴露；历史价格仅限股票和 ETF"
+    },
+    "1": {
+      "label": "无人值守运行",
+      "desc": "连续无人值守运行——令牌持续有效，永不中断"
+    },
+    "2": {
+      "label": "部署时间",
+      "desc": "从 GitHub 到首次 API 调用，不到 30 分钟"
+    },
+    "3": {
+      "label": "语言支持",
+      "desc": "Python、Java、Go、Node.js、C# — 任意 HTTP 客户端均可"
+    }
+  },
+  "how": {
+    "label": "快速开始",
+    "title": "三步从零到生产",
+    "sub": "部署、配置、开始构建。您无需掌握 .NET/C# 知识。",
+    "s0": {
+      "title": "部署与配置",
+      "desc": "部署 Pro Web API。配置您的 Schwab 开发者凭据。"
+    },
+    "s1": {
+      "title": "许可证激活",
+      "desc": "使用您的许可证密钥激活。心跳服务自动验证您的订阅状态。"
+    },
+    "s2": {
+      "title": "从任意语言集成",
+      "desc": "使用 Swagger UI 探索端点，然后从 Python、Java、Go 或任意语言调用我们的 RESTful API。令牌生命周期在后台自动运行。"
+    }
+  },
+  "about": {
+    "title": "关于 Alpha Wealth Lab",
+    "intro": "我们构建面向 Charles Schwab API 集成的本地软件。Quant.Infra.Net.Pro 是我们的旗舰产品——服务于需要自主管理 Schwab 接入、但不想反复处理集成问题的独立开发者、交易团队和量化研究员。",
+    "email": "联系我们：",
+    "substack": "在 Substack 上关注我们的分析和最新动态",
+    "vision": {
+      "title": "我们构建什么",
+      "text": "生产级 Schwab API 软件。它处理 OAuth 复杂性、令牌生命周期管理和部署就绪性；您仍然控制自己的 Schwab 账户、API 凭据和交易决策。"
+    },
+    "products": {
+      "title": "开源版 + Pro",
+      "text": "免费版（GitHub 上的 Quant.Infra.Net）是一个开源的 .NET 类库—适合学习内部原理和建立信任。Quant.Infra.Net.Pro 是部署就绪的 Web API，同样的 Schwab 集成，封装为语言无关的基础设施。用免费版来理解，用 Pro 来上线。"
+    },
+    "closing": "为交易开发者构建的本地交易软件。由构建交易系统的工程师打造。",
+    "signoff": "— Alpha Wealth Lab 团队"
+  },
+  "tos": {
+    "label": "服务条款",
+    "title": "服务条款",
+    "f0": "条款接受",
+    "f1": "访问或使用 Quant.Infra.Net.Pro 软件及相关服务（以下简称“服务”），即表示您同意受本服务条款的约束。如不同意，请勿使用本服务。",
+    "f2": "许可授予。确认收款后，您将获得非排他性、不可转让的软件使用许可，可按照所选计划（Personal Pro 或 Enterprise）使用本地软件。严禁重新分发、转售或共享本软件。",
+    "f3": "用户责任。您有责任保护自己的 Schwab 账户、API 凭据和许可证密钥的机密性。您同意在使用本软件时遵守所有适用的法律法规，包括但不限于您所在司法管辖区的证券法规。",
+    "f4": "知识产权。服务及相关文档的所有知识产权归 Alpha Wealth Lab 所有。本条款不授予您使用我们的商标、标识或品牌名称的任何权利。",
+    "f5": "免责声明。本软件按“现状”提供，不作任何明示或默示保证。Alpha Wealth Lab 不提供投资建议、经纪、托管、资产管理、代客开户或代客下单服务。您对使用本软件做出的任何交易决策承担全部责任。",
+    "f6": "责任限制。在法律允许的最大范围内，Alpha Wealth Lab 不对因使用服务而产生的任何间接、附带、特殊或后果性损害负责，包括但不限于交易损失或数据不准确。"
+  },
+  "privacy": {
+    "label": "隐私政策",
+    "title": "隐私政策",
+    "f0": "我们收集的信息",
+    "f1": "当您购买软件许可证或联系我们时，我们可能会收集您的姓名、电子邮件地址、付款确认信息和 IP 地址。我们还会收集有限的 License 遥测数据，用于激活、验证和服务连续性。",
+    "f2": "我们如何使用您的信息。我们使用您的信息来确认收款、交付许可证访问权限、发送重要的许可证通知以及回复您的咨询。我们不会向第三方出售、交易或出租您的个人信息。",
+    "f3": "数据安全。我们实施行业标准的安全措施来保护您的个人信息。所有数据传输均使用 TLS 加密，敏感凭据使用 AES-256 静态加密存储。",
+    "f4": "遥测数据。服务可能会收集有限的 License 遥测数据，例如产品版本、许可证验证状态、激活时间戳及相关授权合规元数据。这些数据用于权限控制、服务连续性和产品质量改进。",
+    "f5": "第三方服务。付款可通过人工确认或第三方支付服务处理。支付服务商对您信息的使用受其自身隐私政策约束。我们不在服务器上存储信用卡号码。",
+    "f6": "联系方式。如果您对本隐私政策有任何疑问，请通过 alphawealthlab@outlook.com 联系我们。"
+  },
+  "disclaimer": {
+    "label": "免责声明",
+    "title": "免责声明",
+    "general": {
+      "title": "一般免责声明",
+      "f0": "Quant.Infra.Net.Pro 是一个<strong>本地交易软件许可证</strong>，为 Charles Schwab 平台提供 API 集成功能。它<strong>不是</strong>投资建议、经纪服务、托管、代客开户、资产管理或投资平台。",
+      "f1": "该软件按“现状”提供，用于集成和开发目的。Alpha Wealth Lab 不保证通过服务传输的任何市场数据、报价或财务信息的准确性、完整性或及时性。",
+      "f2": "使用该服务做出的任何交易或投资决策<strong>完全由您自行承担风险</strong>。Alpha Wealth Lab 及其关联方不对因使用该软件而产生的任何财务损失负责。",
+      "f3": "任何交易策略或系统的过往表现不保证未来结果。在做出投资决策之前，您应咨询合格的财务顾问。"
+    },
+    "cs": {
+      "title": "Charles Schwab API 免责声明",
+      "f0": "Quant.Infra.Net.Pro 与 Charles Schwab Developer API 集成。使用 Charles Schwab API 须遵守 Charles Schwab 自身的服务条款和开发者协议。",
+      "f1": "您有责任获取并维护自己的 Charles Schwab 账户、开发者账户和 API 凭据。Alpha Wealth Lab 无法访问、托管或控制您的 Schwab 账户或资金。",
+      "f2": "与 Charles Schwab API 相关的任何问题，包括但不限于 API 中断、速率限制或账户限制，均不在 Alpha Wealth Lab 的支持范围内。",
+      "warn": "使用本软件即表示您确认，您对自己的凭据、订单、交易决策以及遵守所在司法管辖区所有适用的证券法律法规承担全部责任。"
+    },
+    "privacy": {
+      "title": "数据收集与隐私声明",
+      "f0": "<strong>我们收集的信息</strong>。为了提供和改善服务，当您访问我们的网站时，我们会自动收集以下技术数据：IP 地址、地理位置（城市级别）、访问页面、访问时间和停留时长、浏览器类型和版本、来源网站、交互事件（按钮点击、导航行为、购买操作）。这些遥测数据通过会话 Cookie 和客户端心跳机制采集。",
+      "f1": "<strong>凭据使用声明</strong>。您在使用本软件过程中配置或生成的任何 Charles Schwab API 凭据（App Key、App Secret、Refresh Token、Access Token）<strong>仅用于</strong>您的应用与 Charles Schwab 平台之间的通信。我们不会在服务器上存储、传输或访问您的 Schwab 凭据。",
+      "f2": "<strong>服务数据用途</strong>。技术服务数据——包括授权验证记录、试用注册邮箱和 License 遥测——仅用于<strong>权限管控</strong>（验证授权权益和设备绑定）和<strong>改善商业服务</strong>（分析用户需求、优化产品功能、提升服务质量）。1.5.1 版本还进一步强化了日志脱敏，敏感 OAuth、账户和订单细节不会通过普通日志或面向用户的错误界面暴露。",
+      "f3": "我们不会将您的个人或技术数据向第三方出售或共享，收集的数据仅用于商业分析和服务改进。",
+      "f4": "继续使用本网站和服务，即表示您同意上述数据收集和使用方式。更多详情请参阅我们的<a href=\"/privacy\" style=\"color:var(--accent-cyan);text-decoration:underline\">隐私政策</a>。"
+    }
+  },
+  "refund": {
+    "label": "退款政策",
+    "title": "退款政策",
+    "monthly": {
+      "title": "月度订阅",
+      "f0": "月度订阅计划可随时取消。您的访问权限将持续到当前计费周期结束。",
+      "f1": "月度订阅不提供部分月份退款。您可以继续使用服务，直到当前计费周期结束。",
+      "f2": "如需取消订阅，请通过 alphawealthlab@outlook.com 联系我们，并提供您的许可证密钥和账户详情。"
+    },
+    "protection": {
+      "title": "首次购买保护（7 天）",
+      "f0": "如果您在首次购买后 7 天内对产品不满意，可以申请全额退款。",
+      "f1": "退款申请请通过电子邮件发送至 alphawealthlab@outlook.com，附上订单确认信息和退款原因。",
+      "f2": "退款通常在 5-10 个工作日内处理。退款将退回至原始支付方式或双方人工确认的退款方式。"
+    },
+    "exclusion": {
+      "title": "不予退款的情况",
+      "f0": "首次购买保护期（7 天）过期后，不再接受退款申请。",
+      "f1": "基于对第三方服务不满意（例如 Charles Schwab API 变更、中断或限制）的退款请求不予受理。",
+      "f2": "未经联系我们的支持团队而直接发起的拒付（chargeback）可能导致许可证撤销和账户暂停。"
+    },
+    "process": {
+      "title": "退款流程",
+      "f0": "发送电子邮件至 alphawealthlab@outlook.com，注明订单 ID、许可证密钥和退款原因。",
+      "f1": "我们的团队将在 2 个工作日内审核您的请求并回复。",
+      "f2": "如获批准，退款将在 5-10 个工作日内退回至原始支付方式或双方人工确认的退款方式。"
+    },
+    "note": {
+      "title": "来自开发者的一句话",
+      "text": "我们即使开发者，也是使用者。如果您遇到任何技术问题或对软件有疑虑，请先联系我们 — 我们致力于解决问题并确保您的满意度。"
+    }
+  },
+  "faq": {
+    "label": "常见问题",
+    "title": "常见问题",
+    "q0": "Quant.Infra.Net.Pro 是什么？",
+    "a0": "Quant.Infra.Net.Pro 是一套本地交易软件许可证，将 Charles Schwab 开发者 API 封装为语言无关的集成基础设施。您在本地或自己的环境中部署，从任意编程语言调用 RESTful 端点，由软件处理 OAuth、令牌管理和会话连续性。它不是交易机器人、信号服务、券商、托管或金融咨询产品。",
+    "q1": "我需要 Charles Schwab 开发者账户吗？",
+    "a1": "需要。您在 Schwab 开发者门户注册应用并获取自己的 API 凭据。Schwab Developer 注册可能要求 +1 美国手机号。Quant.Infra.Net.Pro 提供集成软件——您提供并控制 Schwab 账户连接。",
+    "q2": "使用 Pro 版本需要掌握 C#/.NET 吗？",
+    "a2": "不需要。Pro 版本暴露 RESTful Web API 并附带 Swagger/OpenAPI 文档。您可以从 Python、Java、Go、Node.js、C# 或任意支持 HTTP 客户端的语言集成。底层 SDK 用 C#/.NET 构建，但您无需直接接触它。",
+    "q3": "免费版（开源）和 Pro 有什么区别？",
+    "a3": "免费版（GitHub 上的 Quant.Infra.Net）是一个 .NET 类库，适合学习、评估和审查内部实现。Pro（Quant.Infra.Net.Pro）是部署就绪的 Web API 基础设施，具备自动化令牌生命周期管理、跨语言 RESTful 访问、生产级错误恢复和优先支持。免费 = SDK。Pro = 部署了的基础设施。",
+    "q4": "有试用或退款保证吗？",
+    "a4": "我们提供 3 个月免费试用，方便您在正式订阅前充分评估产品。我们也提供完整文档和开源免费版，便于您在购买前做更深入的技术评估。",
+    "q5": "购买 Pro 后如何获取支持？",
+    "a5": "通过 alphawealthlab@outlook.com 联系我们。Pro 订阅用户享有优先技术支持，覆盖集成问题、设置协助和故障排除。我们会在 1-2 个工作日内响应。",
+    "q6": "能否用 Python/Java/Node.js/Go 使用 Quant.Infra.Net.Pro？",
+    "a6": "可以——这正是 Pro 的设计目标。它将账户、行情、订单、持仓、当前期权链，以及股票/ETF 历史价格暴露为 RESTful 调用并配 Swagger 文档。Schwab 的该历史价格端点不提供期权、期货或历史期权链数据。",
+    "q7": "Quant.Infra.Net.Pro 如何实现无限期无人值守运行？",
+    "a7": "这是我们的突破性功能。Schwab 的 refresh token 每 7 天过期——在 DIY 方案中，你的管道每周都会准时停摆。有了 Quant.Infra.Net.Pro，令牌持续有效，管道永不停歇。整个过程完全自动，无需任何人工干预，你可以真正连续数月无人值守运行。",
+    "q8": "如果账户启用了双因素认证（MFA）怎么办？",
+    "a8": "系统为此提供了优雅的处理方案。当需要 MFA 验证时，您只需完成一次验证，后续完全自动化——无需任何额外配置。"
+  },
+  "pricing": {
+    "label": "价格方案",
+    "title": "选择路径：开发阶段或生产部署",
+    "free": {
+      "badge": "免费版（开源）",
+      "period": "",
+      "sub": "开发与评估阶段—学习、探索、贡献",
+      "f0": "Quant.Infra.Net 开源 .NET 类库（GitHub）",
+      "f1": "Schwab API 集成能力 — 账户、行情、订单",
+      "f2": "完全开源，代码透明，可审查内部实现",
+      "f3": "社区支持与文档",
+      "cta": "查看 GitHub"
+    },
+    "monthly": {
+      "badge": "个人专业版",
+      "sub": "面向自主个人开发者与交易者的本地软件许可证",
+      "f0": "广泛 Schwab API 覆盖，配 Swagger/OpenAPI 文档；历史价格仅限股票和 ETF",
+      "f1": "语言无关的 Web API，支持 Python、Java、Go、Node.js 和 C#",
+      "f2": "自动 OAuth 重授权与长期无人值守运行",
+      "f3": "生产级稳定性与技术支持",
+      "f4": "确认收款后才激活许可证；可提供人工付款指引",
+      "cta": "申请月付购买",
+      "footnote": "付款确认后，激活的许可证密钥将发送至您的邮箱。"
+    },
+    "yearly": {
+      "badge": "个人专业版年付",
+      "sub": "适合长期生产运行的高性价比方案",
+      "f0": "包含个人专业版月付的全部能力",
+      "f1": "按年计费，每年 $999.99",
+      "f2": "适合长期连续运行 Schwab API 工作流",
+      "f3": "对于长期用户，折算月成本更低",
+      "f4": "确认收款后才激活许可证；可提供人工付款指引",
+      "cta": "申请年付购买",
+      "footnote": "付款确认后，激活的许可证密钥将发送至您的邮箱。"
+    },
+    "enterprise": {
+      "badge": "企业版",
+      "price": "定制",
+      "period": "定制",
+      "sub": "企业版价格根据部署范围、席位和支持需求单独评估",
+      "f0": "价格与部署规模、运行环境和支持需求匹配",
+      "f1": "提供定制 onboarding、部署与集成支持",
+      "f2": "可提交邮箱加入 waiting list，或直接邮件联系",
+      "cta": "加入等候名单",
+      "waitlistSuccess": "感谢您的关注！我们会尽快与您联系。",
+      "contact": "或直接邮件联系："
+    },
+    "consulting": {
+      "badge": "咨询服务",
+      "period": "/ 小时",
+      "sub": "一对一集成指导服务",
+      "f0": "一对一屏幕共享会议",
+      "f1": "定制集成方案指导",
+      "f2": "架构评审与优化",
+      "f3": "故障排查与调试支持",
+      "cta": "预约会议"
+    },
+    "checkoutNotice": "购买前可先免费试用。准备正式订阅时，请申请购买指引；仅在确认收款后激活访问权限。Quant.Infra.Net.Pro 是软件许可证，不是经纪、托管、资产管理、代客开户或投资建议服务。",
+    "protection": {
+      "text1": "我们提供完整的",
+      "link": "文档",
+      "text2": "、免费试用以及开源免费版，方便您在正式订阅前充分评估产品。"
+    },
+    "waitlist": {
+      "invalidEmail": "请输入有效的邮箱地址。",
+      "success": "感谢您的关注！我们会尽快与您联系。",
+      "error": "出了点问题，请稍后重试。",
+      "networkError": "网络异常，请稍后再试。",
+      "cta": "加入等候名单"
+    }
+  },
+  "pricingPage": {
+    "deliverables": {
+      "label": "包含内容",
+      "title": "方案包含内容",
+      "subtitle": "每个方案都包含为真实交易场景设计的生产就绪组件。",
+      "placeholder": "详细内容即将上线。所有方案均包含文档和部署指南。"
+    }
+  }
+}
+
+;
+
