@@ -1,0 +1,10 @@
+# Quant.Infra.Net.Pro - alpha-wealth-lab.com
+# AI content signals (EU DSM Directive 2019/790 Art. 4)
+# search:   yes
+# ai-input: yes
+# ai-train: no
+
+User-agent: *
+Allow: /
+
+Sitemap: https://www.alpha-wealth-lab.com/sitemap.xml
