@@ -55,7 +55,7 @@
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
     "title": "Your Charles Schwab API <span class=\"gradient-text\">Infrastructure</span><br>Any Language. Production-Ready.",
-    "subtitle": "The only Schwab API client that survives the 7-day refresh token expiry.",
+    "subtitle": "Weeks or Monthes debugging API integration? Tokens expiring weekly?\nJust make HTTP calls — it runs indefinitely.",
     "desc": "Quant.Infra.Net.Pro is a local trading software license for self-directed users. It helps you connect your own Schwab account and API credentials; we do not custody funds, open accounts, place trades for you, manage assets, or provide investment advice.",
     "cta1": "Download Free Trial",
     "cta2": "Start 3-Month Free Trial",
