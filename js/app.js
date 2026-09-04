@@ -100,10 +100,82 @@ function animateCountUp(element) {
   requestAnimationFrame(step);
 }
 
+// ---------- i18n helpers ----------
+const I18N_STORAGE_KEY = "lang";
+
+// Language codes that ship with translated content (en, zh).
+const SUPPORTED_LANGS = Object.keys(window.i18nData).length ? Object.keys(window.i18nData) : [DEFAULT_LANG, "en", "zh"];
+
+function normalizeLang(lang) {
+  const code = String(lang || "").toLowerCase().split("-")[0].split("_")[0];
+  return SUPPORTED_LANGS.indexOf(code) !== -1 ? code : null;
+}
+
+// Parse an Accept-Language header like "en-US,en;q=0.9,zh-CN;q=0.8" into ranked tags.
+function parseAcceptLanguage(header) {
+  return String(header || "")
+    .split(",")
+    .map((part) => {
+      const [tag, ...params] = part.trim().split(";");
+      const qParam = params.find((p) => p.trim().startsWith("q="));
+      const q = qParam ? Number.parseFloat(qParam.trim().slice(2)) : 1;
+      return { tag: tag.trim(), q: Number.isFinite(q) ? q : 1 };
+    })
+    .filter((entry) => entry.tag)
+    .sort((a, b) => b.q - a.q);
+}
+
+// Pick the best supported language for a visitor without an explicit choice:
+// 1) explicit Accept-Language match, 2) navigator.language, 3) DEFAULT_LANG.
+function detectBrowserLanguage() {
+  const candidates = [];
+  if (typeof window !== "undefined" && window.navigator) {
+    const al = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+    candidates.push(al);
+  }
+  if (typeof navigator !== "undefined" && typeof navigator.languages === "object" && navigator.languages.length) {
+    candidates.push.apply(candidates, navigator.languages.slice(1));
+  }
+  for (const raw of candidates) {
+    const match = normalizeLang(raw);
+    if (match) return match;
+  }
+  return DEFAULT_LANG;
+}
+
+// Return the language the visitor previously chose, or null when absent/invalid.
+function savedLangInitial() {
+  try {
+    const saved = localStorage.getItem(I18N_STORAGE_KEY);
+    return saved && SUPPORTED_LANGS.indexOf(saved) !== -1 ? saved : null;
+  } catch (e) {
+    return null;
+  }
+}
+// Keep the language dropdown in sync with the supported languages, preserving the
+// current selection when it is still valid. This is what lets new languages be added
+// without touching the HTML.
+function populateLangSelect(selected) {
+  const select = document.getElementById("langSelect");
+  if (!select) return;
+  const labels = { en: "English", zh: "中文" };
+  select.innerHTML = "";
+  SUPPORTED_LANGS.forEach((code) => {
+    const option = document.createElement("option");
+    option.value = code;
+    option.textContent = labels[code] || code.toUpperCase();
+    select.appendChild(option);
+  });
+  select.value = SUPPORTED_LANGS.indexOf(selected) !== -1 ? selected : SUPPORTED_LANGS[0];
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  const savedLang = localStorage.getItem("lang");
-  const browserLang = navigator.language.startsWith("zh") ? "zh" : "en";
-  window.setLang(savedLang || browserLang || DEFAULT_LANG);
+  // Populate the language dropdown from the supported languages (future-proof).
+  const saved = savedLangInitial();
+  populateLangSelect(saved || detectBrowserLanguage());
+
+  // Default to the saved choice, else the browser language.
+  window.setLang(saved || detectBrowserLanguage());
 
   const img1 = document.getElementById("carouselImg1");
   const img2 = document.getElementById("carouselImg2");
@@ -115,6 +187,33 @@ document.addEventListener("DOMContentLoaded", () => {
       img2.classList.toggle("hidden", !showSecond);
     }, 4000);
   }
+
+  // Language selector (was inline onchange, blocked by CSP script-src 'self')
+  const langSelect = document.getElementById("langSelect");
+  if (langSelect) {
+    langSelect.addEventListener("change", (event) => {
+      window.setLang(event.target.value);
+    });
+  }
+
+  // Gallery trigger button (was inline onclick)
+  document.querySelectorAll(".gallery-trigger").forEach((button) => {
+    button.addEventListener("click", () => window.openGallery());
+  });
+
+  // Mobile nav toggle (was inline onclick)
+  document.getElementById("mobileToggle")?.addEventListener("click", () => window.toggleMobileNav());
+
+  // Gallery close button (was inline onclick)
+  document.querySelector(".modal-close")?.addEventListener("click", () => window.closeGallery());
+
+  // Gallery thumbnails -> lightbox (was inline onclick using this.src)
+  document.querySelectorAll(".gallery-item img").forEach((img) => {
+    img.addEventListener("click", () => window.openLightbox(img.src));
+  });
+
+  // Lightbox overlay -> close (was inline onclick)
+  document.getElementById("lightboxOverlay")?.addEventListener("click", () => window.closeLightbox());
 
   document.getElementById("galleryModal")?.addEventListener("click", (event) => {
     if (event.target === event.currentTarget) window.closeGallery();
