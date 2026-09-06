@@ -3,3 +3,6 @@
 ################################################################################
 
 /.vs
+
+# Local-only drafts (never commit to public repo)
+P0-2-POSTS.md
