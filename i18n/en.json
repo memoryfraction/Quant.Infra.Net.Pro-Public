@@ -71,8 +71,6 @@
     "c2": "You don't want to wrestle with integration layers — you want reliable Schwab data, continuous, stable, zero maintenance"
   },
   "pain": {
-    "label": "The Real Cost of Going Without Quant.Infra.Net.Pro",
-    "title": "Your Strategy Should Be Running on the Market, Not Stuck on API Problems",
     "0": {
       "title": "Weeks of Engineering, Not Hours",
       "desc": "Think it's just a simple API call? Schwab's auth involves multi-layered token mechanisms with complex expiry policies. Most developers spend weeks or months getting it stable — time you could have spent writing strategies, running backtests, and going live."
@@ -81,12 +79,11 @@
       "title": "The 7-Day Curse That Chains You to Your Desk",
       "desc": "Schwab's token expires every 7 days. Without automatic renewal, your pipeline stops dead weekly — no orders, no quotes, no signals. No vacations, no weekends off, always watching. Quant.Infra.Net.Pro is the solution that breaks this wall."
     },
+    "label": "The Real Cost of Going Without Quant.Infra.Net.Pro",
+    "title": "Your Strategy Should Be Running on the Market, Not Stuck on API Problems",
     "tagline": "You're not buying a brokerage, custody, or advisory service. You're licensing local software that helps you operate your own Schwab API connection."
   },
   "solution": {
-    "label": "Your Pain, Our Solution",
-    "title": "Deploy Once, Call from Any Language — We Handle the Rest",
-    "sub": "Deploy the Web API once. Call our endpoints from any language. Never think about token management again.",
     "0": {
       "title": "Your Language, Your Pace",
       "f0": "Python, Java, Go, Node.js, C# — write in your language of choice, an HTTP call is all it takes",
@@ -106,6 +103,9 @@
       "f1": "Built-in redacted logging and license telemetry for monitoring integration health without exposing sensitive Schwab data in normal logs",
       "f2": "Ready out of the box with production defaults"
     },
+    "label": "Your Pain, Our Solution",
+    "title": "Deploy Once, Call from Any Language — We Handle the Rest",
+    "sub": "Deploy the Web API once. Call our endpoints from any language. Never think about token management again.",
     "conclusion": "Don't rebuild Schwab API plumbing. License the local software, connect your own Schwab credentials, and keep full responsibility for your trading decisions."
   },
   "stats": {
@@ -339,10 +339,13 @@
       "subtitle": "Every plan comes with production-ready components designed for real-world trading.",
       "placeholder": "Full details coming soon. All plans include documentation and deployment guides."
     }
+  },
+  "cta": {
+    "label": "Ready when you are",
+    "title": "Book a 30-minute Schwab API audit — free",
+    "sub": "Not sure if Quant.Infra.Net fits your stack? Book a free 30-minute audit. You leave with a written assessment of your current Schwab/IB/Binance setup, and a migration plan if it makes sense. No pressure, no sales script.",
+    "btnPrimary": "Book a free 30-min audit",
+    "btnSecondary": "Email us instead",
+    "checklistNote": "Also grab our free Compliance & Migration Checklist — the 12 pitfalls we see most often on self-directed Schwab API rollouts."
   }
 }
-
-
-
-
-
