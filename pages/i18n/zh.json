@@ -5,7 +5,8 @@
     "disclaimer": "免责声明",
     "faq": "常见问题",
     "galleryTrigger": "图库",
-    "cta": "立即下载"
+    "cta": "立即下载",
+    "ebook": "电子书"
   },
   "gallery": {
     "title": "产品图库",
@@ -50,12 +51,14 @@
     "legal": "法律",
     "refund": "退款政策",
     "privacy": "隐私政策",
-    "tos": "服务条款"
+    "tos": "服务条款",
+    "githubProfile": "GitHub 主页：@memoryfraction",
+    "ebook": "电子书"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
     "title": "您的 Charles Schwab API <span class=\"gradient-text\">基础设施</span><br>任意语言，生产就绪",
-    "subtitle": "The only Schwab API client that survives the 7-day refresh token expiry.",
+    "subtitle": "花数周调试 API 集成？每周被令牌过期打断？\n不如 HTTP 调用——长期运行",
     "desc": "Quant.Infra.Net.Pro 是面向自主用户的本地交易软件许可证。它帮助您连接自己的 Schwab 账户和 API 凭据；我们不托管资金、不代客开户、不代客下单、不管理资产，也不提供投资建议。",
     "cta1": "免费下载试用",
     "cta2": "开始 3 个月免费试用",
@@ -71,8 +74,6 @@
     "c2": "你要的不是折腾集成层，而是可靠的 Schwab 数据——持续、稳定、零操心"
   },
   "pain": {
-    "label": "没有 Quant.Infra.Net.Pro 的真实代价",
-    "title": "你的策略本应跑在市场上，而不是卡在 API 问题上",
     "0": {
       "title": "数周工程，而非数小时",
       "desc": "你以为只是简单调用 API？Schwab 的认证机制涉及多层令牌和复杂的过期策略。多数开发者花数周甚至数月才能稳定运行——那段时间你本可以写完策略、跑通回测、上线赚钱。"
@@ -81,12 +82,11 @@
       "title": "不敢离开电脑的 7 天魔咒",
       "desc": "Schwab 的令牌每 7 天过期一次。没有自动续期，你的管道每周准时停摆——没有订单、没有行情、没有信号。你不敢出差、不敢休假、周末也要盯着。Quant.Infra.Net.Pro 是突破这堵墙的解决方案。"
     },
+    "label": "没有 Quant.Infra.Net.Pro 的真实代价",
+    "title": "你的策略本应跑在市场上，而不是卡在 API 问题上",
     "tagline": "你购买的不是券商、托管或投顾服务，而是一套帮助你运行自己 Schwab API 连接的本地软件许可证。"
   },
   "solution": {
-    "label": "你的痛点，我们提供解决方案",
-    "title": "部署一次，从任意语言调用——剩下的交给我们",
-    "sub": "部署一次 Web API。从任意语言调用我们的端点。再也不用操心令牌管理。",
     "0": {
       "title": "你的语言，你的节奏",
       "f0": "Python、Java、Go、Node.js、C#——用你最熟悉的语言写策略，HTTP 调用就够了",
@@ -106,6 +106,9 @@
       "f1": "内置脱敏日志与 License 遥测，在不暴露敏感 Schwab 数据的前提下监控集成运行状况",
       "f2": "开箱即用，默认生产就绪"
     },
+    "label": "你的痛点，我们提供解决方案",
+    "title": "部署一次，从任意语言调用——剩下的交给我们",
+    "sub": "部署一次 Web API。从任意语言调用我们的端点。再也不用操心令牌管理。",
     "conclusion": "不用重复搭建 Schwab API 管道。许可使用本地软件，连接你自己的 Schwab 凭据，并继续对自己的交易决策完全负责。"
   },
   "stats": {
@@ -339,7 +342,30 @@
       "subtitle": "每个方案都包含为真实交易场景设计的生产就绪组件。",
       "placeholder": "详细内容即将上线。所有方案均包含文档和部署指南。"
     }
+  },
+  "ebook": {
+    "label": "来自作者",
+    "title": "代码背后的电子书",
+    "sub": "同一套工程思维，写进了一本书。在 Amazon 上获取，也欢迎在 GitHub 上关注我。",
+    "book": {
+      "title": "量化交易员实战手册",
+      "desc": "算法交易中的实用策略、风险管理与系统设计——这个网站交付的软件能力，在书中逐页拆解。",
+      "cta": "前往 Amazon 购买",
+      "authorNote": "由 Quant.Infra.Net.Pro 的同一团队撰写",
+      "disclaimer": "第三方出版，与 Charles Schwab & Co., Inc. 无关联、非其背书。",
+      "p0": "以风险为先的交易系统架构",
+      "p1": "策略设计、回测与执行模式",
+      "p2": "面向 Schwab 及其他券商的数据管道可靠性",
+      "p3": "可复用的真实运维 Playbook"
+    },
+    "github": {
+      "title": "GitHub 上的更多项目",
+      "desc": "Quant.Infra.Net.Pro 只是我众多开源项目之一。关注 GitHub 主页，第一时间跟踪版本发布、路线图与新工具。",
+      "cta": "访问 GitHub：@memoryfraction",
+      "r0": "Quant.Infra.Net — 开源 .NET 类库（免费版本）",
+      "r1": "Quant.Infra.Net.Pro-Public — 本网站与指南",
+      "r2": "更多量化与交易基础设施——即将推出"
+    },
+    "back": "返回首页"
   }
 }
-
-
