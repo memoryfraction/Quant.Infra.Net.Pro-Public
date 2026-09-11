@@ -5,7 +5,8 @@
     "disclaimer": "Disclaimer",
     "faq": "FAQ",
     "galleryTrigger": "Gallery",
-    "cta": "Download Now"
+    "cta": "Download Now",
+    "ebook": "The E-Book"
   },
   "gallery": {
     "title": "Product Gallery",
@@ -50,7 +51,9 @@
     "legal": "Legal",
     "refund": "Refund Policy",
     "privacy": "Privacy Policy",
-    "tos": "Terms of Service"
+    "tos": "Terms of Service",
+    "githubProfile": "GitHub Profile: @memoryfraction",
+    "ebook": "E-Book"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
@@ -339,5 +342,30 @@
       "subtitle": "Every plan comes with production-ready components designed for real-world trading.",
       "placeholder": "Full details coming soon. All plans include documentation and deployment guides."
     }
+  },
+  "ebook": {
+    "label": "From the Author",
+    "title": "The E-Book Behind the Code",
+    "sub": "The same engineering mindset, turned into a book. Grab it on Amazon — and find more of my work on GitHub.",
+    "book": {
+      "title": "The Quant Trader's Playbook",
+      "desc": "Practical strategies, risk management, and system design for algorithmic trading — everything this site ships as software, explained page by page.",
+      "cta": "Get It on Amazon",
+      "authorNote": "Written by the same team that builds Quant.Infra.Net.Pro",
+      "disclaimer": "Third-party publisher. Not affiliated with, or endorsed by, Charles Schwab & Co., Inc.",
+      "p0": "Risk-first architecture for production trading systems",
+      "p1": "Strategy design, backtesting, and execution patterns",
+      "p2": "Data pipeline reliability for Schwab and other brokers",
+      "p3": "Real-world operational playbooks you can reuse"
+    },
+    "github": {
+      "title": "More Projects on GitHub",
+      "desc": "Quant.Infra.Net.Pro is one of many open-source projects. Follow the GitHub profile to track releases, roadmap, and new tools.",
+      "cta": "Visit @memoryfraction on GitHub",
+      "r0": "Quant.Infra.Net — open-source .NET class library (Free tier)",
+      "r1": "Quant.Infra.Net.Pro-Public — this site + guides",
+      "r2": "More quant & trading infrastructure — coming soon"
+    },
+    "back": "Back to home"
   }
 }

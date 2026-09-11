@@ -9,7 +9,8 @@ window.i18nData.en = {
     "disclaimer": "Disclaimer",
     "faq": "FAQ",
     "galleryTrigger": "Gallery",
-    "cta": "Download Now"
+    "cta": "Download Now",
+    "ebook": "The E-Book"
   },
   "gallery": {
     "title": "Product Gallery",
@@ -54,7 +55,9 @@ window.i18nData.en = {
     "legal": "Legal",
     "refund": "Refund Policy",
     "privacy": "Privacy Policy",
-    "tos": "Terms of Service"
+    "tos": "Terms of Service",
+    "githubProfile": "GitHub Profile: @memoryfraction",
+    "ebook": "E-Book"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
@@ -343,6 +346,31 @@ window.i18nData.en = {
       "subtitle": "Every plan comes with production-ready components designed for real-world trading.",
       "placeholder": "Full details coming soon. All plans include documentation and deployment guides."
     }
+  },
+  "ebook": {
+    "label": "From the Author",
+    "title": "The E-Book Behind the Code",
+    "sub": "The same engineering mindset, turned into a book. Grab it on Amazon — and find more of my work on GitHub.",
+    "book": {
+      "title": "The Quant Trader's Playbook",
+      "desc": "Practical strategies, risk management, and system design for algorithmic trading — everything this site ships as software, explained page by page.",
+      "cta": "Get It on Amazon",
+      "authorNote": "Written by the same team that builds Quant.Infra.Net.Pro",
+      "disclaimer": "Third-party publisher. Not affiliated with, or endorsed by, Charles Schwab & Co., Inc.",
+      "p0": "Risk-first architecture for production trading systems",
+      "p1": "Strategy design, backtesting, and execution patterns",
+      "p2": "Data pipeline reliability for Schwab and other brokers",
+      "p3": "Real-world operational playbooks you can reuse"
+    },
+    "github": {
+      "title": "More Projects on GitHub",
+      "desc": "Quant.Infra.Net.Pro is one of many open-source projects. Follow the GitHub profile to track releases, roadmap, and new tools.",
+      "cta": "Visit @memoryfraction on GitHub",
+      "r0": "Quant.Infra.Net — open-source .NET class library (Free tier)",
+      "r1": "Quant.Infra.Net.Pro-Public — this site + guides",
+      "r2": "More quant & trading infrastructure — coming soon"
+    },
+    "back": "Back to home"
   }
 };
 
@@ -353,7 +381,8 @@ window.i18nData.zh = {
     "disclaimer": "免责声明",
     "faq": "常见问题",
     "galleryTrigger": "图库",
-    "cta": "立即下载"
+    "cta": "立即下载",
+    "ebook": "电子书"
   },
   "gallery": {
     "title": "产品图库",
@@ -398,7 +427,9 @@ window.i18nData.zh = {
     "legal": "法律",
     "refund": "退款政策",
     "privacy": "隐私政策",
-    "tos": "服务条款"
+    "tos": "服务条款",
+    "githubProfile": "GitHub 主页：@memoryfraction",
+    "ebook": "电子书"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
@@ -687,5 +718,30 @@ window.i18nData.zh = {
       "subtitle": "每个方案都包含为真实交易场景设计的生产就绪组件。",
       "placeholder": "详细内容即将上线。所有方案均包含文档和部署指南。"
     }
+  },
+  "ebook": {
+    "label": "来自作者",
+    "title": "代码背后的电子书",
+    "sub": "同一套工程思维，写进了一本书。在 Amazon 上获取，也欢迎在 GitHub 上关注我。",
+    "book": {
+      "title": "量化交易员实战手册",
+      "desc": "算法交易中的实用策略、风险管理与系统设计——这个网站交付的软件能力，在书中逐页拆解。",
+      "cta": "前往 Amazon 购买",
+      "authorNote": "由 Quant.Infra.Net.Pro 的同一团队撰写",
+      "disclaimer": "第三方出版，与 Charles Schwab & Co., Inc. 无关联、非其背书。",
+      "p0": "以风险为先的交易系统架构",
+      "p1": "策略设计、回测与执行模式",
+      "p2": "面向 Schwab 及其他券商的数据管道可靠性",
+      "p3": "可复用的真实运维 Playbook"
+    },
+    "github": {
+      "title": "GitHub 上的更多项目",
+      "desc": "Quant.Infra.Net.Pro 只是我众多开源项目之一。关注 GitHub 主页，第一时间跟踪版本发布、路线图与新工具。",
+      "cta": "访问 GitHub：@memoryfraction",
+      "r0": "Quant.Infra.Net — 开源 .NET 类库（免费版本）",
+      "r1": "Quant.Infra.Net.Pro-Public — 本网站与指南",
+      "r2": "更多量化与交易基础设施——即将推出"
+    },
+    "back": "返回首页"
   }
 };
