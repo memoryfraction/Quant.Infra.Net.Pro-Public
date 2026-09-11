@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The E-Book Behind the Code | Quant.Infra.Net.Pro</title>
+  <meta name="description" content="The Quant Trader's Playbook — practical strategies, risk management, and system design for algorithmic trading. Get it on Amazon and explore more on GitHub @memoryfraction.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'">
+  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://www.alpha-wealth-lab.com/ebook">
+  <meta property="og:type" content="book">
+  <meta property="og:site_name" content="Quant.Infra.Net.Pro">
+  <meta property="og:title" content="The E-Book Behind the Code — The Quant Trader's Playbook">
+  <meta property="og:description" content="Practical strategies, risk management, and system design for algorithmic trading. Get it on Amazon.">
+  <meta property="og:url" content="https://www.alpha-wealth-lab.com/ebook">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The E-Book Behind the Code — The Quant Trader's Playbook">
+  <meta name="twitter:description" content="Practical strategies, risk management, and system design for algorithmic trading.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Book",
+    "name": "The Quant Trader's Playbook",
+    "description": "Practical strategies, risk management, and system design for algorithmic trading — everything this site ships as software, explained page by page.",
+    "url": "https://www.amazon.com/dp/B0D7W89ZQD",
+    "author": {
+      "@type": "Person",
+      "name": "memoryfraction",
+      "url": "https://github.com/memoryfraction"
+    },
+    "isRelatedTo": {
+      "@type": "SoftwareApplication",
+      "name": "Quant.Infra.Net.Pro",
+      "url": "https://www.alpha-wealth-lab.com/"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.amazon.com/dp/B0D7W89ZQD",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css">
+  <script src="./js/i18n-data.js"></script>
+  <script defer src="./js/app.js"></script>
+  <style>
+    .ebook-hero{position:relative;padding:100px 0 80px;overflow:hidden}
+    .ebook-hero .container{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .book-card{position:relative;border:1px solid var(--border);border-radius:16px;padding:40px 32px;background:linear-gradient(135deg,rgba(37,99,235,.15),rgba(6,182,212,.08));backdrop-filter:blur(8px)}
+    .book-card .book-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;line-height:1.2;margin:0 0 16px}
+    .book-card .book-desc{color:var(--text-secondary);font-size:15px;line-height:1.7;margin:0 0 24px}
+    .book-card .points{list-style:none;margin:0 0 28px;padding:0}
+    .book-card .points li{position:relative;padding:8px 0 8px 28px;font-size:14px;color:var(--text-secondary);line-height:1.6}
+    .book-card .points li::before{content:'';position:absolute;left:0;top:14px;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#06b6d4);opacity:.8}
+    .book-card .author-note{font-size:13px;color:var(--text-muted);margin-top:20px;border-top:1px solid var(--border);padding-top:16px}
+    .github-card{border:1px solid var(--border);border-radius:16px;padding:32px;background:rgba(255,255,255,.02)}
+    .github-card .repo-list{list-style:none;margin:20px 0 24px;padding:0}
+    .github-card .repo-list li{padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--text-secondary);display:flex;align-items:center;gap:10px}
+    .github-card .repo-list li::before{content:'▸';color:var(--accent-cyan);font-size:12px}
+    .github-card .repo-list li:last-child{border-bottom:none}
+    @media(max-width:768px){
+      .ebook-hero .container{grid-template-columns:1fr;gap:40px}
+      .ebook-hero{padding:60px 0 60px}
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="/" class="nav-logo" aria-label="Quant.Infra.Net home">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="28" height="28" rx="6" stroke="url(#lg)" stroke-width="2" fill="rgba(37,99,235,.1)"/>
+          <path d="M10 20V12l4 5 4-5v8" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="22" cy="12" r="2" fill="url(#lg)"/>
+          <circle cx="22" cy="20" r="2" fill="url(#lg)"/>
+          <defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+        </svg>
+        Quant.Infra.Net
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" data-i18n="how.label">Getting Started</a></li>
+        <li><a href="https://github.com/memoryfraction" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="#book" data-i18n="nav.ebook">The E-Book</a></li>
+      </ul>
+      <div class="nav-right">
+        <div class="lang-select">
+          <select id="langSelect" onchange="window.setLang(this.value)" aria-label="Language">
+            <option value="en">English</option>
+            <option value="zh">中文</option>
+          </select>
+        </div>
+        <a href="https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" data-i18n="nav.cta">Download Now</a>
+        <button class="nav-mobile-toggle" id="mobileToggle" type="button" onclick="window.toggleMobileNav()" aria-label="Open navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="ebook-hero" id="book">
+      <div class="container">
+        <div>
+          <div class="hero-badge" style="margin-bottom:24px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            <span data-i18n="ebook.label">From the Author</span>
+          </div>
+          <h1 class="hero-title" style="font-size:48px" data-i18n="ebook.title">The E-Book Behind the Code</h1>
+          <p class="hero-subtitle" style="margin:20px 0 32px" data-i18n="ebook.sub">The same engineering mindset, turned into a book. Grab it on Amazon — and find more of my work on GitHub.</p>
+          <div class="hero-actions" style="display:flex;gap:16px;flex-wrap:wrap">
+            <a href="https://www.amazon.com/dp/B0D7W89ZQD" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg" data-i18n="ebook.book.cta">Get It on Amazon</a>
+            <a href="https://github.com/memoryfraction" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-lg" data-i18n="ebook.github.cta">Visit @memoryfraction on GitHub</a>
+          </div>
+          <p style="margin-top:24px;font-size:13px;color:var(--text-muted)" data-i18n="ebook.book.disclaimer">Third-party publisher. Not affiliated with, or endorsed by, Charles Schwab &amp; Co., Inc.</p>
+        </div>
+        <div class="book-card">
+          <h2 class="book-title" data-i18n="ebook.book.title">The Quant Trader's Playbook</h2>
+          <p class="book-desc" data-i18n="ebook.book.desc">Practical strategies, risk management, and system design for algorithmic trading — everything this site ships as software, explained page by page.</p>
+          <ul class="points" id="bookPoints">
+            <li data-i18n="ebook.book.p0">Risk-first architecture for production trading systems</li>
+            <li data-i18n="ebook.book.p1">Strategy design, backtesting, and execution patterns</li>
+            <li data-i18n="ebook.book.p2">Data pipeline reliability for Schwab and other brokers</li>
+            <li data-i18n="ebook.book.p3">Real-world operational playbooks you can reuse</li>
+          </ul>
+          <div class="author-note" data-i18n="ebook.book.authorNote">Written by the same team that builds Quant.Infra.Net.Pro</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="github">
+      <div class="container">
+        <div class="github-card fade-in">
+          <h2 class="section-title" data-i18n="ebook.github.title">More Projects on GitHub</h2>
+          <p class="section-sub" style="margin:12px 0 0" data-i18n="ebook.github.desc">Quant.Infra.Net.Pro is one of many open-source projects. Follow the GitHub profile to track releases, roadmap, and new tools.</p>
+          <ul class="repo-list" id="repoList">
+            <li data-i18n="ebook.github.r0">Quant.Infra.Net — open-source .NET class library (Free tier)</li>
+            <li data-i18n="ebook.github.r1">Quant.Infra.Net.Pro-Public — this site + guides</li>
+            <li data-i18n="ebook.github.r2">More quant &amp; trading infrastructure — coming soon</li>
+          </ul>
+          <a href="https://github.com/memoryfraction" target="_blank" rel="noopener noreferrer" class="btn btn-primary" data-i18n="ebook.github.cta">Visit @memoryfraction on GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">
+        <div class="logo">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="28" height="28" rx="6" stroke="url(#lg2)" stroke-width="2" fill="rgba(37,99,235,.1)"/>
+            <path d="M10 20V12l4 5 4-5v8" stroke="url(#lg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="lg2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+          </svg>
+          Quant.Infra.Net
+        </div>
+        <div class="footer-tagline" data-i18n="footer.tagline">Local trading software license for self-directed Schwab API users. Write in any language. Deploy in minutes.</div>
+      </div>
+      <div class="footer-links">
+        <h4 data-i18n="footer.links">Links</h4>
+        <a href="/" data-i18n="how.label">Getting Started</a>
+        <a href="https://github.com/memoryfraction" target="_blank" rel="noopener noreferrer" data-i18n="footer.githubProfile">GitHub Profile: @memoryfraction</a>
+        <a href="https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public" target="_blank" rel="noopener noreferrer">GitHub: Quant.Infra.Net.Pro-Public</a>
+      </div>
+      <div class="footer-links">
+        <h4 data-i18n="footer.legal">Legal</h4>
+        <a href="mailto:alphawealthlab@outlook.com">alphawealthlab@outlook.com</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">© 2026 Quant.Infra.Net</div>
+  </footer>
+
+
+</body>
+</html>
