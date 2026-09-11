@@ -339,13 +339,5 @@
       "subtitle": "Every plan comes with production-ready components designed for real-world trading.",
       "placeholder": "Full details coming soon. All plans include documentation and deployment guides."
     }
-  },
-  "cta": {
-    "label": "Ready when you are",
-    "title": "Book a 30-minute Schwab API audit — free",
-    "sub": "Not sure if Quant.Infra.Net fits your stack? Book a free 30-minute audit. You leave with a written assessment of your current Schwab/IB/Binance setup, and a migration plan if it makes sense. No pressure, no sales script.",
-    "btnPrimary": "Book a free 30-min audit",
-    "btnSecondary": "Email us instead",
-    "checklistNote": "Also grab our free Compliance & Migration Checklist — the 12 pitfalls we see most often on self-directed Schwab API rollouts."
   }
 }

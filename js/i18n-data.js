@@ -343,14 +343,6 @@ window.i18nData.en = {
       "subtitle": "Every plan comes with production-ready components designed for real-world trading.",
       "placeholder": "Full details coming soon. All plans include documentation and deployment guides."
     }
-  },
-  "cta": {
-    "label": "Ready when you are",
-    "title": "Book a 30-minute Schwab API audit — free",
-    "sub": "Not sure if Quant.Infra.Net fits your stack? Book a free 30-minute audit. You leave with a written assessment of your current Schwab/IB/Binance setup, and a migration plan if it makes sense. No pressure, no sales script.",
-    "btnPrimary": "Book a free 30-min audit",
-    "btnSecondary": "Email us instead",
-    "checklistNote": "Also grab our free Compliance & Migration Checklist — the 12 pitfalls we see most often on self-directed Schwab API rollouts."
   }
 };
 
@@ -695,13 +687,5 @@ window.i18nData.zh = {
       "subtitle": "每个方案都包含为真实交易场景设计的生产就绪组件。",
       "placeholder": "详细内容即将上线。所有方案均包含文档和部署指南。"
     }
-  },
-  "cta": {
-    "label": "随时可以开始",
-    "title": "预约 30 分钟 Schwab API 免费审计",
-    "sub": "不确定 Quant.Infra.Net 是否适合你的技术栈？预约一次 30 分钟免费审计。结束后你会拿到一份书面评估（你当前的 Schwab/IB/Binance 配置），以及一份（如有意义的）迁移方案。没有压力，没有销售话术。",
-    "btnPrimary": "预约 30 分钟免费审计",
-    "btnSecondary": "发邮件给我们",
-    "checklistNote": "顺便免费领取我们的《合规与迁移 Checklist》——自托管 Schwab API 项目里最常见的 12 个坑。"
   }
 };
