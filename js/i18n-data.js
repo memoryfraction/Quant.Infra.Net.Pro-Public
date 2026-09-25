@@ -10,7 +10,8 @@ window.i18nData.en = {
     "faq": "FAQ",
     "galleryTrigger": "Gallery",
     "cta": "Download Now",
-    "ebook": "The E-Book"
+    "ebook": "The E-Book",
+    "macro": "Macro Dashboard"
   },
   "gallery": {
     "title": "Product Gallery",
@@ -382,7 +383,8 @@ window.i18nData.zh = {
     "faq": "常见问题",
     "galleryTrigger": "图库",
     "cta": "立即下载",
-    "ebook": "电子书"
+    "ebook": "电子书",
+    "macro": "宏观周期"
   },
   "gallery": {
     "title": "产品图库",
