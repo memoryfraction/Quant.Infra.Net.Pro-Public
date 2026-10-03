@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Use Quant.Infra.Net.Pro with AI clients (MCP) | Quant.Infra.Net.Pro</title>
+  <meta name="description" content="How to let an AI client such as Claude Code read your Schwab account data with Quant.Infra.Net.Pro. Read-only, off by default.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'">
+  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://www.alpha-wealth-lab.com/mcp">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Quant.Infra.Net.Pro">
+  <meta property="og:title" content="Use Quant.Infra.Net.Pro with AI clients (MCP)">
+  <meta property="og:description" content="Read-only MCP guide: enable it, get the token, connect Claude Code.">
+  <meta property="og:url" content="https://www.alpha-wealth-lab.com/mcp">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css">
+  <script src="./js/i18n-data.js"></script>
+  <script defer src="./js/app.js"></script>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="/" class="nav-logo" aria-label="Quant.Infra.Net home">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="28" height="28" rx="6" stroke="url(#lg)" stroke-width="2" fill="rgba(37,99,235,.1)"/>
+          <path d="M10 20V12l4 5 4-5v8" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="22" cy="12" r="2" fill="url(#lg)"/>
+          <circle cx="22" cy="20" r="2" fill="url(#lg)"/>
+          <defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+        </svg>
+        Quant.Infra.Net
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" data-i18n="how.label">Getting Started</a></li>
+        <li><a href="https://github.com/memoryfraction" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="./changelog" data-i18n="nav.changelog">What's New</a></li>
+        <li><a href="./ebook" data-i18n="nav.ebook">The E-Book</a></li>
+      </ul>
+      <div class="nav-right">
+        <div class="lang-select">
+          <select id="langSelect" onchange="window.setLang(this.value)" aria-label="Language">
+            <option value="en">English</option>
+            <option value="zh">中文</option>
+          </select>
+        </div>
+        <a href="https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" data-i18n="nav.cta">Download Now</a>
+        <button class="nav-mobile-toggle" id="mobileToggle" type="button" onclick="window.toggleMobileNav()" aria-label="Open navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section cl-page">
+      <div class="container">
+        <div class="cl-intro">
+          <div class="section-label">MCP</div>
+          <h1 class="section-title">Use Quant.Infra.Net.Pro with AI clients</h1>
+          <p class="section-sub">Read-only access for Claude Code, Cursor and other MCP clients.</p>
+        </div>
+
+      <article class="cl-entry fade-in" id="mcp">
+        <header class="cl-head">
+          <h2 class="cl-ver">MCP</h2>
+          <span class="cl-badge">v1.8.4+</span>
+        </header>
+        <div class="cl-body cl-en" lang="en">
+<p><strong>Let an AI client read your Schwab data. Read-only and off by default.</strong></p>
+<ul>
+<li><strong>What it is.</strong> Quant.Infra.Net.Pro can let AI clients such as Claude Code or Cursor <em>read</em> your account, positions, orders, quotes and option chains through MCP (Model Context Protocol). It runs inside the app on your own computer at <code>https://127.0.0.1:8443/mcp</code>. It <strong>cannot place, change or cancel any order</strong>. Available from v1.8.4.</li>
+<li><strong>1. Turn it on.</strong> Open your settings file and add the block below, then restart the app. Windows: <code>%APPDATA%\Quant.Infra.Net.Pro\config\appsettings.user.json</code>. macOS and Linux: <code>~/.config/Quant.Infra.Net.Pro/config/appsettings.user.json</code>. Merge it into the existing JSON instead of creating a second top-level object.</li>
+</ul>
+<p><code>{ "Mcp": { "Enabled": true } }</code></p>
+<ul>
+<li><strong>2. Get your token.</strong> On first start the app creates <code>mcp-token.txt</code> in the same <code>config</code> folder. Every request must send it as <code>Authorization: Bearer &lt;token&gt;</code>. Treat the token like a password and never share it. To replace it, stop the app, delete the file and start the app again.</li>
+<li><strong>3. Connect Claude Code.</strong> Run the command below with your token. Other clients need the same three things: the URL, the HTTP (Streamable HTTP) transport and the Authorization header; see their own MCP documentation.</li>
+</ul>
+<p><code>claude mcp add --transport http quant-infra https://127.0.0.1:8443/mcp --header "Authorization: Bearer &lt;token&gt;"</code></p>
+<ul>
+<li><strong>4. If the client complains about the certificate.</strong> The app uses its own local certificate authority. Trust the file <code>certs/quant-ca.cer</code> in your data folder. For Node-based clients set <code>NODE_EXTRA_CA_CERTS</code> to that file's path.</li>
+<li><strong>Tools (all read-only).</strong> <code>get_account</code>, <code>get_balances</code>, <code>get_positions</code>, <code>get_orders</code>, <code>get_order</code>, <code>get_quote</code>, <code>get_quotes</code>, <code>get_price_history</code>, <code>get_option_chain</code>, <code>calculate_rebalance</code>. <code>calculate_rebalance</code> only suggests; trading is done in the app.</li>
+<li><strong>Privacy.</strong> Everything a tool returns is sent to the AI service your client uses. Only turn MCP on if you are comfortable with that service seeing your account, positions, orders and quotes. To turn it off, set <code>Enabled</code> to <code>false</code> and restart.</li>
+</ul>
+        </div>
+        <div class="cl-body cl-zh" lang="zh-CN">
+<p><strong>让 AI 客户端读取您的 Schwab 数据。只读，默认关闭。</strong></p>
+<ul>
+<li><strong>这是什么。</strong>Quant.Infra.Net.Pro 可以通过 MCP（Model Context Protocol）让 Claude Code、Cursor 等 AI 客户端<em>读取</em>您的账户、持仓、订单、报价和期权链。服务运行在您自己电脑上的应用内，地址为 <code>https://127.0.0.1:8443/mcp</code>。它<strong>无法下单、改单或撤单</strong>。v1.8.4 起提供。</li>
+<li><strong>1. 开启。</strong>打开设置文件，加入下面的配置块，然后重启应用。Windows：<code>%APPDATA%\Quant.Infra.Net.Pro\config\appsettings.user.json</code>；macOS 和 Linux：<code>~/.config/Quant.Infra.Net.Pro/config/appsettings.user.json</code>。请合并进已有 JSON，不要新建第二个顶层对象。</li>
+</ul>
+<p><code>{ "Mcp": { "Enabled": true } }</code></p>
+<ul>
+<li><strong>2. 获取 token。</strong>首次启动时，应用会在同一个 <code>config</code> 文件夹里生成 <code>mcp-token.txt</code>。每个请求都必须以 <code>Authorization: Bearer &lt;token&gt;</code> 的形式携带它。请把 token 当作密码，切勿分享。要更换时，停止应用、删除该文件、再次启动。</li>
+<li><strong>3. 连接 Claude Code。</strong>用您的 token 执行下面的命令。其他客户端需要同样三项：URL、HTTP（Streamable HTTP）传输方式和 Authorization 请求头，请参阅其自身的 MCP 文档。</li>
+</ul>
+<p><code>claude mcp add --transport http quant-infra https://127.0.0.1:8443/mcp --header "Authorization: Bearer &lt;token&gt;"</code></p>
+<ul>
+<li><strong>4. 客户端提示证书问题时。</strong>应用使用自己的本地证书颁发机构。请信任数据文件夹里的 <code>certs/quant-ca.cer</code>。基于 Node 的客户端可把 <code>NODE_EXTRA_CA_CERTS</code> 设为该文件的路径。</li>
+<li><strong>工具（全部只读）。</strong><code>get_account</code>、<code>get_balances</code>、<code>get_positions</code>、<code>get_orders</code>、<code>get_order</code>、<code>get_quote</code>、<code>get_quotes</code>、<code>get_price_history</code>、<code>get_option_chain</code>、<code>calculate_rebalance</code>。<code>calculate_rebalance</code> 只给出建议，交易请在应用内操作。</li>
+<li><strong>隐私。</strong>工具返回的所有内容都会发送给您的客户端所使用的 AI 服务。只有在您能接受该服务看到您的账户、持仓、订单和报价时才开启 MCP。要关闭，把 <code>Enabled</code> 设为 <code>false</code> 并重启。</li>
+</ul>
+        </div>
+      </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">
+        <div class="logo">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="28" height="28" rx="6" stroke="url(#lg2)" stroke-width="2" fill="rgba(37,99,235,.1)"/>
+            <path d="M10 20V12l4 5 4-5v8" stroke="url(#lg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="lg2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+          </svg>
+          Quant.Infra.Net
+        </div>
+        <div class="footer-tagline" data-i18n="footer.tagline">Local trading software license for self-directed Schwab API users. Write in any language. Deploy in minutes.</div>
+      </div>
+      <div class="footer-links">
+        <h4 data-i18n="footer.links">Links</h4>
+        <a href="/" data-i18n="how.label">Getting Started</a>
+        <a href="https://github.com/memoryfraction" target="_blank" rel="noopener noreferrer" data-i18n="footer.githubProfile">GitHub Profile: @memoryfraction</a>
+        <a href="https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public" target="_blank" rel="noopener noreferrer">GitHub: Quant.Infra.Net.Pro-Public</a>
+      </div>
+      <div class="footer-links">
+        <h4 data-i18n="footer.legal">Legal</h4>
+        <a href="mailto:alphawealthlab@outlook.com">alphawealthlab@outlook.com</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">© 2026 Quant.Infra.Net</div>
+  </footer>
+</body>
+</html>
