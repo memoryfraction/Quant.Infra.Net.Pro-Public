@@ -29,6 +29,7 @@
     "description": "Charles Schwab API infrastructure that survives the 7-day refresh token expiry. Local, any-language, production-ready trading software license.",
     "url": "https://www.alpha-wealth-lab.com/",
     "applicationCategory": "FinanceApplication",
+    "softwareVersion": "1.8.4",
     "operatingSystem": "Windows, macOS, Linux",
     "offers": {
       "@type": "Offer",
@@ -108,7 +109,7 @@ The only Schwab API client that survives the 7-day refresh token expiry.</h2>
             <a href="https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg" data-i18n="hero.cta1">Download Free Trial</a>
             <a href="mailto:alphawealthlab@outlook.com?subject=Quant.Infra.Net.Pro%20Trial%20Request" class="btn btn-outline btn-lg" data-i18n="hero.cta2">Start 3-Month Free Trial</a>
           </div>
-          <div class="hero-early" data-i18n-html="hero.early">Version 1.5.1 update: <strong>financial compliance logging hardened</strong>. Sensitive OAuth, account, and order details are now redacted from normal logs and user-facing errors.</div>
+          <div class="hero-early" data-i18n-html="hero.early">Version 1.8.4: <strong>built-in read-only MCP server for AI clients</strong>. Claude Code, Cursor and other clients can read your Schwab data; no tool can place an order. <a href="./changelog">See what's new</a></div>
         </div>
         <div class="hero-image">
           <div class="hero-image-wrapper">
@@ -226,6 +227,41 @@ The only Schwab API client that survives the 7-day refresh token expiry.</h2>
       </div>
     </section>
 
+    <section class="section" id="news">
+      <div class="container">
+        <div class="text-center news-head">
+          <div class="section-label" data-i18n="news.label">What's New</div>
+          <h2 class="section-title" data-i18n="news.title">Always Improving. Every Release Documented.</h2>
+          <p class="section-sub text-center" data-i18n="news.sub">The latest highlights from the product. Every version's full notes are on the version history page.</p>
+        </div>
+        <div class="news-grid fade-in">
+          <a class="news-card" href="./changelog#v1-8-4">
+            <div class="news-meta"><span class="news-ver">v1.8.4</span><span class="news-date">2026-10-03</span></div>
+            <h3 data-i18n="news.n0.title">Read-only MCP server for AI clients</h3>
+            <p data-i18n="news.n0.desc">Let Claude Code, Cursor and other AI clients read your Schwab accounts, positions, orders, quotes and option chains. Off by default, protected by a bearer token, and no tool can place, change or cancel an order.</p>
+          </a>
+          <a class="news-card" href="./changelog#v1-8-1">
+            <div class="news-meta"><span class="news-ver">v1.8.1 – 1.8.3</span><span class="news-date">2026-09-28 – 09-30</span></div>
+            <h3 data-i18n="news.n1.title">Trusted HTTPS, no more "Not secure"</h3>
+            <p data-i18n="news.n1.desc">A local certificate authority now signs the HTTPS certificate, and on Linux it is trusted in Chrome automatically. Also fixes the in-app update check and HTTP-to-HTTPS redirects behind nginx or Apache.</p>
+          </a>
+          <a class="news-card" href="./changelog#v1-8-0">
+            <div class="news-meta"><span class="news-ver">v1.8.0</span><span class="news-date">2026-09-27</span></div>
+            <h3 data-i18n="news.n2.title">One-click in-app upgrade</h3>
+            <p data-i18n="news.n2.desc">Update from inside the app, with a trading safety gate (no upgrades during a rebalance, pending orders or market hours) and an automatic backup of your settings before every upgrade.</p>
+          </a>
+          <a class="news-card" href="./changelog#v1-7-0">
+            <div class="news-meta"><span class="news-ver">v1.7.0</span><span class="news-date">2026-09-27</span></div>
+            <h3 data-i18n="news.n3.title">Program / data separation</h3>
+            <p data-i18n="news.n3.desc">Settings and strategy data now live in your user data folder, so upgrades can never wipe them. Includes a one-time automatic migration and export / import of all settings.</p>
+          </a>
+        </div>
+        <div class="text-center news-more">
+          <a href="./changelog" class="btn btn-outline" data-i18n="news.all">View full version history</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="how">
       <div class="container">
         <div class="text-center" style="margin-bottom:48px">
@@ -299,6 +335,7 @@ The only Schwab API client that survives the 7-day refresh token expiry.</h2>
         <a href="#solution" data-i18n="solution.label">Your Pain, Our Solution</a>
         <a href="#how" data-i18n="how.label">Getting Started</a>
         <a href="https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public" target="_blank" rel="noopener noreferrer">GitHub: Quant.Infra.Net.Pro-Public</a>
+        <a href="./changelog" data-i18n="footer.changelog">Version History</a>
         <a href="https://github.com/memoryfraction" target="_blank" rel="noopener noreferrer" data-i18n="footer.githubProfile">GitHub Profile: @memoryfraction</a>
         <a href="https://alphawealthlab.substack.com" target="_blank" rel="noopener noreferrer">AlphaWealthLab Substack</a>
       </div>

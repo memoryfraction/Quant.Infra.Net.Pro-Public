@@ -11,7 +11,8 @@ window.i18nData.en = {
     "galleryTrigger": "Gallery",
     "cta": "Download Now",
     "ebook": "The E-Book",
-    "macro": "Macro Dashboard"
+    "macro": "Macro Dashboard",
+    "changelog": "What's New"
   },
   "gallery": {
     "title": "Product Gallery",
@@ -58,7 +59,8 @@ window.i18nData.en = {
     "privacy": "Privacy Policy",
     "tos": "Terms of Service",
     "githubProfile": "GitHub Profile: @memoryfraction",
-    "ebook": "E-Book"
+    "ebook": "E-Book",
+    "changelog": "Version History"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
@@ -68,7 +70,7 @@ window.i18nData.en = {
     "cta1": "Download Free Trial",
     "cta2": "Start 3-Month Free Trial",
     "badgeLabel": "Swagger API",
-    "early": "Version 1.5.1 update: <strong>financial compliance logging hardened</strong>. Sensitive OAuth, account, and order details are now redacted from normal logs and user-facing errors."
+    "early": "Version 1.8.4: <strong>built-in read-only MCP server for AI clients</strong>. Claude Code, Cursor and other clients can read your Schwab data; no tool can place an order. <a href=\"./changelog\">See what's new</a>"
   },
   "scenario": {
     "label": "Does This Sound Like You?",
@@ -372,6 +374,38 @@ window.i18nData.en = {
       "r2": "More quant & trading infrastructure — coming soon"
     },
     "back": "Back to home"
+  },
+  "news": {
+    "label": "What's New",
+    "title": "Always Improving. Every Release Documented.",
+    "sub": "The latest highlights from the product. Every version's full notes are on the version history page.",
+    "all": "View full version history",
+    "n0": {
+      "title": "Read-only MCP server for AI clients",
+      "desc": "Let Claude Code, Cursor and other AI clients read your Schwab accounts, positions, orders, quotes and option chains. Off by default, protected by a bearer token, and no tool can place, change or cancel an order."
+    },
+    "n1": {
+      "title": "Trusted HTTPS, no more \"Not secure\"",
+      "desc": "A local certificate authority now signs the HTTPS certificate, and on Linux it is trusted in Chrome automatically. Also fixes the in-app update check and HTTP-to-HTTPS redirects behind nginx or Apache."
+    },
+    "n2": {
+      "title": "One-click in-app upgrade",
+      "desc": "Update from inside the app, with a trading safety gate (no upgrades during a rebalance, pending orders or market hours) and an automatic backup of your settings before every upgrade."
+    },
+    "n3": {
+      "title": "Program / data separation",
+      "desc": "Settings and strategy data now live in your user data folder, so upgrades can never wipe them. Includes a one-time automatic migration and export / import of all settings."
+    }
+  },
+  "changelog": {
+    "label": "Version History",
+    "title": "What's New",
+    "sub": "Release notes for every version, newest first.",
+    "latest": "Latest",
+    "older": "Versions 1.6.2 and earlier:",
+    "olderLink": "README version history",
+    "releases": "All GitHub releases",
+    "release": "GitHub Release ↗"
   }
 };
 
@@ -384,7 +418,8 @@ window.i18nData.zh = {
     "galleryTrigger": "图库",
     "cta": "立即下载",
     "ebook": "电子书",
-    "macro": "宏观周期"
+    "macro": "宏观周期",
+    "changelog": "更新日志"
   },
   "gallery": {
     "title": "产品图库",
@@ -431,7 +466,8 @@ window.i18nData.zh = {
     "privacy": "隐私政策",
     "tos": "服务条款",
     "githubProfile": "GitHub 主页：@memoryfraction",
-    "ebook": "电子书"
+    "ebook": "电子书",
+    "changelog": "版本历史"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
@@ -441,7 +477,7 @@ window.i18nData.zh = {
     "cta1": "免费下载试用",
     "cta2": "开始 3 个月免费试用",
     "badgeLabel": "Swagger API",
-    "early": "1.5.1 版本更新：<strong>金融合规日志进一步加固</strong>。敏感的 OAuth、账户与订单信息，现已不会出现在普通日志和面向用户的错误提示中。"
+    "early": "1.8.4 版本：<strong>内置只读 MCP 服务，供 AI 客户端使用</strong>。Claude Code、Cursor 等客户端可读取您的 Schwab 数据，且没有任何下单工具。<a href=\"./changelog\">查看更新内容</a>"
   },
   "scenario": {
     "label": "这是你的困境吗？",
@@ -745,5 +781,37 @@ window.i18nData.zh = {
       "r2": "更多量化与交易基础设施——即将推出"
     },
     "back": "返回首页"
+  },
+  "news": {
+    "label": "最新动态",
+    "title": "持续改进，每个版本都有据可查",
+    "sub": "产品的最新亮点。每个版本的完整说明见版本历史页面。",
+    "all": "查看完整版本历史",
+    "n0": {
+      "title": "面向 AI 客户端的只读 MCP 服务",
+      "desc": "让 Claude Code、Cursor 等 AI 客户端读取您的 Schwab 账户、持仓、订单、报价与期权链。默认关闭，Bearer token 保护，且没有任何下单、改单或撤单的工具。"
+    },
+    "n1": {
+      "title": "可信 HTTPS，告别“不安全”提示",
+      "desc": "现在由本地证书颁发机构签发 HTTPS 证书，Linux 上 Chrome 自动信任。同时修复应用内更新检查，以及 nginx / Apache 反向代理后的 HTTP 跳转 HTTPS。"
+    },
+    "n2": {
+      "title": "应用内一键升级",
+      "desc": "在应用内即可完成升级，带交易安全闸门（再平衡执行中、存在未完成订单或交易时段内拒绝升级），并在每次升级前自动备份您的设置。"
+    },
+    "n3": {
+      "title": "程序与数据分离",
+      "desc": "配置和策略数据现在存放在用户数据目录，升级再也不会把它们冲掉。包含一次性自动迁移，以及全部设置的导出 / 导入。"
+    }
+  },
+  "changelog": {
+    "label": "版本历史",
+    "title": "更新日志",
+    "sub": "每个版本的发布说明，最新版本在前。",
+    "latest": "最新",
+    "older": "1.6.2 及更早版本：",
+    "olderLink": "README 版本历史",
+    "releases": "全部 GitHub 发布",
+    "release": "GitHub 发布页 ↗"
   }
 };

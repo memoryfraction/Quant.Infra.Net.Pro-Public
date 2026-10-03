@@ -13,6 +13,8 @@
 - License: Commercial (free 3-month trial)
 - GitHub: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public
 - Releases: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/releases
+- Version history / release notes: https://www.alpha-wealth-lab.com/changelog
+- Latest version: 1.8.4
 - Web API: Schwab Accounts, Positions, Quotes, Option Chain, Order History
 - Core differentiator: automated refresh-token lifecycle (7-day expiry handled)
 
