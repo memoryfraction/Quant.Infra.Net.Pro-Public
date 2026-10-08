@@ -15,7 +15,7 @@
   }
   function panel(title, node) { return h("section", { cls: "panel" }, [h("h2", { text: title }), node]); }
   function ratio(v, c) { return v > 0 ? (c / v * 100).toFixed(1) + "%" : "—"; }
-  function place(r) { return [r.country, r.region, r.city].filter(Boolean).join(" / "); }
+  function place(r) { return [r.country, r.region, r.city, r.postal].filter(Boolean).join(" / "); }
 
   function chart(daily, from, to) {
     var days = [], d = new Date(from + "T00:00:00Z"), end = new Date(to + "T00:00:00Z");
@@ -39,14 +39,14 @@
 
   function show(d) {
     var out = $("out"); out.textContent = "";
-    out.appendChild(panel("概览", h("p", { text: "区间 " + d.from + " ~ " + d.to + "；浏览 " + (d.summary.views || 0) + " 次；独立 IP " + (d.summary.visitors || 0) + " 个" })));
+    out.appendChild(panel("概览", h("p", { text: "区间 " + d.from + " ~ " + d.to + "；浏览 " + (d.summary.views || 0) + " 次；计算 " + (d.summary.calcs || 0) + " 次" })));
     var cls = d.totals.map(function (r) { var v = r.view, c = r.calc; return v > 0 && c / v >= 0.4 ? "good" : (v >= 20 && c / v < 0.15 ? "bad" : ""); });
-    out.appendChild(panel("页面排行", table(["路径", "浏览", "计算", "转化率", "分享", "独立 IP"], d.totals.map(function (r) { return [r.path, r.view, r.calc, ratio(r.view, r.calc), r.share, r.visitors]; }), cls)));
+    out.appendChild(panel("页面排行", table(["路径", "浏览", "计算", "转化率", "分享"], d.totals.map(function (r) { return [r.path, r.view, r.calc, ratio(r.view, r.calc), r.share]; }), cls)));
     out.appendChild(panel("每日浏览", chart(d.daily, d.from, d.to)));
-    out.appendChild(panel("地区（国家 / 省 / 城市）", table(["地区", "浏览", "独立 IP"], d.geo.map(function (r) { return [place(r) || "未知", r.n, r.visitors]; }))));
+    out.appendChild(panel("地区（国家 / 省 / 城市 / 邮编）", table(["地区", "经纬度", "时区", "浏览"], d.geo.map(function (r) { return [place(r) || "未知", r.lat === null ? "" : r.lat + ", " + r.lon, r.tz, r.n]; }))));
     out.appendChild(panel("来源域", table(["来源", "浏览"], d.refs.map(function (r) { return [r.ref === "" ? "直接访问" : (r.ref === "self" ? "站内跳转" : r.ref), r.n]; }))));
-    out.appendChild(panel("最近 100 次访问", table(["时间 (UTC)", "路径", "事件", "IP", "地区", "来源"], d.recent.map(function (r) {
-      return [new Date(r.ts * 1000).toISOString().replace("T", " ").slice(0, 19), r.path, r.event, r.ip, place(r), r.ref];
+    out.appendChild(panel("最近 100 次访问", table(["时间 (UTC)", "路径", "事件", "地区", "来源"], d.recent.map(function (r) {
+      return [new Date(r.ts * 1000).toISOString().replace("T", " ").slice(0, 19), r.path, r.event, place(r), r.ref];
     }))));
   }
   function load() {
