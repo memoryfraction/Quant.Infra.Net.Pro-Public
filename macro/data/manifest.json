@@ -1,9 +1,9 @@
 {
- "generated_utc": "2026-10-07T01:44:13Z",
+ "generated_utc": "2026-10-08T01:49:01Z",
  "run": {
-  "trigger": "schedule",
-  "commit": "f6559937323619708c90abbb27b6372f63cccf2f",
-  "run_id": "37558382084",
+  "trigger": "workflow_dispatch",
+  "commit": "d63cf854adae12788eca8ebacc055335dd7ad251",
+  "run_id": "37714621040",
   "repository": "memoryfraction/macro-cycle-spectrum"
  },
  "python": "3.14.7",
@@ -32,15 +32,15 @@
   },
   {
    "path": "raw/DFF.csv",
-   "sha256": "8854e592c8745c55cb985838912478d50a51bc10816d880c641373ca25ebcf69",
-   "rows": 26395,
-   "bytes": 418548
+   "sha256": "d7fa74968e12cdc8dc6a9e9d3b1845f95c5221610bafe577e050658cc0d232c1",
+   "rows": 26396,
+   "bytes": 418564
   },
   {
    "path": "raw/DGS2.csv",
-   "sha256": "816cfc7146a3b74f58fbb59ddd71ebbcc0c437eb7b0dfffdd66b8ea08f3b3f8a",
-   "rows": 12583,
-   "bytes": 201252
+   "sha256": "18119e6f8ccb8283b6b608d8fdf1a1cb709905870a2aefc6c857a70a37c7cc4c",
+   "rows": 12584,
+   "bytes": 201268
   },
   {
    "path": "raw/GFDEGDQ188S.csv",
@@ -68,9 +68,9 @@
   },
   {
    "path": "raw/NFCI.csv",
-   "sha256": "6284ce40c27c916ed10045b293435839550076d6d2c53de0ea5965e0be872ef6",
-   "rows": 2908,
-   "bytes": 51248
+   "sha256": "d322a413fac044977177a30c101fd7631c00a00446ddd05226ac8432aab7b469",
+   "rows": 2909,
+   "bytes": 51230
   },
   {
    "path": "raw/QUSPAM770A.csv",
@@ -104,15 +104,15 @@
   },
   {
    "path": "raw/prices_monthly.csv",
-   "sha256": "082606a40e008ee6ad00e1930c3e09bf76303f7a6c78c030f2046510e69b2037",
+   "sha256": "fafa5dcfc17e1dd9bcc6083fafd33d1b76c0226660e10988d0fb4b903d65b944",
    "rows": 1187,
-   "bytes": 130420
+   "bytes": 130489
   },
   {
    "path": "raw/spy_daily.csv",
-   "sha256": "79bf65511262d794a2a0b26d48c30095396c74e3625774de36ca9344ff478a78",
-   "rows": 751,
-   "bytes": 21462
+   "sha256": "6c46f28edf849b9cda59ac5e5357b0f452f966aa294b883c552f58643615b37a",
+   "rows": 752,
+   "bytes": 21488
   },
   {
    "path": "alfred/CPIAUCSL.csv",
