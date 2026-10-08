@@ -13,12 +13,8 @@ const STANCE_STYLE = {
 };
 
 /* ---------------- language ---------------- */
-function detectLang() {
-  try { const saved = localStorage.getItem('lang'); if (saved === 'zh' || saved === 'en') return saved; } catch (e) { /* ignore */ }
-  const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'];
-  return langs.some((l) => /^zh\b/i.test(l)) && /^zh\b/i.test(langs[0]) ? 'zh' : 'en';
-}
-let LANG = detectLang();
+// Language preference comes from the shared site module (js/site-lang.js), same as the rest of the site.
+let LANG = SiteLang.get();
 const T = () => I18N[LANG];
 
 function applyStaticText() {
@@ -27,7 +23,6 @@ function applyStaticText() {
   document.title = t.docTitle;
   document.querySelectorAll('[data-i18n]').forEach((el) => { el.innerHTML = t[el.dataset.i18n]; });
   document.querySelectorAll('[data-i18n-aria]').forEach((el) => el.setAttribute('aria-label', t[el.dataset.i18nAria]));
-  $('langBtn').textContent = t.langName;
 }
 
 // The host zone sends a CSP with style-src 'self', which blocks style="" attributes in markup.
@@ -922,11 +917,7 @@ $('hero').addEventListener('click', (ev) => {
   try { localStorage.setItem('cashPreset', CASH); } catch (e) { /* storage unavailable */ }
   renderAll();
 });
-$('langBtn').addEventListener('click', () => {
-  LANG = LANG === 'zh' ? 'en' : 'zh';
-  try { localStorage.setItem('lang', LANG); } catch (e) { /* storage unavailable */ }
-  renderAll();
-});
+SiteLang.subscribe((l) => { LANG = l; renderAll(); });
 $('themeBtn').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme')
     || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
