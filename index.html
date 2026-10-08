@@ -7,7 +7,7 @@
   <meta name="description" content="Local trading software license for self-directed Schwab API users. Deploy once, call from any language, and keep token lifecycle automated.">
   <!-- ===== Security hardening: meta fallbacks (browsers enforce these even without HTTP headers; canonical headers are also set via Cloudflare Transform Rules) ===== -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://*.counter.dev; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.counter.dev; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'">
   <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
@@ -51,6 +51,7 @@
   <link rel="stylesheet" href="./css/styles.css">
   <script src="./js/i18n-data.js"></script>
   <script defer src="./js/app.js"></script>
+<script defer src="/assets/hit.js?v=20261008"></script>
 </head>
 <body>
   <nav class="navbar" id="navbar">
@@ -70,8 +71,22 @@
         <li><a href="#how" data-i18n="how.label">Getting Started</a></li>
         <li><a href="mailto:alphawealthlab@outlook.com">Contact</a></li>
         <li><a href="./ebook" data-i18n="nav.ebook">The E-Book</a></li>
-        <li><a href="./calculator/" data-i18n="nav.calculator">Calculator</a></li>
-        <li><a href="./macro/" data-i18n="nav.macro">Macro Dashboard</a></li>
+        <li class="nav-dd" id="navTools">
+          <button type="button" class="nav-dd-btn" id="navToolsBtn" aria-haspopup="true" aria-expanded="false"><span data-i18n="nav.tools">Tools</span> <span class="caret" aria-hidden="true"></span></button>
+          <ul class="nav-dd-menu" id="navToolsMenu">
+            <li><a href="./calculator/" data-i18n="nav.calculator">Calculator</a></li>
+            <li><a href="./macro/" data-i18n="nav.macro">Macro Dashboard</a></li>
+            <li class="nav-dd-sep" role="separator"></li>
+            <li><a href="./planner/" data-i18n="nav.planner">All planner tools</a></li>
+            <li><a href="./planner/fi/" data-i18n="nav.plFi">Financial Independence</a></li>
+            <li><a href="./planner/allocation/" data-i18n="nav.plAlloc">433 Allocation &amp; Beta</a></li>
+            <li><a href="./planner/margin/" data-i18n="nav.plMargin">Pledge Loan Margin</a></li>
+            <li><a href="./planner/rebalance/" data-i18n="nav.plRebal">Smart Rebalancing</a></li>
+            <li><a href="./planner/withdrawal/" data-i18n="nav.plWd">Withdrawal Ladder</a></li>
+            <li><a href="./planner/mortgage/" data-i18n="nav.plMort">Prepay Mortgage or Invest</a></li>
+            <li><a href="./planner/social-security/" data-i18n="nav.plSS">Social Security Age</a></li>
+          </ul>
+        </li>
       </ul>
       <div class="nav-right">
         <button class="gallery-trigger" type="button" data-i18n="nav.galleryTrigger">

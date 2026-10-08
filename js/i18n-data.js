@@ -13,7 +13,16 @@ window.i18nData.en = {
     "ebook": "The E-Book",
     "macro": "Macro Dashboard",
     "changelog": "What's New",
-    "calculator": "Calculator"
+    "calculator": "Calculator",
+    "tools": "Tools",
+    "planner": "All planner tools",
+    "plFi": "Financial Independence",
+    "plAlloc": "433 Allocation & Beta",
+    "plMargin": "Pledge Loan Margin",
+    "plRebal": "Smart Rebalancing",
+    "plWd": "Withdrawal Ladder",
+    "plMort": "Prepay Mortgage or Invest",
+    "plSS": "Social Security Age"
   },
   "gallery": {
     "title": "Product Gallery",
@@ -421,7 +430,16 @@ window.i18nData.zh = {
     "ebook": "电子书",
     "macro": "宏观周期",
     "changelog": "更新日志",
-    "calculator": "全天候计算器"
+    "calculator": "全天候计算器",
+    "tools": "工具",
+    "planner": "财富规划工具箱",
+    "plFi": "财务自由计算器",
+    "plAlloc": "433 配置与 Beta",
+    "plMargin": "质押维持率",
+    "plRebal": "聪明再平衡",
+    "plWd": "退休提领率",
+    "plMort": "提前还房贷？",
+    "plSS": "美国社安金"
   },
   "gallery": {
     "title": "产品图库",

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>访问统计 | Alpha Wealth Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/calculator/calculator.css?v=20261008">
+<link rel="stylesheet" href="/planner/assets/planner.css?v=20261008">
+</head>
+<body>
+<div class="wrap">
+  <header><div><p class="brand">Alpha Wealth Lab</p><h1>访问统计</h1>
+    <p class="sub">转化率 = 计算次数 / 浏览次数；它比浏览量更能说明工具是否真的有用。</p></div></header>
+  <section class="panel">
+    <div class="fields">
+      <div><label for="token">STATS_TOKEN</label><input id="token" type="password" autocomplete="off"></div>
+      <div><label for="days">天数</label><select id="days"><option>7</option><option selected>30</option><option>90</option><option>365</option></select></div>
+    </div>
+    <p><button id="load" type="button">加载</button> <button id="clear" type="button">清除 token</button> <span id="msg" class="note"></span></p>
+  </section>
+  <div id="out"></div>
+</div>
+<script src="/stats/stats.js?v=20261008"></script>
+</body>
+</html>

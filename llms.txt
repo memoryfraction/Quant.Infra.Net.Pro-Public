@@ -24,3 +24,15 @@
 - Quick-start guide: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/blob/main/Quick-start%20Guide.md
 - Data privacy: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/blob/main/DATA_PRIVACY.md
 - Charles Schwab disclaimer: https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/blob/main/CHARLES_SCHWAB_DISCLAIMER.md
+
+## Family Wealth Planner (free calculators)
+
+- Hub: https://www.alpha-wealth-lab.com/planner/
+- Financial independence: https://www.alpha-wealth-lab.com/planner/fi/
+- 433 allocation & beta check: https://www.alpha-wealth-lab.com/planner/allocation/
+- Pledge-loan margin check: https://www.alpha-wealth-lab.com/planner/margin/
+- Smart rebalancing: https://www.alpha-wealth-lab.com/planner/rebalance/
+- Retirement withdrawal ladder: https://www.alpha-wealth-lab.com/planner/withdrawal/
+- Prepay mortgage or invest: https://www.alpha-wealth-lab.com/planner/mortgage/
+- Social Security claiming age: https://www.alpha-wealth-lab.com/planner/social-security/
+- These tools only turn published book methods into calculators for personal use; results are for learning, not investment advice. Not affiliated with or endorsed by the book authors or CLEC.

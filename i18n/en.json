@@ -9,7 +9,16 @@
     "ebook": "The E-Book",
     "macro": "Macro Dashboard",
     "changelog": "What's New",
-    "calculator": "Calculator"
+    "calculator": "Calculator",
+    "tools": "Tools",
+    "planner": "All planner tools",
+    "plFi": "Financial Independence",
+    "plAlloc": "433 Allocation & Beta",
+    "plMargin": "Pledge Loan Margin",
+    "plRebal": "Smart Rebalancing",
+    "plWd": "Withdrawal Ladder",
+    "plMort": "Prepay Mortgage or Invest",
+    "plSS": "Social Security Age"
   },
   "gallery": {
     "title": "Product Gallery",
