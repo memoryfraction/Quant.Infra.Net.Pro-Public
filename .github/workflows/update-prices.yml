@@ -1,0 +1,60 @@
+name: Update calculator prices
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # daily, 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-calculator-prices
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      # The site is served from gh-pages, so always build against that branch,
+      # even when this workflow file is triggered from the default branch.
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install yfinance pandas
+
+      - name: Build prices.csv
+        run: python scripts/build_prices.py --out "$RUNNER_TEMP/prices.csv"
+
+      # Yahoo sometimes rate-limits a ticker; the script then silently drops history.
+      # Never overwrite good data with a shorter or later-starting file.
+      - name: Validate output
+        run: |
+          new="$RUNNER_TEMP/prices.csv"
+          old="calculator/prices.csv"
+          head -1 "$new" | grep -qx "Date,SPY,QQQ,QQQI,IBIT,VNQ,XLE,IAUM,URAN,LEAPS,SGOV" || { echo "unexpected header"; exit 1; }
+          if [ -f "$old" ]; then
+            [ "$(wc -l < "$new")" -ge "$(wc -l < "$old")" ] || { echo "new file has fewer rows than existing"; exit 1; }
+            [ "$(sed -n 2p "$new" | cut -d, -f1)" = "$(sed -n 2p "$old" | cut -d, -f1)" ] || { echo "start date changed"; exit 1; }
+          fi
+          if grep -qi "nan" "$new"; then echo "NaN in output"; exit 1; fi
+          mkdir -p calculator
+          cp "$new" "$old"
+
+      - name: Commit if changed
+        run: |
+          if [ -z "$(git status --porcelain calculator/prices.csv)" ]; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add calculator/prices.csv
+          git commit -m "chore: update calculator prices"
+          git push origin HEAD:gh-pages
