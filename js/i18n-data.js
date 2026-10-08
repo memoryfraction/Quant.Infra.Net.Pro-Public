@@ -416,6 +416,11 @@ window.i18nData.en = {
     "olderLink": "README version history",
     "releases": "All GitHub releases",
     "release": "GitHub Release ↗"
+  },
+  "contact": {
+    "copy": "Copy",
+    "manual": "Email us at {email}",
+    "copied": "Email copied: {email}"
   }
 };
 
@@ -833,5 +838,10 @@ window.i18nData.zh = {
     "olderLink": "README 版本历史",
     "releases": "全部 GitHub 发布",
     "release": "GitHub 发布页 ↗"
+  },
+  "contact": {
+    "copy": "复制",
+    "manual": "请发邮件到：{email}",
+    "copied": "已复制邮箱：{email}"
   }
 };

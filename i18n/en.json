@@ -412,5 +412,10 @@
     "olderLink": "README version history",
     "releases": "All GitHub releases",
     "release": "GitHub Release ↗"
+  },
+  "contact": {
+    "copy": "Copy",
+    "manual": "Email us at {email}",
+    "copied": "Email copied: {email}"
   }
 }

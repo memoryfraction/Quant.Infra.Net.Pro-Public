@@ -303,3 +303,10 @@ html:not([lang="zh-CN"]) .cl-zh,html[lang="zh-CN"] .cl-en{display:none}
   .nav-dd:hover .nav-dd-menu,.nav-dd:focus-within .nav-dd-menu{display:none}
   .nav-dd.open .nav-dd-menu{display:block}
 }
+
+/* Contact: copy-email button and toast (mailto: does nothing without a mail client) */
+.copy-mail{margin-top:8px;align-self:flex-start;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text-secondary);border-radius:6px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer;transition:var(--transition)}
+.copy-mail:hover{color:var(--text-primary);border-color:rgba(255,255,255,.2)}
+.toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:3000;max-width:calc(100vw - 32px);padding:10px 18px;border-radius:8px;background:#0d1224;color:var(--text-primary);border:1px solid var(--border);box-shadow:0 12px 32px rgba(0,0,0,.45);font-size:14px}
+.toast[hidden]{display:none}
+.visually-hidden-copy{position:fixed;left:-9999px;top:0}
