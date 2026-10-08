@@ -9,6 +9,6 @@ routes = [
 [[d1_databases]]
 binding = "DB"
 database_name = "awl_analytics"
-database_id = "REPLACE_ME"   # from `wrangler d1 create awl_analytics`
+database_id = "82684561-1447-4e7d-997b-1a1e8a8425d4"   # from `wrangler d1 create awl_analytics`
 
 # STATS_TOKEN is a secret: `wrangler secret put STATS_TOKEN`
