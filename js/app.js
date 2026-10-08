@@ -235,6 +235,50 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("keydown", (event) => { if (event.key === "Escape") setOpen(false); });
   }
 
+  // Contact: mailto: does nothing when no mail client is set up, so also copy the address and say so.
+  const toastEl = document.getElementById("toast");
+  let toastTimer;
+  const showToast = (text) => {
+    if (!toastEl) return;
+    toastEl.textContent = text;
+    toastEl.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastEl.hidden = true; }, 3500);
+  };
+  const copyText = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.className = "visually-hidden-copy";
+      document.body.appendChild(area);
+      area.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      area.remove();
+      return ok;
+    }
+  };
+  const contactMessage = (key, fallback, email) => {
+    const template = getNestedValue(window.i18nData[localStorage.getItem("lang") === "zh" ? "zh" : "en"] || {}, key) || fallback;
+    return template.replace("{email}", email);
+  };
+  // Copy succeeded -> "copied"; copy blocked -> still show the address so it can be copied by hand.
+  const copyEmail = async (email) => {
+    const ok = await copyText(email);
+    showToast(ok ? contactMessage("contact.copied", "Email copied: {email}", email) : contactMessage("contact.manual", "Email us at {email}", email));
+  };
+  document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
+    const email = link.getAttribute("href").slice(7).split("?")[0];
+    link.addEventListener("click", () => { copyEmail(email); });
+  });
+  document.querySelectorAll("[data-copy]").forEach((button) => {
+    button.addEventListener("click", () => { copyEmail(button.dataset.copy); });
+  });
+
   window.addEventListener("scroll", () => {
     document.getElementById("navbar")?.classList.toggle("scrolled", window.scrollY > 80);
   });
