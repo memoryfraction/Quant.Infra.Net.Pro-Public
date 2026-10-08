@@ -1,0 +1,136 @@
+{
+ "generated_utc": "2026-10-07T01:44:13Z",
+ "run": {
+  "trigger": "schedule",
+  "commit": "f6559937323619708c90abbb27b6372f63cccf2f",
+  "run_id": "37558382084",
+  "repository": "memoryfraction/macro-cycle-spectrum"
+ },
+ "python": "3.14.7",
+ "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+ "libraries": {
+  "pandas": "3.0.6",
+  "numpy": "2.5.3",
+  "scipy": "1.18.1",
+  "statsmodels": "0.15.0",
+  "yfinance": "1.7.0",
+  "requests": "2.34.2",
+  "xlrd": "2.0.2"
+ },
+ "files": [
+  {
+   "path": "raw/BAA.csv",
+   "sha256": "fb7f2f4b8a4a2280f984d367523867fdfbb06a12f8d19e90ac9a23728dc09027",
+   "rows": 1293,
+   "bytes": 20739
+  },
+  {
+   "path": "raw/CPIAUCSL.csv",
+   "sha256": "50b8719531acadd56be59ccbaf91a9dd1e9ee929aefb009f7e7e2f83aaec6112",
+   "rows": 955,
+   "bytes": 16491
+  },
+  {
+   "path": "raw/DFF.csv",
+   "sha256": "8854e592c8745c55cb985838912478d50a51bc10816d880c641373ca25ebcf69",
+   "rows": 26395,
+   "bytes": 418548
+  },
+  {
+   "path": "raw/DGS2.csv",
+   "sha256": "816cfc7146a3b74f58fbb59ddd71ebbcc0c437eb7b0dfffdd66b8ea08f3b3f8a",
+   "rows": 12583,
+   "bytes": 201252
+  },
+  {
+   "path": "raw/GFDEGDQ188S.csv",
+   "sha256": "e79d91753d925dc6edfeef799e0b926dac8b63a474a0250e92b8d5e2fd37607e",
+   "rows": 241,
+   "bytes": 4879
+  },
+  {
+   "path": "raw/GS10.csv",
+   "sha256": "3558c4a9d276c963893fb2a6c54382ffcbd48a25c35856be86f08b65e63cbbe0",
+   "rows": 882,
+   "bytes": 14102
+  },
+  {
+   "path": "raw/ICSA.csv",
+   "sha256": "53321b4d46f6356604617ee300f2a6ca13205edef4b606b852a98a041923109c",
+   "rows": 3117,
+   "bytes": 62382
+  },
+  {
+   "path": "raw/INDPRO.csv",
+   "sha256": "184063f9452b2608d6ea484d260a186ef81c57d4ee4d086c0f28619eb75124cc",
+   "rows": 1292,
+   "bytes": 24295
+  },
+  {
+   "path": "raw/NFCI.csv",
+   "sha256": "6284ce40c27c916ed10045b293435839550076d6d2c53de0ea5965e0be872ef6",
+   "rows": 2908,
+   "bytes": 51248
+  },
+  {
+   "path": "raw/QUSPAM770A.csv",
+   "sha256": "dd9adf68e6ec121890bee7de0a231169bb52fe083a966597715194f852efbe0b",
+   "rows": 313,
+   "bytes": 5219
+  },
+  {
+   "path": "raw/SAHMREALTIME.csv",
+   "sha256": "d3d6914b8bbc157f98f72b80c838ab5253ffa377fed51889cbcf325483c6ab87",
+   "rows": 801,
+   "bytes": 12824
+  },
+  {
+   "path": "raw/TB3MS.csv",
+   "sha256": "1b4ec821be52c414952be460c75f8a97b1abc5ceb3c4f96ee2798d3e2c805f68",
+   "rows": 1113,
+   "bytes": 17748
+  },
+  {
+   "path": "raw/UNRATE.csv",
+   "sha256": "229f734708f256445dc606e3c23d8993c0c6786713bfe67de94980de5bdc0338",
+   "rows": 944,
+   "bytes": 14199
+  },
+  {
+   "path": "raw/USREC.csv",
+   "sha256": "02faa66a6443daee74f9e0e15eca12e0c6e485eb1f5f62f9eea177c66fa863fc",
+   "rows": 2062,
+   "bytes": 30953
+  },
+  {
+   "path": "raw/prices_monthly.csv",
+   "sha256": "082606a40e008ee6ad00e1930c3e09bf76303f7a6c78c030f2046510e69b2037",
+   "rows": 1187,
+   "bytes": 130420
+  },
+  {
+   "path": "raw/spy_daily.csv",
+   "sha256": "79bf65511262d794a2a0b26d48c30095396c74e3625774de36ca9344ff478a78",
+   "rows": 751,
+   "bytes": 21462
+  },
+  {
+   "path": "alfred/CPIAUCSL.csv",
+   "sha256": "f7a024356709d3251f734461a3f4653048f6175f3cf34b5a8d603dcc8b13a500",
+   "rows": 17745,
+   "bytes": 513184
+  },
+  {
+   "path": "alfred/INDPRO.csv",
+   "sha256": "214e3d1820965446f90803b441dd993f4ca897320ce96b0d794fedd61eb53bf5",
+   "rows": 20040,
+   "bytes": 595074
+  },
+  {
+   "path": "raw/shiller_ie_data.xls",
+   "sha256": "98a54927942e842ec07ffe73000998e793953708c345b6b27bb363e9ada8366a",
+   "rows": null,
+   "bytes": 1675264
+  }
+ ]
+}

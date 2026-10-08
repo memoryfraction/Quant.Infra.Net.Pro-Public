@@ -1,0 +1,22 @@
+{
+ "month": "2026-09",
+ "written_utc": "2026-10-01T01:25:16Z",
+ "returns": {
+  "spy": -0.0093,
+  "standard": -0.0093,
+  "moderate": -0.0083,
+  "mild": -0.0083
+ },
+ "stance_days": {
+  "offensive": 3
+ },
+ "stance_end": "offensive",
+ "rule_versions": [
+  "v2",
+  "v3"
+ ],
+ "recession_prob_range": [
+  0.018,
+  0.0185
+ ]
+}
