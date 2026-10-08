@@ -1,9 +1,9 @@
 {
- "generated_utc": "2026-10-08T01:49:01Z",
+ "generated_utc": "2026-10-08T02:11:56Z",
  "run": {
-  "trigger": "workflow_dispatch",
-  "commit": "d63cf854adae12788eca8ebacc055335dd7ad251",
-  "run_id": "37714621040",
+  "trigger": "schedule",
+  "commit": "7b5437164e402d2501c818c85b32608cbc3eacd0",
+  "run_id": "37716502384",
   "repository": "memoryfraction/macro-cycle-spectrum"
  },
  "python": "3.14.7",
@@ -104,15 +104,15 @@
   },
   {
    "path": "raw/prices_monthly.csv",
-   "sha256": "fafa5dcfc17e1dd9bcc6083fafd33d1b76c0226660e10988d0fb4b903d65b944",
+   "sha256": "4f9f7c4b61a2ebe4d6cdfc23888e68c8ea6a4056f03a1c9aa391bd1afb7bfe93",
    "rows": 1187,
-   "bytes": 130489
+   "bytes": 130478
   },
   {
    "path": "raw/spy_daily.csv",
-   "sha256": "6c46f28edf849b9cda59ac5e5357b0f452f966aa294b883c552f58643615b37a",
+   "sha256": "4c5b33b9bf9bd6af2970a3354b61f5af20774d92193e111ffb28f8caeef54604",
    "rows": 752,
-   "bytes": 21488
+   "bytes": 21489
   },
   {
    "path": "alfred/CPIAUCSL.csv",
