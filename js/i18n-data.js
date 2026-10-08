@@ -12,7 +12,8 @@ window.i18nData.en = {
     "cta": "Download Now",
     "ebook": "The E-Book",
     "macro": "Macro Dashboard",
-    "changelog": "What's New"
+    "changelog": "What's New",
+    "calculator": "Calculator"
   },
   "gallery": {
     "title": "Product Gallery",
@@ -419,7 +420,8 @@ window.i18nData.zh = {
     "cta": "立即下载",
     "ebook": "电子书",
     "macro": "宏观周期",
-    "changelog": "更新日志"
+    "changelog": "更新日志",
+    "calculator": "全天候计算器"
   },
   "gallery": {
     "title": "产品图库",
