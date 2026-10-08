@@ -7,7 +7,9 @@
     "galleryTrigger": "Gallery",
     "cta": "Download Now",
     "ebook": "The E-Book",
-    "macro": "Macro Dashboard"
+    "macro": "Macro Dashboard",
+    "changelog": "What's New",
+    "calculator": "Calculator"
   },
   "gallery": {
     "title": "Product Gallery",
@@ -54,7 +56,8 @@
     "privacy": "Privacy Policy",
     "tos": "Terms of Service",
     "githubProfile": "GitHub Profile: @memoryfraction",
-    "ebook": "E-Book"
+    "ebook": "E-Book",
+    "changelog": "Version History"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
@@ -368,5 +371,37 @@
       "r2": "More quant & trading infrastructure — coming soon"
     },
     "back": "Back to home"
+  },
+  "news": {
+    "label": "What's New",
+    "title": "Always Improving. Every Release Documented.",
+    "sub": "The latest highlights from the product. Every version's full notes are on the version history page.",
+    "all": "View full version history",
+    "n0": {
+      "title": "Read-only MCP server for AI clients",
+      "desc": "Let Claude Code, Cursor and other AI clients read your Schwab accounts, positions, orders, quotes and option chains. Off by default, protected by a bearer token, and no tool can place, change or cancel an order."
+    },
+    "n1": {
+      "title": "Trusted HTTPS, no more \"Not secure\"",
+      "desc": "A local certificate authority now signs the HTTPS certificate, and on Linux it is trusted in Chrome automatically. Also fixes the in-app update check and HTTP-to-HTTPS redirects behind nginx or Apache."
+    },
+    "n2": {
+      "title": "One-click in-app upgrade",
+      "desc": "Update from inside the app, with a trading safety gate (no upgrades during a rebalance, pending orders or market hours) and an automatic backup of your settings before every upgrade."
+    },
+    "n3": {
+      "title": "Program / data separation",
+      "desc": "Settings and strategy data now live in your user data folder, so upgrades can never wipe them. Includes a one-time automatic migration and export / import of all settings."
+    }
+  },
+  "changelog": {
+    "label": "Version History",
+    "title": "What's New",
+    "sub": "Release notes for every version, newest first.",
+    "latest": "Latest",
+    "older": "Versions 1.6.2 and earlier:",
+    "olderLink": "README version history",
+    "releases": "All GitHub releases",
+    "release": "GitHub Release ↗"
   }
 }
