@@ -37,6 +37,9 @@ function json(obj, status = 200) {
   });
 }
 
+// Cloudflare gives lat/lon as strings; keep 2 decimals (~1 km).
+function num(x) { const n = parseFloat(x); return Number.isFinite(n) ? Math.round(n * 100) / 100 : null; }
+
 function safeEqual(a, b) {
   if (a.length !== b.length) return false;
   let d = 0;
@@ -59,14 +62,18 @@ async function handleHit(request, env, ctx) {
     now.toISOString().slice(0, 10),
     normalizePath(body.p),
     body.e,
-    request.headers.get("CF-Connecting-IP") || "",
     cf.country || "XX",
     cf.region || "",
     cf.city || "",
+    cf.postalCode || "",
+    num(cf.latitude),
+    num(cf.longitude),
+    cf.timezone || "",
+    cf.metroCode || "",
     refHost(body.r),
   ];
   ctx.waitUntil(
-    env.DB.prepare("INSERT INTO hits(ts,day,path,event,ip,country,region,city,ref) VALUES(?,?,?,?,?,?,?,?,?)")
+    env.DB.prepare("INSERT INTO hits(ts,day,path,event,country,region,city,postal,lat,lon,tz,metro,ref) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)")
       .bind(...row).run().catch(() => {})
   );
   return new Response(null, { status: 204, headers: { "Cache-Control": "no-store" } });
@@ -85,19 +92,18 @@ async function handleStats(request, env, url) {
   const f = from.toISOString().slice(0, 10);
   const q = (sql, ...args) => env.DB.prepare(sql).bind(...args).all().then((r) => r.results);
 
-  const [totals, daily, refs, geo, uniq, recent] = await Promise.all([
+  const [totals, daily, refs, geo, summary, recent] = await Promise.all([
     q(`SELECT path,
-         SUM(event='view') AS view, SUM(event='calc') AS calc, SUM(event='share') AS share,
-         COUNT(DISTINCT ip) AS visitors
+         SUM(event='view') AS view, SUM(event='calc') AS calc, SUM(event='share') AS share
        FROM hits WHERE day >= ? GROUP BY path ORDER BY view DESC`, f),
     q("SELECT day, path, event, COUNT(*) AS n FROM hits WHERE day >= ? GROUP BY day, path, event ORDER BY day", f),
     q("SELECT ref, COUNT(*) AS n FROM hits WHERE day >= ? AND event='view' GROUP BY ref ORDER BY n DESC LIMIT 30", f),
-    q(`SELECT country, region, city, COUNT(*) AS n, COUNT(DISTINCT ip) AS visitors
-       FROM hits WHERE day >= ? AND event='view' GROUP BY country, region, city ORDER BY n DESC LIMIT 50`, f),
-    q("SELECT COUNT(DISTINCT ip) AS visitors, SUM(event='view') AS views FROM hits WHERE day >= ?", f),
-    q("SELECT ts, path, event, ip, country, region, city, ref FROM hits ORDER BY id DESC LIMIT 100"),
+    q(`SELECT country, region, city, postal, tz, ROUND(AVG(lat),2) AS lat, ROUND(AVG(lon),2) AS lon, COUNT(*) AS n
+       FROM hits WHERE day >= ? AND event='view' GROUP BY country, region, city, postal ORDER BY n DESC LIMIT 100`, f),
+    q("SELECT SUM(event='view') AS views, SUM(event='calc') AS calcs FROM hits WHERE day >= ?", f),
+    q("SELECT ts, path, event, country, region, city, postal, ref FROM hits ORDER BY id DESC LIMIT 100"),
   ]);
-  return json({ from: f, to: to.toISOString().slice(0, 10), summary: uniq[0], totals, daily, refs, geo, recent });
+  return json({ from: f, to: to.toISOString().slice(0, 10), summary: summary[0], totals, daily, refs, geo, recent });
 }
 
 export default {
