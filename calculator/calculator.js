@@ -246,7 +246,17 @@ const I18N = {
 
 const COLORS = {X:"#0F5C55",Y:"#4F6D8F",Z:"#6B4E8C",C:"#B8892B"};
 const LINE = {strat:"#0F5C55", spy:"#B8892B", qqq:"#4F6D8F"};
-let lang = "zh", cfState = "rich", priceData = null, dataError = null;
+// Language preference is shared with the rest of the site: same localStorage key ("lang": "en" | "zh"),
+// same fallback order as js/app.js (saved choice, then browser language, then English).
+const LANG_KEY = "lang";
+const isLang = v => v === "en" || v === "zh";
+function initialLang(){
+  try { const s = localStorage.getItem(LANG_KEY); if (isLang(s)) return s; } catch(e){}
+  const prefs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ""];
+  for (const raw of prefs){ const c = String(raw || "").toLowerCase().split(/[-_]/)[0]; if (isLang(c)) return c; }
+  return "en";
+}
+let lang = initialLang(), cfState = "rich", priceData = null, dataError = null;
 const current = {};
 const $ = id => document.getElementById(id);
 const num = id => { const v = parseFloat($(id).value); return isNaN(v) ? null : v; };
@@ -275,7 +285,8 @@ function applyLang(){
     const v = t[el.dataset.i18n];
     if (typeof v === "string") el.textContent = v;
   });
-  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  $("langSelect").value = lang;
+  try { localStorage.setItem(LANG_KEY, lang); } catch(e){}
   renderCF();
   render();
 }
@@ -471,7 +482,9 @@ function renderSignals(){
   $("verdict").innerHTML = `<b>${v}</b>${leaps}${erp !== null ? " " + t.erpNote(erp.toFixed(2)) : ""}`;
 }
 
-document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => { lang = b.dataset.lang; applyLang(); }));
+$("langSelect").addEventListener("change", e => { lang = e.target.value; applyLang(); });
+// keep other open tabs of the site in sync
+window.addEventListener("storage", e => { if (e.key === LANG_KEY && isLang(e.newValue) && e.newValue !== lang){ lang = e.newValue; applyLang(); } });
 document.querySelectorAll("input:not([data-k]):not([type=radio]):not([type=file]),select").forEach(el => el.addEventListener("input", render));
 let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(drawChart, 150); });
 applyLang();

@@ -84,7 +84,11 @@ footer{color:var(--muted);font-size:12.5px;max-width:80ch;margin-top:10px}
 /* site back-link bar (matches alpha-wealth-lab.com header colours; scoped, does not touch calculator styles) */
 .sitebar{background:#080c18;border-bottom:1px solid rgba(255,255,255,.08)}
 .sitebar a{display:inline-flex;align-items:center;gap:6px;padding:12px 20px;color:#94a3b8;font-size:14px;font-weight:500;text-decoration:none;transition:color .3s ease}
-.sitebar-in{max-width:1180px;margin:0 auto}
+.sitebar-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-right:20px}
+/* same look as the site header's language dropdown */
+.lang-select{position:relative}.lang-select select{-webkit-appearance:none;-moz-appearance:none;appearance:none;padding:6px 28px 6px 12px;font-size:13px;font-weight:600;font-family:var(--font);border:1px solid rgba(255,255,255,.08);border-radius:6px;background:rgba(255,255,255,.06);color:#f1f5f9;cursor:pointer;min-width:100px;width:auto}
+.lang-select::after{content:"";position:absolute;right:12px;top:50%;width:6px;height:6px;border-right:2px solid #94a3b8;border-bottom:2px solid #94a3b8;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.lang-select select option{background:#0d1224;color:#f1f5f9}
 .sitebar a:hover,.sitebar a:focus-visible{color:#f1f5f9}
 /* mobile fix: let grid columns shrink so wide tables scroll inside .tablewrap instead of widening the page */
 .grid>div{min-width:0}
