@@ -1,0 +1,14 @@
+name = "awl-analytics"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+routes = [
+  { pattern = "www.alpha-wealth-lab.com/api/*", zone_name = "alpha-wealth-lab.com" }
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "awl_analytics"
+database_id = "REPLACE_ME"   # from `wrangler d1 create awl_analytics`
+
+# STATS_TOKEN is a secret: `wrangler secret put STATS_TOKEN`
