@@ -13,16 +13,18 @@
 <meta property="og:description" content="Bayesian recession probability, investment clock and a rules-based Offensive / Balanced / Defensive stance for US stocks, with an honest track record.">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/css/site-bar.css">
 <script src="vendor/echarts.min.js"></script>
 </head>
 <body>
+<div class="sitebar"><div class="sitebar-in"><a href="/"><span aria-hidden="true">←</span> <span class="sb-zh">返回首页</span><span class="sb-en">Back to Home</span></a>
+  <div class="lang-select"><select id="langSelect" aria-label="Language"><option value="en">English</option><option value="zh">中文</option></select></div></div></div>
 <header class="wrap top">
   <div>
     <h1 data-i18n="title"></h1>
     <p class="sub"><span data-i18n="subtitle"></span> — <span id="updated"></span></p>
   </div>
   <div class="tools">
-    <button id="langBtn" class="btn wide" type="button"></button>
     <button id="themeBtn" class="btn" type="button" data-i18n-aria="themeAria">◐</button>
   </div>
 </header>
@@ -310,6 +312,7 @@
   </section>
 </main>
 <footer class="wrap foot"><span data-i18n="footer"></span> · <a href="data/dashboard.json">JSON</a> · <a href="data/history.csv">history.csv</a></footer>
+<script src="/js/site-lang.js"></script>
 <script src="i18n.js"></script>
 <script src="app.js"></script>
 </body>
