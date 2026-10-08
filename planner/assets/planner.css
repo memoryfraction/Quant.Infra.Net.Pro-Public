@@ -1,0 +1,27 @@
+/* Extras for /planner/* pages; the base look comes from /calculator/calculator.css. No inline styles (site CSP). */
+.chkrow{display:flex;gap:8px;align-items:center}
+.chkrow input{width:auto;margin:0;accent-color:var(--teal)}
+.chkrow label{margin:0;color:var(--ink)}
+[hidden]{display:none!important}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 14px}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:#F8FAF9}
+.kpi .l{font-size:12.5px;color:var(--muted)}
+.kpi .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px;overflow-wrap:anywhere}
+.kpi.good{background:var(--good-soft);border-color:#BFDCCB}.kpi.bad{background:var(--bad-soft);border-color:#F0C4BF}.kpi.warn{background:#FFF4DD;border-color:#EBD59E}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12.5px;font-weight:500;background:#EEF1F0;color:var(--muted);margin:0 6px 6px 0}
+.badge.good{background:var(--good-soft);color:var(--good)}.badge.warn{background:#FFF4DD;color:#8A6A12}.badge.bad{background:var(--bad-soft);color:var(--bad)}
+.note{font-size:13px;color:var(--muted);margin:10px 0 0}
+.formula{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:#F3F5F4;border-radius:6px;padding:8px 12px;margin:6px 0;overflow-x:auto;white-space:pre-wrap}
+.err{color:var(--bad);padding:12px 14px;background:var(--bad-soft);border-radius:8px}
+tr.hl td{background:var(--teal-soft);font-weight:600}
+tr.bad td{background:var(--bad-soft)}tr.warn td{background:#FFF4DD}tr.good td{background:var(--good-soft)}
+td.good{background:var(--good-soft)}td.warn{background:#FFF4DD}td.bad{background:var(--bad-soft)}
+.big{font-size:18px;font-weight:600;padding:14px;border-radius:8px;background:var(--teal-soft);margin:0 0 14px}
+.chartlegend .lg-0F5C55::before{--c:#0F5C55}.chartlegend .lg-B8892B::before{--c:#B8892B}.chartlegend .lg-4F6D8F::before{--c:#4F6D8F}.chartlegend .lg-6B4E8C::before{--c:#6B4E8C}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{display:block;background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:18px;color:var(--ink);text-decoration:none}
+a.card:hover,a.card:focus-visible{border-color:var(--teal);box-shadow:0 2px 10px rgba(15,92,85,.1)}
+.card h3{margin:0 0 6px;font-size:16px}.card p{margin:0;font-size:13.5px;color:var(--muted)}
+.card.soon{opacity:.65}
+.disc{margin-top:28px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.sitebar a.sb-link{padding-left:20px}

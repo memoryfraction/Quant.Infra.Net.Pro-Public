@@ -219,6 +219,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (event.target === event.currentTarget) window.closeGallery();
   });
 
+  // "Tools" dropdown: click/tap toggles (hover and keyboard focus are handled in CSS); Esc or an outside click closes it.
+  const toolsBox = document.getElementById("navTools");
+  const toolsBtn = document.getElementById("navToolsBtn");
+  if (toolsBox && toolsBtn) {
+    const setOpen = (open) => {
+      toolsBox.classList.toggle("open", open);
+      toolsBtn.setAttribute("aria-expanded", String(open));
+    };
+    toolsBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      setOpen(!toolsBox.classList.contains("open"));
+    });
+    document.addEventListener("click", (event) => { if (!toolsBox.contains(event.target)) setOpen(false); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape") setOpen(false); });
+  }
+
   window.addEventListener("scroll", () => {
     document.getElementById("navbar")?.classList.toggle("scrolled", window.scrollY > 80);
   });

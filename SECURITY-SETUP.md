@@ -19,7 +19,7 @@
 | 动作 | Header Name | Header Value |
 |---|---|---|
 | Add header | strict-transport-security | max-age=31536000; includeSubDomains; preload |
-| Add header | content-security-policy | default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none' |
+| Add header | content-security-policy | default-src 'self'; script-src 'self' https://*.counter.dev; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.counter.dev; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none' |
 | Add header | x-frame-options | DENY |
 | Add header | x-content-type-options | nosniff |
 | Add header | referrer-policy | strict-origin-when-cross-origin |

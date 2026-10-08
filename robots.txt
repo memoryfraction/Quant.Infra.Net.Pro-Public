@@ -6,5 +6,6 @@
 
 User-agent: *
 Allow: /
+Disallow: /stats/
 
 Sitemap: https://www.alpha-wealth-lab.com/sitemap.xml
