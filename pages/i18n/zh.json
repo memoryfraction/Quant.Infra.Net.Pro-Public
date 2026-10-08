@@ -7,7 +7,9 @@
     "galleryTrigger": "图库",
     "cta": "立即下载",
     "ebook": "电子书",
-    "macro": "宏观周期"
+    "macro": "宏观周期",
+    "changelog": "更新日志",
+    "calculator": "全天候计算器"
   },
   "gallery": {
     "title": "产品图库",
@@ -54,7 +56,8 @@
     "privacy": "隐私政策",
     "tos": "服务条款",
     "githubProfile": "GitHub 主页：@memoryfraction",
-    "ebook": "电子书"
+    "ebook": "电子书",
+    "changelog": "版本历史"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
@@ -368,5 +371,37 @@
       "r2": "更多量化与交易基础设施——即将推出"
     },
     "back": "返回首页"
+  },
+  "news": {
+    "label": "最新动态",
+    "title": "持续改进，每个版本都有据可查",
+    "sub": "产品的最新亮点。每个版本的完整说明见版本历史页面。",
+    "all": "查看完整版本历史",
+    "n0": {
+      "title": "面向 AI 客户端的只读 MCP 服务",
+      "desc": "让 Claude Code、Cursor 等 AI 客户端读取您的 Schwab 账户、持仓、订单、报价与期权链。默认关闭，Bearer token 保护，且没有任何下单、改单或撤单的工具。"
+    },
+    "n1": {
+      "title": "可信 HTTPS，告别“不安全”提示",
+      "desc": "现在由本地证书颁发机构签发 HTTPS 证书，Linux 上 Chrome 自动信任。同时修复应用内更新检查，以及 nginx / Apache 反向代理后的 HTTP 跳转 HTTPS。"
+    },
+    "n2": {
+      "title": "应用内一键升级",
+      "desc": "在应用内即可完成升级，带交易安全闸门（再平衡执行中、存在未完成订单或交易时段内拒绝升级），并在每次升级前自动备份您的设置。"
+    },
+    "n3": {
+      "title": "程序与数据分离",
+      "desc": "配置和策略数据现在存放在用户数据目录，升级再也不会把它们冲掉。包含一次性自动迁移，以及全部设置的导出 / 导入。"
+    }
+  },
+  "changelog": {
+    "label": "版本历史",
+    "title": "更新日志",
+    "sub": "每个版本的发布说明，最新版本在前。",
+    "latest": "最新",
+    "older": "1.6.2 及更早版本：",
+    "olderLink": "README 版本历史",
+    "releases": "全部 GitHub 发布",
+    "release": "GitHub 发布页 ↗"
   }
 }
