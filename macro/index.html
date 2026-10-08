@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Macro Cycle Spectrum</title>
+<meta name="description" content="Free daily dashboard for US stock investors: Bayesian recession probability, investment clock, Fourier test of economic cycles, and an Offensive / Balanced / Defensive stance with an out-of-sample track record.">
+<link rel="canonical" href="https://www.alpha-wealth-lab.com/macro/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.alpha-wealth-lab.com/macro/">
+<meta property="og:title" content="Macro Cycle Spectrum — recession odds &amp; market stance, updated daily">
+<meta property="og:description" content="Bayesian recession probability, investment clock and a rules-based Offensive / Balanced / Defensive stance for US stocks, with an honest track record.">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="style.css">
+<script src="vendor/echarts.min.js"></script>
+</head>
+<body>
+<header class="wrap top">
+  <div>
+    <h1 data-i18n="title"></h1>
+    <p class="sub"><span data-i18n="subtitle"></span> — <span id="updated"></span></p>
+  </div>
+  <div class="tools">
+    <button id="langBtn" class="btn wide" type="button"></button>
+    <button id="themeBtn" class="btn" type="button" data-i18n-aria="themeAria">◐</button>
+  </div>
+</header>
+
+<aside class="wrap">
+  <div class="disclaimer-banner" role="note">
+    <strong data-i18n="discTitle"></strong>
+    <span data-i18n="discBody"></span>
+  </div>
+</aside>
+
+<main class="wrap">
+  <section class="v4hero" id="v4hero"></section>
+
+  <section id="longview" class="card">
+    <h2 data-i18n="lvH"></h2>
+    <p class="lede" id="lvLede"></p>
+    <div class="grid2">
+      <div class="lv-box" id="lvFwd"></div>
+      <div class="lv-box" id="lvCost"></div>
+    </div>
+    <h3 data-i18n="lvCapeH"></h3>
+    <div class="chart" id="chCape"></div>
+    <p class="note" id="lvCapeNote"></p>
+    <h3 data-i18n="lvWealthH"></h3>
+    <div class="chart" id="chWealth"></div>
+    <div class="tablewrap"><table id="tblPerm"></table></div>
+    <p class="note" id="lvSel"></p>
+    <p class="note" data-i18n="lvDefs"></p>
+  </section>
+
+  <section id="checklist" class="card">
+    <h2 data-i18n="ckH"></h2>
+    <p class="lede" data-i18n="ckLede"></p>
+    <ol class="prose-list checklist" data-i18n="ckList"></ol>
+    <p class="note" data-i18n="ckNote"></p>
+  </section>
+
+  <section id="thermo" class="card thermo">
+    <h2 data-i18n="thH"></h2>
+    <p class="lede" data-i18n="thLede"></p>
+    <section class="hero" id="hero"></section>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <section id="core" class="card">
+    <h2 data-i18n="coreH"></h2>
+    <p class="lede" data-i18n="coreLede"></p>
+    <div class="core-head" id="coreHead"></div>
+    <div class="chart" id="chCore"></div>
+    <h3 data-i18n="liveH"></h3>
+    <p class="note" id="liveNote"></p>
+    <div class="chart" id="chLive"></div>
+    <div class="tablewrap"><table id="tblLive"></table></div>
+    <p class="note" id="paperDD"></p>
+    <p class="note" id="predNote"></p>
+    <p class="note" id="reportsNote"></p>
+  </section>
+
+  <section id="shadow" class="card">
+    <h2 data-i18n="shH"></h2>
+    <p class="lede" id="shLede"></p>
+    <div class="tablewrap"><table id="tblShadow"></table></div>
+    <p class="note" data-i18n="shNote"></p>
+  </section>
+
+  <section id="outlook" class="card">
+    <h2 data-i18n="olH"></h2>
+    <p class="lede" id="olLede"></p>
+    <div class="tablewrap"><table class="ol-tbl" id="tblOutlook"></table></div>
+    <div class="grid2 ol-notes">
+      <div><h3 data-i18n="olWhyH"></h3><ol class="prose-list" data-i18n="olWhy"></ol></div>
+      <div><h3 data-i18n="olHikeH"></h3><div class="prose-list" id="olHike"></div></div>
+    </div>
+  </section>
+
+  <section id="scenarios" class="card">
+    <h2 data-i18n="scH"></h2>
+    <p class="lede" data-i18n="scLede"></p>
+    <div class="chart short" id="chScProb"></div>
+    <div class="chart fan" id="chFan"></div>
+    <p class="verdict" id="scSummary"></p>
+    <div class="tablewrap"><table id="tblScen"></table></div>
+    <h3 data-i18n="scEvH"></h3>
+    <div class="tablewrap"><table id="tblScEv"></table></div>
+    <p class="note" id="scNote"></p>
+  </section>
+
+  <section id="dips" class="card">
+    <h2 data-i18n="dipH"></h2>
+    <p class="lede" data-i18n="dipLede"></p>
+    <h3 data-i18n="watchH"></h3>
+    <div class="tablewrap"><table id="tblWatch"></table></div>
+    <h3 data-i18n="dipTblH"></h3>
+    <div class="tablewrap"><table id="tblDips"></table></div>
+    <p class="verdict" id="dipSummary"></p>
+    <h3 data-i18n="playH"></h3>
+    <ol class="prose-list" data-i18n="play"></ol>
+  </section>
+
+  <section id="timeline" class="card">
+    <h2 data-i18n="tlH"></h2>
+    <p class="lede" data-i18n="tlLede"></p>
+    <div class="chart xtall" id="chTimeline"></div>
+    <div class="tablewrap"><table id="tblTlStats"></table></div>
+    <p class="note" data-i18n="tlNote"></p>
+  </section>
+
+  <section id="analogs" class="card">
+    <h2 data-i18n="anH"></h2>
+    <p class="lede" id="anLede"></p>
+    <div class="tablewrap"><table class="an-tbl" id="tblAnalogs"></table></div>
+    <p class="verdict" id="anSummary"></p>
+    <p class="callout" id="anRecon"></p>
+    <p class="note" data-i18n="anNote"></p>
+  </section>
+
+  <nav class="toc">
+    <a href="#v4hero" data-i18n="tocV4"></a><a href="#longview" data-i18n="tocLv"></a><a href="#checklist" data-i18n="tocCk"></a><a href="#thermo" data-i18n="tocTh"></a><a href="#core" data-i18n="tocCore"></a><a href="#shadow" data-i18n="tocShadow"></a><a href="#outlook" data-i18n="tocOl"></a><a href="#scenarios" data-i18n="tocSc"></a><a href="#dips" data-i18n="tocDip"></a><a href="#timeline" data-i18n="tocTl"></a><a href="#analogs" data-i18n="tocAn"></a><a href="#guide" data-i18n="toc0"></a><a href="#bayes" data-i18n="toc1"></a><a href="#clock" data-i18n="toc2"></a>
+    <a href="#fourier" data-i18n="toc3"></a><a href="#bands" data-i18n="toc4"></a>
+    <a href="#long" data-i18n="toc5"></a><a href="#backtest" data-i18n="toc6"></a>
+    <a href="#track" data-i18n="toc7"></a><a href="#sources" data-i18n="toc8"></a><a href="#method" data-i18n="toc9"></a><a href="#audit" data-i18n="toc10"></a>
+  </nav>
+
+  <section id="guide" class="card guide">
+    <h2 data-i18n="guideH"></h2>
+    <p class="lede" data-i18n="guideLede"></p>
+    <div class="grid2">
+      <div><h3 data-i18n="guideCanH"></h3><ul class="prose-list" data-i18n="guideCan"></ul></div>
+      <div><h3 data-i18n="guideCannotH"></h3><ul class="prose-list" data-i18n="guideCannot"></ul></div>
+    </div>
+    <h3 data-i18n="guideRoutineH"></h3>
+    <ol class="prose-list" data-i18n="guideRoutine"></ol>
+    <h3 data-i18n="guideMapH"></h3>
+    <div class="tablewrap"><table class="guide-tbl" data-i18n="guideMap"></table></div>
+    <p class="note" data-i18n="guideMapNote"></p>
+    <h3 data-i18n="guideComboH"></h3>
+    <ul class="prose-list" data-i18n="guideCombo"></ul>
+    <h3 data-i18n="guideReadH"></h3>
+    <div class="tablewrap"><table class="guide-tbl" data-i18n="guideRead"></table></div>
+    <h3 data-i18n="guideRulesH"></h3>
+    <ol class="prose-list" data-i18n="guideRules"></ol>
+    <details class="faq">
+      <summary data-i18n="guideFaqH"></summary>
+      <div data-i18n="guideFaq"></div>
+    </details>
+    <p class="note" data-i18n="guideDisclaimer"></p>
+  </section>
+
+  <section id="bayes" class="card">
+    <h2 data-i18n="bayesH"></h2>
+    <p class="lede" data-i18n="bayesLede"></p>
+    <div id="bayesSteps"></div>
+    <h3 data-i18n="bayesHistH"></h3>
+    <div class="chart" id="chRecProb"></div>
+    <p class="note" id="brierNote"></p>
+  </section>
+
+  <section id="clock" class="card">
+    <h2 data-i18n="clockH"></h2>
+    <p class="lede" data-i18n="clockLede"></p>
+    <div class="chart" id="chClock"></div>
+    <h3 data-i18n="phaseTblH"></h3>
+    <p class="note" data-i18n="phaseTblNote"></p>
+    <div class="tablewrap"><table class="heat" id="tblPhase"></table></div>
+    <h3 data-i18n="momH"></h3>
+    <div class="tablewrap"><table class="mom" id="tblMom"></table></div>
+    <h3 data-i18n="secH"></h3>
+    <p class="note" id="secLede"></p>
+    <div class="tablewrap"><table id="tblSector"></table></div>
+    <p class="note" id="secByStance"></p>
+    <p class="verdict" data-i18n="secTake"></p>
+  </section>
+
+  <section id="fourier" class="card">
+    <h2 data-i18n="fourierH"></h2>
+    <p class="lede" data-i18n="fourierLede"></p>
+    <div class="grid2"><div class="chart" id="chSpec0"></div><div class="chart" id="chSpec1"></div></div>
+    <p class="verdict" id="specVerdict"></p>
+  </section>
+
+  <section id="bands" class="card">
+    <h2 data-i18n="bandsH"></h2>
+    <p class="lede" data-i18n="bandsLede"></p>
+    <div class="chart tall" id="chBands"></div>
+    <p class="note" id="relNote"></p>
+  </section>
+
+  <section id="long" class="card">
+    <h2 data-i18n="longH"></h2>
+    <p class="lede" data-i18n="longLede"></p>
+    <div class="grid2"><div class="chart" id="chCredit"></div><div class="chart" id="chGap"></div></div>
+  </section>
+
+  <section id="backtest" class="card">
+    <h2 data-i18n="btH"></h2>
+    <p class="lede" data-i18n="btLede"></p>
+    <div class="chart" id="chBT"></div>
+    <div class="tablewrap"><table class="stats" id="tblBT"></table></div>
+    <h3 data-i18n="presetH"></h3>
+    <div class="tablewrap"><table id="tblPresets"></table></div>
+    <p class="note" id="presetNote"></p>
+    <h3 data-i18n="qqqH"></h3>
+    <p class="note" id="qqqNote"></p>
+    <div class="chart" id="chQQQ"></div>
+    <div class="tablewrap"><table id="tblQQQ"></table></div>
+    <p class="note" data-i18n="qqqTake"></p>
+  </section>
+
+  <section id="track" class="card">
+    <h2 data-i18n="trackH"></h2>
+    <p class="lede" data-i18n="trackLede"></p>
+    <div class="callout" id="analog"></div>
+    <h3 data-i18n="trkStanceH"></h3>
+    <div class="tablewrap"><table id="tblStance"></table></div>
+    <p class="note" data-i18n="trkStanceNote"></p>
+    <h3 data-i18n="expH"></h3>
+    <div class="tablewrap"><table id="tblExp"></table></div>
+    <p class="note" id="expNote"></p>
+    <h3 data-i18n="trkRecH"></h3>
+    <div class="tablewrap"><table id="tblCalls"></table></div>
+    <p class="note" id="recNote"></p>
+    <div class="chips" id="alarmChips"></div>
+    <h3 data-i18n="trkCmpH"></h3>
+    <div class="tablewrap"><table id="tblCmp"></table></div>
+    <p class="note" id="robustNote"></p>
+    <h3 data-i18n="trkCrashH"></h3>
+    <div class="tablewrap"><table id="tblCrash"></table></div>
+    <h3 data-i18n="trkRateH"></h3>
+    <div class="tablewrap"><table id="tblRate"></table></div>
+    <p class="note" data-i18n="trkRateNote"></p>
+    <h3 data-i18n="s20H"></h3>
+    <p class="note" data-i18n="s20Lede"></p>
+    <div class="tablewrap"><table id="tblS20"></table></div>
+    <p class="note" id="s20Causes"></p>
+    <p class="note" data-i18n="s20Take"></p>
+    <h3 data-i18n="wfH"></h3>
+    <p class="note" id="wfLede"></p>
+    <div class="tablewrap"><table id="tblWF"></table></div>
+    <p class="verdict" id="wfVerdict"></p>
+    <h3 data-i18n="ddH"></h3>
+    <p class="note" data-i18n="ddLede"></p>
+    <div class="tablewrap"><table id="tblDD"></table></div>
+    <p class="note" id="ddNote"></p>
+    <h3 data-i18n="trkLimitsH"></h3>
+    <ul class="prose-list" data-i18n="trkLimits"></ul>
+  </section>
+
+  <section id="sources" class="card">
+    <h2 data-i18n="srcH"></h2>
+    <p class="lede" id="srcLede"></p>
+    <h3 data-i18n="srcFredH"></h3>
+    <div class="tablewrap"><table class="src" id="tblFred"></table></div>
+    <h3 data-i18n="srcPxH"></h3>
+    <p class="note" data-i18n="srcPxNote"></p>
+    <div class="tablewrap"><table class="src" id="tblPx"></table></div>
+    <h3 data-i18n="srcPipeH"></h3>
+    <ol class="pipe" data-i18n="srcPipe"></ol>
+  </section>
+
+  <section id="method" class="card prose">
+    <h2 data-i18n="methodH"></h2>
+    <ul data-i18n="methodList"></ul>
+  </section>
+
+  <section id="audit" class="card">
+    <h2 data-i18n="auditH"></h2>
+    <p class="lede" data-i18n="auditLede"></p>
+    <h3 data-i18n="ablH"></h3>
+    <div class="tablewrap"><table id="tblAblation"></table></div>
+    <p class="note" data-i18n="ablNote"></p>
+    <h3 data-i18n="bootH"></h3>
+    <p class="note" id="bootText"></p>
+    <h3 data-i18n="costH"></h3>
+    <p class="note" id="costText"></p>
+    <h3 data-i18n="gapsH"></h3>
+    <p class="note" id="gapsText"></p>
+    <h3 data-i18n="paramsH"></h3>
+    <pre class="params" id="paramsText"></pre>
+    <details class="faq"><summary id="gridH"></summary><div class="tablewrap"><table id="tblGrid"></table></div></details>
+    <h3 data-i18n="filesH"></h3>
+    <ul class="prose-list" data-i18n="files"></ul>
+    <h3 data-i18n="versionsH"></h3>
+    <ul class="prose-list" data-i18n="versions"></ul>
+  </section>
+</main>
+<footer class="wrap foot"><span data-i18n="footer"></span> · <a href="data/dashboard.json">JSON</a> · <a href="data/history.csv">history.csv</a></footer>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
