@@ -12,12 +12,12 @@
 
   var COMMON = {
     en: {
-      back: "Tools", home: "Home", inputs: "Inputs", results: "Results", method: "Method & formulas",
+      back: "Tools", home: "Home", inputs: "Inputs", results: "Results", methodTitle: "Method & formulas",
       invalid: "Please check the inputs (some values are empty or out of range).",
       disclaimer: "This tool simply turns the published methods in “Wealth Shortcut” (by 硅谷居士) and the “CLEC Handbook” into calculators, for my own use and for anyone who finds them helpful. Results are for learning only and are not investment, tax or legal advice; please make your own decisions. This site is not affiliated with or endorsed by the authors, CLEC or James."
     },
     zh: {
-      back: "工具箱", home: "首页", inputs: "输入", results: "结果", method: "方法与公式",
+      back: "工具箱", home: "首页", inputs: "输入", results: "结果", methodTitle: "方法与公式",
       invalid: "请检查输入（有的值为空或超出范围）。",
       disclaimer: "本工具只是把《财富捷径》（硅谷居士）与《CLEC 宝典》中的公开方法论做成计算器，方便大家和我自己使用。计算结果仅供学习参考，不构成任何投资、税务或法律建议；请结合自身情况独立判断，盈亏自负。本站与原作者、CLEC 及 James 老师均无关联，也未获其背书。"
     }
