@@ -3,7 +3,7 @@
   var I18N = {
     en: {
       title: "Prepay the Mortgage or Invest?",
-      subtitle: "See your real mortgage rate, compare both paths over decades, and the leveraged return on a down payment.",
+      subtitle: "Compare paying off your mortgage early with investing the money instead, see your real mortgage rate after tax and inflation, and the return on a leveraged home purchase.",
       s1: "1 · Real mortgage rate", s2: "2 · Extra money each year", s3: "3 · A lump sum", s4: "4 · Leveraged home return",
       i: "Mortgage rate", t: "Marginal tax rate on interest relief", tHint: "Use 0 if you get no deduction.", pi: "Inflation", r: "Investment return (yearly)",
       X: "Extra money each year", Y: "Years", P: "Lump sum", cg: "Capital-gains tax on the gain",
@@ -25,7 +25,7 @@
     },
     zh: {
       title: "房贷：提前还还是去投资",
-      subtitle: "看清房贷的真实利率，比较两条路径几十年后的差别，以及杠杆买房的首付收益率。",
+      subtitle: "比较提前还房贷和把钱拿去投资哪个更划算，看清扣除税和通胀后的真实房贷利率，以及杠杆买房的首付收益率。",
       s1: "1 · 房贷的真实利率", s2: "2 · 每年多出来的钱", s3: "3 · 手上一笔钱", s4: "4 · 杠杆买房收益",
       i: "房贷利率", t: "利息抵税的边际税率", tHint: "没有抵扣就填 0。", pi: "通胀率", r: "投资年化收益率",
       X: "每年多出的钱", Y: "年数", P: "一笔资金", cg: "收益的资本利得税",

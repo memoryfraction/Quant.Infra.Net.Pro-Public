@@ -3,7 +3,7 @@
   var I18N = {
     en: {
       title: "Pledge Loan Margin & Liquidation Check",
-      subtitle: "How far the market can fall before a margin call — and how a yearly living-cost loan erodes your buffer.",
+      subtitle: "How far the market can fall before your pledged-stock loan is called, and how borrowing living costs every year wears down your safety margin.",
       s1: "1 · My margin ratio now", s2: "2 · How much to borrow, how far can it fall", s3: "3 · Retiree borrowing living costs every year",
       collateral: "Collateral market value", loan: "Loan balance", renew: "Renewal line", warn: "Broker warning line", call: "Margin-call line",
       lineHint: "Taiwan-style defaults; follow your broker contract.",
@@ -29,7 +29,7 @@
     },
     zh: {
       title: "质押维持率与断头台",
-      subtitle: "借几成、市场跌多少会被追缴；退休后每年借生活费，几年后会碰线。",
+      subtitle: "查看质押股票借款后，市场跌多少会被追缴；以及退休后每年借生活费，安全边际会被消耗多快。",
       s1: "1 · 我现在的维持率", s2: "2 · 借几成、跌多少会出事", s3: "3 · 退休后每年质押借生活费",
       collateral: "担保品市值", loan: "借款余额", renew: "可续约线", warn: "券商警示线", call: "追缴断头线",
       lineHint: "台湾常见默认值，以你的券商合约为准。",

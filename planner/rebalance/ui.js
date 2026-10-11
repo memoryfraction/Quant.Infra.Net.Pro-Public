@@ -4,7 +4,7 @@
   var I18N = {
     en: {
       title: "Smart Rebalancing Assistant",
-      subtitle: "Once a year, enter your three sleeves and get this year's move.",
+      subtitle: "Once a year, enter what each part of your portfolio is worth today and get this year's rebalancing move.",
       s1: "Target & today's values", s2: "Rules",
       preset: "Target mix", region: "Labels", rGen: "Generic", rUS: "US tickers", rTW: "Taiwan tickers",
       base: "Base index value", lev: "2x leveraged value", cash: "Cash / T-bill value",
@@ -29,13 +29,13 @@
     },
     zh: {
       title: "聪明再平衡执行器",
-      subtitle: "每年固定一天，输入三个部位的市值，得到这一年的操作。",
+      subtitle: "每年固定一天，输入组合里三个部分当前的市值，得到今年该怎么调整仓位。",
       s1: "目标与今天的市值", s2: "规则",
       preset: "目标阵型", region: "标的名称", rGen: "通用", rUS: "美股标的", rTW: "台股标的",
-      base: "原型指数市值", lev: "二倍杠杆市值", cash: "现金/短债市值",
+      base: "大盘指数基金市值", lev: "二倍杠杆市值", cash: "现金/短债市值",
       levStart: "一年前的杠杆部位市值", levNew: "今年新投入杠杆部位的本金",
       lock: "锁利比例", down: "下跌年补仓比例", pledged: "我有质押借款", initial: "最初投入的总资产", newMoney: "大额资金（可选）",
-      tBase: "原型指数", tLev: "二倍杠杆", tCash: "现金/短债",
+      tBase: "大盘指数基金", tLev: "二倍杠杆", tCash: "现金/短债",
       up: "上涨年", downY: "下跌年", flat: "持平", kType: "年份类型", kGain: "杠杆部位纯收益", kBasis: "补仓基数",
       doUp: "卖出 {a} 的{from}，买入{to}", doDown: "用{to_}买入 {a} 的{lev}", doNone: "今年不用操作",
       cmp: "对比", cCur: "当前", cSmart: "聪明再平衡后", cMind: "无脑再平衡后", cBeta: "Beta",
