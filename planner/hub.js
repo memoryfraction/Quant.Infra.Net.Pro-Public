@@ -2,7 +2,7 @@
 (function () {
   var TOOLS = [
     { href: "/planner/fi/", en: ["Financial Independence", "Target assets, yearly saving needed, years to FI"], zh: ["财务自由计算器", "需要多少资产、每年要投多少、还要工作几年"] },
-    { href: "/planner/allocation/", en: ["433 Allocation & Beta", "Pick a mix, cash floor, household exposure"], zh: ["433 配置与 Beta 体检", "阵型选择、现金底线、全家资产曝险"] },
+    { href: "/planner/allocation/", en: ["433 Allocation & Beta", "Split index fund, leverage and cash; see how many times as volatile as the market"], zh: ["433 配置与 Beta 体检", "指数基金、杠杆、现金怎么配，整体波动是大盘的几倍"] },
     { href: "/planner/margin/", en: ["Pledge Loan Margin", "How far can the market fall before a margin call"], zh: ["质押维持率与断头台", "借几成、跌多少会触线"] },
     { href: "/planner/rebalance/", en: ["Smart Rebalancing", "Lock gains in up years, add in down years"], zh: ["聪明再平衡执行器", "上涨年锁利、下跌年补仓"] },
     { href: "/planner/withdrawal/", en: ["Withdrawal Ladder", "Asset multiple, draw rate, rescue mix"], zh: ["退休提领率阶梯", "资产倍数、提领率、救援配置"] },

@@ -3,7 +3,7 @@
   var I18N = {
     en: {
       title: "Financial Independence Calculator",
-      subtitle: "How much you need, how much to invest each year, and how many years to go at your savings rate.",
+      subtitle: "How much you need to be financially free, how much to invest each year to get there, and how many years of work remain at your savings rate.",
       secA: "How much do I need?", secB: "How many more years of work?",
       mode: "When do you want to be free?", modeNow: "Right now", modeRetire: "At retirement",
       expenseNow: "Yearly spending today", rentNow: "Yearly rent / passive income today", other: "Pension / social security at retirement (that year's money)",
@@ -26,7 +26,7 @@
     },
     zh: {
       title: "财务自由计算器",
-      subtitle: "需要多少资产、每年要投多少、按现在的储蓄率还要工作几年。",
+      subtitle: "算出要多少资产才能财务自由、为此每年要投多少，以及按你现在的储蓄率还要工作几年。",
       secA: "我需要多少资产？", secB: "还要工作几年？",
       mode: "想在什么时候财务自由？", modeNow: "现在", modeRetire: "退休时",
       expenseNow: "今天的年开销", rentNow: "今天的年房租等被动收入", other: "退休时的养老金/社保（届时金额）",

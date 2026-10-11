@@ -4,7 +4,7 @@
   var I18N = {
     en: {
       title: "Social Security: When to Claim",
-      subtitle: "Early, full or delayed to 70 — monthly amounts and the age where waiting pays off.",
+      subtitle: "How much Social Security you get by claiming at 62, 67 or 70, and at what age waiting pays off.",
       s1: "Inputs", birth: "Birth year", pia: "Monthly benefit at full retirement age", piaHint: "See your statement at ssa.gov.",
       cA: "Compare age A", cB: "Compare age B", cC: "Compare age C", life: "Expected age at death",
       kFra: "Full retirement age", ym: "{y} y {m} m", tbl: "Comparison", tAge: "Claim at", tF: "Factor", tM: "Per month", tY: "Per year", tCum: "Total by expected age",
@@ -20,7 +20,7 @@
     },
     zh: {
       title: "美国社安金：几岁开始领",
-      subtitle: "提前领、按时领、推迟到 70 岁，每月多少、几岁之后划算。",
+      subtitle: "比较 62、67、70 岁开始领社安金每月能领多少，以及活到几岁之后推迟领更划算。",
       s1: "输入", birth: "出生年份", pia: "完全退休年龄时每月可领", piaHint: "可在 ssa.gov 的账户里查到。",
       cA: "比较年龄 A", cB: "比较年龄 B", cC: "比较年龄 C", life: "预计寿命",
       kFra: "完全退休年龄", ym: "{y} 岁 {m} 个月", tbl: "对比", tAge: "开始领取", tF: "系数", tM: "每月", tY: "每年", tCum: "到预计寿命累计",

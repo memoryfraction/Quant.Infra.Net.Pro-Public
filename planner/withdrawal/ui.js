@@ -3,7 +3,7 @@
   var I18N = {
     en: {
       title: "Retirement Withdrawal Ladder",
-      subtitle: "How many years of spending you hold, what you can draw each year, and what to do when it isn't enough.",
+      subtitle: "How many years of spending your assets cover, what share you can safely draw each year, and what to do if it is not enough.",
       s1: "1 · Which rung am I on?", s2: "2 · High-yield rescue mix", s3: "3 · Rule of thumb", s4: "4 · Sequence-of-returns demo",
       assets: "Retirement financial assets", expense: "Yearly spending", lev: "My mix includes 2x leveraged ETFs",
       yieldRate: "Distribution yield", core: "Share of the rest in base index",
@@ -31,7 +31,7 @@
     },
     zh: {
       title: "退休提领率阶梯",
-      subtitle: "资产是年开销的几倍、每年能动用多少、不够时怎么补现金流。",
+      subtitle: "看你的资产够花几年、每年能安全取出多少，不够时怎么补现金流。",
       s1: "1 · 我在第几档", s2: "2 · 高配息救援方案", s3: "3 · 书中的经验法则", s4: "4 · 顺序风险演示",
       assets: "可用于退休的金融资产", expense: "年开销", lev: "我的组合含二倍杠杆 ETF",
       yieldRate: "配息率", core: "剩余资金中原型占比",
