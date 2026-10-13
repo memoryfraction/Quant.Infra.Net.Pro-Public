@@ -19,10 +19,23 @@ function makeDB() {
     const s = sql.replace(/\s+/g, " ").trim();
 
     // ---- INSERT ----
-    let m = s.match(/^INSERT INTO (\w+)\s*\(([^)]*)\)\s*VALUES/i);
+    let m = s.match(/^INSERT INTO (\w+)\s*\(([^)]*)\)\s*VALUES\s*\(([^)]*)\)/i);
     if (m) {
       const table = m[1];
       const cols = m[2].split(",").map((c) => c.trim());
+      // A real D1 rejects a statement whose placeholder count disagrees with
+      // its column count. The old stub silently tolerated that, which let a
+      // 28-column / 27-placeholder INSERT ship green while every production
+      // write failed. Enforce the invariant here so it can never hide again.
+      const nPlaceholders = (m[3].match(/\?/g) || []).length;
+      assert.equal(
+        nPlaceholders, cols.length,
+        `INSERT INTO ${table}: ${cols.length} columns but ${nPlaceholders} placeholders`
+      );
+      assert.equal(
+        args.length, nPlaceholders,
+        `INSERT INTO ${table}: ${nPlaceholders} placeholders but ${args.length} bound values`
+      );
       const rec = {};
       cols.forEach((c, i) => { rec[c] = args[i]; });
       if (table === "hits") { rec.id = ++counters.hits; }
@@ -243,8 +256,22 @@ function makeDB() {
     _tables: tables,
     prepare(sql) {
       const args = [];
+      // Real D1 validates bind() arity against the placeholder count and throws
+      // on a mismatch in EITHER direction. The old stub accepted anything, so
+      // two production bugs hid behind a green suite:
+      //   - INSERT ... 28 columns / 27 placeholders  (every hit write failed)
+      //   - a bind("") attached to a statement with no placeholder  (500)
+      // Enforce the invariant at bind() time so neither can return unnoticed.
+      const nPlaceholders = (String(sql).match(/\?/g) || []).length;
       return {
-        bind(...a) { args.push(...a); return this; },
+        bind(...a) {
+          assert.equal(
+            a.length, nPlaceholders,
+            `bind() arity mismatch: statement has ${nPlaceholders} placeholder(s) but ${a.length} value(s) bound\nSQL: ${String(sql).slice(0, 160)}`
+          );
+          args.push(...a);
+          return this;
+        },
         async run() { return run(sql, args.slice()); },
         async first() { const r = select(sql, args.slice()); return r.results[0] || null; },
         async all() { return select(sql, args.slice()); },

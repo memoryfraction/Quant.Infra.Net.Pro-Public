@@ -199,10 +199,15 @@ async function handleHit(request, env, ctx) {
   ];
   const stmt = env.DB.prepare(
     "INSERT INTO hits(ts,day,path,event,country,region,city,postal,lat,lon,tz,metro,ref,visitor,vid,sid,ip_hash,device,os,browser,blang,vw,utm_source,utm_medium,utm_campaign,campaign,dur_ms,scroll) " +
-    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
   ).bind(...row);
-  const p = stmt.run().catch(() => {});
-  if (ctx && ctx.waitUntil) ctx.waitUntil(p); else p;
+  // A swallowed rejection here silently kills the whole analytics pipeline
+  // (the endpoint still answers 204, so nothing looks wrong). Log the failure
+  // so it is visible in `wrangler tail`, but never log any payload field.
+  const p = stmt.run().catch((e) => {
+    console.error("hit_insert_failed", (e && e.message) || String(e));
+  });
+  if (ctx && ctx.waitUntil) ctx.waitUntil(p); else await p;
   return noStore();
 }
 
@@ -363,9 +368,13 @@ async function adminSubscribers(request, env, url) {
   const rows = await env.DB.prepare("SELECT status, COUNT(*) n FROM subscribers GROUP BY status").all();
   for (const r of rows.results) counts[r.status] = (counts[r.status] || 0) + r.n;
   const has = status && ["pending", "confirmed", "unsubscribed"].includes(status);
-  const recentRows = await env.DB.prepare(
+  // Bind only when the WHERE clause is actually present: D1 rejects a bind()
+  // whose arity exceeds the statement's placeholder count, which made the
+  // unfiltered listing (no ?status=) fail with a 500.
+  const recentStmt = env.DB.prepare(
     "SELECT email, status, source, lang, created_ts, confirmed_ts FROM subscribers" + (has ? " WHERE status=?" : "") + " ORDER BY created_ts DESC LIMIT 50"
-  ).bind(has ? status : "").all();
+  );
+  const recentRows = await (has ? recentStmt.bind(status) : recentStmt).all();
   const recent = recentRows.results.map((r) => ({ email: maskEmail(r.email), status: r.status, source: r.source, lang: r.lang, created: r.created_ts, confirmed: r.confirmed_ts }));
   return json({ counts, recent });
 }
