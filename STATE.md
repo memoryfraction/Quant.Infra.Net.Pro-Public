@@ -1,11 +1,12 @@
 # STATE.md — Phase 1 (Analytics Worker + Site)  — LIVING DOC
-_Last updated: 2026-10-12 ~23:20 ET. Read this FIRST after any compact. Then continue "Next action"._
+_Last updated: 2026-10-13 ~03:25 ET. Read this FIRST after any compact. Then continue "Next action"._
 
-## >>> STATUS: DEPLOYED + ONLINE SMOKE GREEN <<<
-Worker is LIVE at https://www.alpha-wealth-lab.com/api/* (version 487c6097).
+## >>> STATUS: DEPLOYED + ONLINE SMOKE GREEN (3rd bug found & fixed post-deploy) <<<
+Worker is LIVE at https://www.alpha-wealth-lab.com/api/* (version **dbadc736**, supersedes 487c6097).
 All three secrets set. Full end-to-end verified against production D1.
-Task A = PR #20 open. Task B = PR #21 open. Neither merged (per instruction).
-Remaining: final report only (spec §8).
+Task A = PR #20 open (6 commits, tip 65b71b7). Task B = PR #21 open. Neither merged (per instruction).
+Bugs #7 / #8 / #9 all found post-deploy, all fixed, all re-verified live.
+Remaining: final report only (spec §8) — currently lists 2 bugs, must be amended to 3.
 
 ## Objective
 Implement Phase 1 of alpha-wealth-lab.com per the spec (pasted-text-1.txt, 201 lines):
@@ -231,10 +232,11 @@ Existing single-file src/index.js (hit/stats/health), schema.sql (hits only), wr
       (playwright 1.64 lives in /e/Github/memoryfraction/node_modules, NOT in this worktree —
        node resolves node_modules relative to the SCRIPT path, so `cd` alone does not help.)
 
-## REAL BUGS #7 / #8 — FOUND ONLY BY PROBING PRODUCTION, NOT BY THE SUITE
-Both are D1 bind/placeholder arity mismatches. The in-memory D1 stub accepted ANY bind arity,
-so 62 green tests proved nothing about real D1. Found by checking whether the smoke-test data
-actually landed in production D1 (a 204 response proves nothing on its own).
+## REAL BUGS #7 / #8 / #9 — FOUND ONLY BY PROBING PRODUCTION, NOT BY THE SUITE
+All three are SQL/statement-shape mismatches. The in-memory D1 stub was strictly MORE PERMISSIVE
+than real D1 (it accepted ANY bind arity and modelled no NOT NULL constraints), so 42 green tests
+proved nothing about real D1. Found by checking whether the smoke-test data actually landed in
+production D1 (a 204 response proves nothing on its own).
 
 - [x] **BUG #7 (SEVERE — analytics collection was 100% dead).**
       `POST /api/hit` listed **28 columns but only 27 `?` placeholders** in its INSERT, so every
@@ -253,13 +255,38 @@ actually landed in production D1 (a 204 response proves nothing on its own).
       500 (error code 1101). The filtered path worked, which is why it looked healthy.
       FIX: only bind when the WHERE clause is actually present.
       VERIFIED LIVE: `/api/admin/subscribers` -> 200 with masked emails; `?status=confirmed` -> 200.
-- [x] TEST-HARNESS HARDENING (the actual root cause of both misses):
-      `test/index.test.mjs`'s D1 stub now enforces arity in BOTH directions —
-      (a) INSERT column count vs placeholder count, (b) `bind()` value count vs placeholder count.
+- [x] **BUG #9 (500 on /api/profile — found by the smoke test itself).**
+      `handleProfile` guarded its four enum fields with `x !== undefined`. But `cleanEnum`
+      returns **`null`** (not `undefined`) for a value outside the whitelist, so the test was
+      *always true*: an invalid enum reached the column as SQL NULL, hit
+      `NOT NULL constraint failed: profiles.age_band`, and 500'd the whole request — when the
+      spec only asks that an invalid value be **silently dropped**.
+      Trick that exposed it: my "bad test data" `age_band:"35-44"` is not in `AGE_BANDS`
+      (`<30,30-39,40-49,50-59,60+`), so the malformed request surfaced a real defect.
+      FIX: two independent guards — (1) `keep(raw, cleaned)` -> `undefined` unless the key was
+      present AND the cleaned value is non-null; (2) `?? base.xxx` -> fall back to the stored or
+      default value. **Both are load-bearing: ablation shows removing EITHER one alone
+      reproduces all 3 failures.** (My first injection only removed `keep` but left a usage,
+      yielding a `ReferenceError` instead of the NOT NULL error — a narrower second injection
+      was needed to show the fallback independently protects the column.)
+      VERIFIED LIVE (version `dbadc736`): the exact payload that 500'd now returns 204 and the
+      row reads `age_band:"" asset_band:"" leverage_exp:""` with `age_null:0 asset_null:0`,
+      while the *valid* field in the same request (`goal:"retire"`) is still applied.
+      Also verified the don't-clobber path: a valid `age_band:"40-49"` survives a later
+      `age_band:"nonsense"` update unchanged.
+- [x] TEST-HARNESS HARDENING (the actual root cause of all three misses):
+      `test/index.test.mjs`'s D1 stub now enforces:
+      (a) INSERT column count vs placeholder count, (b) `bind()` value count vs placeholder count,
+      (c) **NOT NULL** for every column declared so in migrations 0002 + 0003.
       PROVEN to work by re-injecting each bug and confirming the suite turns red with a precise
-      message ("28 columns but 27 placeholders" / "0 placeholder(s) but 1 value(s) bound").
+      message ("28 columns but 27 placeholders" / "0 placeholder(s) but 1 value(s) bound" /
+      "D1_ERROR: NOT NULL constraint failed: profiles.age_band").
+      One prior assertion **encoded bug #9 as correct behaviour**:
+      `assert.equal(p.asset_band, null, "illegal enum dropped (stored as NULL/empty)")` — the
+      `null` it asserted is exactly what production rejects. Now `""` + `assert.notEqual(..., null)`.
       LESSON: a stub that is more permissive than the real service converts production failures
       into green tests. Verify against the real thing before believing the suite.
+      Tests: **42 pass, 0 fail** (3 new regression tests added).
       14 sections green: console/CSP cleanliness on 9 pages, notice bar, share round-trip,
       malformed ?s=, save->banner->load->compare, blocked storage, GPC, profile card,
       zh/en retention entry, honeypot, stats escaping (incl. all 10 blocks vs the real shapes),
@@ -275,6 +302,16 @@ actually landed in production D1 (a 204 response proves nothing on its own).
             origin (`THIRD_PARTY` regex).
       (iii) share-button click: the button is far below the fold; a synthetic DOM click replaces
             `locator.click()` for this link-generation assertion.
+
+## TESTING TRAP — `curl` IS TREATED AS A BOT (cost me a false "still broken" read)
+`BOT_RE` in `src/lib.js` matches `curl` (also `wget`, `python`, `httpclient`, `headless`,
+`monitor`, `lighthouse`, ...), and every write handler opens with
+`if (isBot(request.headers.get("User-Agent") || "")) return noStore();`.
+So a plain `curl` POST returns **204 with nothing written** — byte-identical to success.
+I nearly concluded bug #9 was unfixed because my verification requests were being dropped.
+ALWAYS pass a browser UA when smoke-testing write endpoints:
+  `-A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ... Chrome/131.0.0.0 Safari/537.36"`
+And never trust the status code alone — confirm the row with a D1 SELECT.
 - [x] **PUSHED + PR OPEN**: `PR #21` https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/pull/21
       (`feature/phase1-site` -> `gh-pages`). 6 commits, all with Co-Authored-By: Codex.
       Secret scan of the diff = clean. NOT merged (as instructed). mergeable=MERGEABLE.

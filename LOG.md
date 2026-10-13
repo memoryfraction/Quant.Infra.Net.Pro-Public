@@ -202,3 +202,113 @@ token and the emails in the admin view are masked. Privacy audit re-confirmed: 2
 - In this sandbox node **cannot spawn child processes** (`spawnSync` fails with `EBUSY` for every
   binary, including bare `python`). The Brevo login therefore ran its mailbox poller as a separate
   top-level process and passed the 2FA code through a file.
+
+---
+
+## Phase 1 — bug #9 fixed, redeployed, and re-verified live
+
+Third production-only defect, same family as #7 and #8 (a statement/guard whose shape does not match
+reality). Found by the post-deploy smoke test, not by the suite.
+
+### The defect — `POST /api/profile` 500s on an out-of-whitelist enum
+
+`handleProfile` guarded its four enum fields with `x !== undefined`:
+
+```js
+age_band: has("age_band") && age !== undefined ? age : base.age_band,
+```
+
+but `cleanEnum` returns **`null`**, not `undefined`, for a value outside the whitelist. The test was
+therefore *always true*, so a rejected enum was written to the column as SQL NULL and tripped
+`NOT NULL constraint failed: profiles.age_band`, turning the whole request into a 500 — when the spec
+only requires that an invalid value be **silently dropped**.
+
+The trap that exposed it: I sent `age_band:"35-44"` as throwaway "bad test data". It is not in
+`AGE_BANDS` (`<30,30-39,40-49,50-59,60+`), so my malformed request surfaced a genuine defect.
+Found via `wrangler tail`: `[ERROR] Error: D1_ERROR: NOT NULL constraint failed: profiles.age_band:
+SQLITE_CONSTRAINT` at `handleProfile (index.js:508:3)`.
+
+### The fix — two independent guards, both proven load-bearing
+
+```js
+const base = existing || { age_band: "", asset_band: "", goal: "", markets: "", follows: "", leverage_exp: "", country: "" };
+const keep = (raw, cleaned) => (has(raw) && cleaned !== null ? cleaned : undefined);
+const rec = {
+  lang,
+  age_band: keep("age_band", age) ?? base.age_band,
+  asset_band: keep("asset_band", asset) ?? base.asset_band,
+  goal: keep("goal", goal) ?? base.goal,
+  markets: has("markets") ? markets : base.markets,
+  follows: has("follows") ? follows : base.follows,
+  leverage_exp: keep("leverage_exp", lev) ?? base.leverage_exp,
+  country,
+};
+```
+
+Ablation, run in both directions to be sure neither guard was decorative:
+
+| variant | result |
+| --- | --- |
+| both guards (shipped) | 42 pass / 0 fail |
+| drop `keep`, keep `??` fallback | 39 pass / **3 fail** — `NOT NULL constraint failed: profiles.asset_band` + `age_band` |
+| keep `keep`, drop `??` fallback | 39 pass / **3 fail** — same two errors |
+
+Removing *either* guard alone reproduces every failure, so the double protection is real and not
+one guard masking a broken other. (A first, sloppier injection deleted only the `keep` definition
+while leaving a usage behind, which produced a `ReferenceError: keep is not defined` rather than the
+NOT NULL error — a narrower injection was required to isolate the fallback.)
+
+### The stub was the reason all three bugs passed
+
+`test/index.test.mjs`'s in-memory D1 was strictly **more permissive** than real D1: it accepted any
+`bind()` arity and modelled no NOT NULL constraints. It now enforces:
+
+- INSERT column count vs `?` placeholder count
+- `bind()` value count vs placeholder count, **both** directions
+- NOT NULL for every column declared so in migrations 0002 + 0003
+
+Each guard was proven by re-injecting the corresponding bug and confirming a precise red message
+("28 columns but 27 placeholders" / "0 placeholder(s) but 1 value(s) bound" /
+"D1_ERROR: NOT NULL constraint failed: profiles.age_band").
+
+One pre-existing assertion had **encoded bug #9 as correct behaviour**:
+
+```js
+assert.equal(p.asset_band, null, "illegal enum dropped (stored as NULL/empty)");
+```
+
+The `null` that assertion demanded is exactly what production rejects. It now requires `""` and adds
+`assert.notEqual(p.asset_band, null, ...)`. Three new regression tests were added; suite is
+**42 pass, 0 fail** (the earlier "62" figure in this log was a miscount of the same 42 tests).
+
+### The testing trap that nearly produced a false "still broken"
+
+After deploying I re-sent the failing payload with plain `curl` and got **204**, then queried D1 and
+found `profiles` still at **0 rows** — a silent write failure, the same signature as bug #7. It was
+not. `BOT_RE` in `src/lib.js` matches `curl`, and every write handler opens with
+`if (isBot(request.headers.get("User-Agent") || "")) return noStore();`. Every probe was being
+discarded as a bot, returning 204 with nothing written — byte-identical to success.
+
+With a browser User-Agent the picture is unambiguous, and the row confirms the fix:
+
+```
+vid=pc6f4d1b2a3e5f7c9  lang=en  age_band=""  asset_band=""  goal="retire"  leverage_exp=""
+age_null=0  asset_null=0
+```
+
+Invalid enums dropped to empty strings (not NULL), while the valid field in the same request was
+still applied. The don't-clobber path was verified separately: a stored `age_band:"40-49"` survives a
+later `age_band:"nonsense"` update unchanged.
+
+**Rule for future smoke tests: always pass a browser UA to write endpoints, and never trust the
+status code alone — confirm the row with a D1 SELECT.**
+
+### Deploy
+
+- Worker version **dbadc736** (supersedes 487c6097), commit `65b71b7` on `feature/phase1-worker`.
+- Secret scan of the staged diff was clean before committing (no key, token, account/zone/D1 IDs).
+- Live smoke, all with a browser UA: `/api/health` 200, `POST /api/hit` 204 (row id 217 landed),
+  `/api/stats` 401 without token / 200 with, `/api/admin/subscribers` 200 unfiltered **and** filtered
+  (bug #8's two paths), `/api/admin/export?table=calcs` 200, `/stats/` 200, `/planner/` 200.
+- Production D1: `hits 217, calcs 1, profiles 1, subscribers 1, feedback 0`; `ip_hash` length 16,
+  no plaintext IP or User-Agent column anywhere.
