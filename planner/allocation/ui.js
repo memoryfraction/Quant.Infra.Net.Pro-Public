@@ -29,6 +29,8 @@
       r_cash_low: "Cash is low (guideline: 30%, minimum 20%).", r_lev_no_pledge: "Living off the portfolio without a pledge line: do not use leverage.",
       r_beta_age: "Over 30: 433 (beta 1.0) is already the aggressive limit.", r_beta_high: "Beta above 1.2 is too high.", r_all_good: "All rules pass.",
       f_cash_share_low: "Cash is under 30% of liquid assets.", f_negative_nw: "Net worth is not positive.",
+      nMargin: "If you pledge this portfolio, how far can the market fall? → Margin check",
+      nRebal: "Once a year, what exactly should I buy or sell? → Smart rebalancing",
       method: [
         "beta = base × 1 + leveraged × 2 + cash × 0",
         "cash floor = min(assets, max(1 year spending, 30% × assets))",
@@ -58,6 +60,8 @@
       r_cash_low: "现金偏低（参考：30%，下限 20%）。", r_lev_no_pledge: "靠资产生活又没有质押额度：不应使用杠杆。",
       r_beta_age: "30 岁以上：433（Beta 1.0）已是积极上限。", r_beta_high: "Beta 超过 1.2，太高。", r_all_good: "规则全部通过。",
       f_cash_share_low: "现金不到流动资产的 30%。", f_negative_nw: "净资产不为正。",
+      nMargin: "如果用这套组合质押借款，跌多少会出事？→ 质押维持率体检",
+      nRebal: "每年到底该买哪一项、卖多少？→ 聪明再平衡执行器",
       method: [
         "Beta = 原型 × 1 + 杠杆 × 2 + 现金 × 0",
         "现金底线 = min(资产, max(1 年开销, 30% × 资产))",
@@ -139,5 +143,25 @@
     out.push(A.panel(t.s3, p3));
     return out;
   }
-  ui = A.mount({ I18N: I18N, fields: fields, render: render });
+  // Compact summary for the share link / saved plan / /api/calc report (<=5 rows).
+  function summary(v, t) {
+    var c = E.cashFloor({ assets: v.assets, annualExpense: v.expense });
+    if (!c.ok || !isFinite(v.age)) return [];
+    var w = v.preset === "custom" ? { base: v.cBase, lev: v.cLev, cash: v.cCash } : E.PRESETS[v.preset];
+    if (![w.base, w.lev, w.cash].every(isFinite) || Math.abs(w.base + w.lev + w.cash - 1) > 0.001) return [];
+    var nm = NAMES[v.region] || [t.base, t.lev, t.cashL];
+    var inv = c.investable;
+    var rows = [
+      [t.tMix, Math.round(w.base * 100) + " / " + Math.round(w.lev * 100) + " / " + Math.round(w.cash * 100)],
+      [t.kBeta, fmt(E.beta(w), 2)],
+      [t.kFloor, fmt(c.floor)]
+    ];
+    rows.push([nm[0] + " / " + nm[1] + " / " + nm[2], fmt(inv * w.base) + " / " + fmt(inv * w.lev) + " / " + fmt(inv * w.cash)]);
+    return rows.slice(0, 5);
+  }
+
+  ui = A.mount({
+    I18N: I18N, fields: fields, render: render, summary: summary,
+    next: [{ href: "/planner/margin/", key: "nMargin" }, { href: "/planner/rebalance/", key: "nRebal" }]
+  });
 })();

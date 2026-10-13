@@ -1,0 +1,89 @@
+/*
+ * assets/notice.css — the "continue = consent" notice bar injected by hit.js.
+ *
+ * Non-blocking: fixed to the bottom, never covers the page, and is dismissed
+ * by the "Got it" button (which also writes localStorage awl_notice=1).
+ * Colours follow the site palette used by planner/assets/planner.css.
+ */
+
+.awl-notice {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border-top: 1px solid #d8e2de;
+  box-shadow: 0 -2px 12px rgba(16, 40, 36, 0.08);
+  font: 400 13px/1.5 "IBM Plex Sans", "Noto Sans SC", system-ui, sans-serif;
+  color: #20403a;
+  transition: transform 220ms ease;
+}
+
+.awl-notice.on {
+  transform: translateY(0) !important;
+}
+
+.awl-notice-txt {
+  margin: 0;
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.awl-notice-txt a {
+  color: #1a6b5a;
+  text-decoration: underline;
+}
+
+.awl-notice-txt a:hover,
+.awl-notice-txt a:focus {
+  color: #0f4f42;
+}
+
+.awl-notice-btn {
+  flex: 0 0 auto;
+  padding: 7px 16px;
+  border: 1px solid #1a6b5a;
+  border-radius: 6px;
+  background: #1a6b5a;
+  color: #ffffff;
+  font: 500 13px/1 "IBM Plex Sans", "Noto Sans SC", system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.awl-notice-btn:hover,
+.awl-notice-btn:focus {
+  background: #0f4f42;
+  border-color: #0f4f42;
+}
+
+.awl-notice-btn:focus-visible {
+  outline: 2px solid #1a6b5a;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .awl-notice {
+    padding: 9px 11px;
+    gap: 8px;
+  }
+  .awl-notice-txt {
+    flex-basis: 100%;
+    font-size: 12.5px;
+  }
+  .awl-notice-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .awl-notice {
+    transition: none;
+  }
+}

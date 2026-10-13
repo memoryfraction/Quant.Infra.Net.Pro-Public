@@ -25,3 +25,74 @@ a.card:hover,a.card:focus-visible{border-color:var(--teal);box-shadow:0 2px 10px
 .card.soon{opacity:.65}
 .disc{margin-top:28px;font-size:12.5px;color:var(--muted);line-height:1.6}
 .sitebar a.sb-link{padding-left:20px}
+
+/* ============ phase-1 runtime blocks (rendered by planner/assets/common.js) ============ */
+
+/* srcref: "methodology reference: xxx" under Method & formulas */
+.srcref{font-size:12.5px;color:var(--muted);margin:10px 0 0;padding-top:8px;border-top:1px dashed var(--line)}
+.srcref a{color:var(--teal)}
+
+/* "you saved a plan on <date>" banner above the inputs */
+.awl-banner{display:grid;gap:8px;border:1px solid #EBD59E;background:#FFF8E8;border-radius:8px;padding:12px 14px;margin:0 0 14px}
+.awl-banner .awl-linkbox{font-weight:600;color:var(--ink)}
+.awl-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* buttons (share / save / load / dismiss / submit) */
+.awl-btn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13.5px;font-weight:500;
+  padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink);cursor:pointer}
+.awl-btn:hover,.awl-btn:focus-visible{border-color:var(--teal)}
+.awl-btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.awl-btn.primary:hover,.awl-btn.primary:focus-visible{background:#0B4A44}
+.awl-btn.ghost{background:none;color:var(--muted)}
+.awl-btn:disabled{opacity:.55;cursor:default}
+.awl-btn[disabled]:hover{border-color:var(--line)}
+
+/* read-only link box (copy fallback) */
+.awl-linkbox{margin-top:8px}
+.awl-in{width:100%;font:inherit;font-size:13px;font-family:ui-monospace,Consolas,monospace;
+  padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:#F8FAF9;color:var(--ink)}
+.awl-ta{width:100%;min-height:84px;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:6px;background:#F8FAF9;color:var(--ink);resize:vertical}
+.awl-hint{font-size:12.5px;color:var(--muted);margin:6px 0 0;line-height:1.55}
+.awl-link{color:var(--teal);text-decoration:underline}
+
+/* honeypot: off-screen, never type=hidden (bots skip hidden fields) */
+.awl-hp{position:absolute!important;left:-9999px!important;top:auto!important;width:1px!important;height:1px!important;
+  overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+
+/* chip groups: stars, wtp multi-select, profile answers */
+.awl-chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 0}
+.awl-chip{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;border:1px solid var(--line);
+  border-radius:999px;padding:5px 12px;background:var(--sheet);color:var(--ink)}
+.awl-chip input{width:auto;margin:0;accent-color:var(--teal)}
+.awl-chip label{margin:0;font-size:13.5px;color:var(--ink);cursor:pointer}
+.awl-chip:has(input:checked){border-color:var(--teal);background:var(--teal-soft)}
+
+/* feedback <details> block */
+.awl-fb{margin-top:14px;border:1px solid var(--line);border-radius:8px;background:var(--sheet);padding:12px 14px}
+.awl-fb summary{cursor:pointer;font-size:14px;font-weight:500;color:var(--ink)}
+.awl-fb summary:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.awl-fbbody{display:grid;gap:12px;margin-top:14px}
+.awl-pick{display:grid;gap:6px}
+.awl-picklbl{font-size:13px;color:var(--muted)}
+.awl-sub{display:grid;gap:8px}
+.awl-prof{display:grid;gap:14px}
+.awl-prof .awl-pick{margin:0}
+
+/* next-step + keep + compare panels reuse .panel; add a little breathing room */
+.panel.awl-next,.panel.awl-keep,.panel.awl-cmp{margin-top:20px}
+.panel.awl-next h2,.panel.awl-keep h2,.panel.awl-cmp h2{margin-bottom:8px}
+.panel.awl-keep .awl-actions{margin-top:12px}
+
+/* toast (role=status) */
+.awl-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;max-width:min(92vw,420px);
+  background:#1C2B2A;color:#fff;font-size:13.5px;line-height:1.5;padding:10px 16px;border-radius:8px;
+  box-shadow:0 6px 20px rgba(0,0,0,.22);text-align:center}
+@media (prefers-reduced-motion:reduce){.awl-toast{scroll-behavior:auto}}
+
+/* narrow phones: keep chips and action rows from forcing horizontal scroll */
+@media (max-width:420px){
+  .awl-chip{font-size:13px;padding:5px 10px}
+  .awl-actions .awl-btn{flex:1 1 auto;justify-content:center}
+  .awl-toast{left:12px;right:12px;transform:none;max-width:none}
+}

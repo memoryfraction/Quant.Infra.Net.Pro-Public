@@ -12,6 +12,7 @@
       lock: "Profit-lock ratio", down: "Down-year top-up rate", pledged: "I have a pledge loan", initial: "Total assets at the start", newMoney: "Lump sum to invest (optional)",
       tBase: "Base index", tLev: "2x leveraged", tCash: "Cash / short bonds",
       up: "Up year", downY: "Down year", flat: "Flat year", kType: "Year type", kGain: "Pure gain of the leveraged part", kBasis: "Top-up base",
+      nWithdraw: "Turn the portfolio into steady retirement income → Withdrawal ladder",
       doUp: "Sell {a} of {from}, buy {to}", doDown: "Use {to_} to buy {a} of {lev}", doNone: "No action this year",
       cmp: "Comparison", cCur: "Now", cSmart: "After smart rebalance", cMind: "After mechanical rebalance", cBeta: "Beta",
       lumpTitle: "Lump-sum allocation", buy: "Buy",
@@ -37,6 +38,7 @@
       lock: "锁利比例", down: "下跌年补仓比例", pledged: "我有质押借款", initial: "最初投入的总资产", newMoney: "大额资金（可选）",
       tBase: "大盘指数基金", tLev: "二倍杠杆", tCash: "现金/短债",
       up: "上涨年", downY: "下跌年", flat: "持平", kType: "年份类型", kGain: "杠杆部位纯收益", kBasis: "补仓基数",
+      nWithdraw: "把资产变成稳定的退休现金流 → 退休提领率阶梯",
       doUp: "卖出 {a} 的{from}，买入{to}", doDown: "用{to_}买入 {a} 的{lev}", doNone: "今年不用操作",
       cmp: "对比", cCur: "当前", cSmart: "聪明再平衡后", cMind: "无脑再平衡后", cBeta: "Beta",
       lumpTitle: "大额资金精算", buy: "买入",
@@ -94,5 +96,32 @@
     }
     return out;
   }
-  A.mount({ I18N: I18N, fields: fields, render: render });
+  // Compact summary for the share link / saved plan / /api/calc report (<=5 rows).
+  function summary(v, t) {
+    var target = v.preset === "custom" ? { base: v.cBase, lev: v.cLev, cash: v.cCash } : AE.PRESETS[v.preset];
+    if (!target || ![target.base, target.lev, target.cash].every(isFinite)) return [];
+    if (![v.base, v.lev, v.cash, v.levStart, v.levNew, v.lock, v.down].every(isFinite)) return [];
+    var p = { base: v.base, lev: v.lev, cash: v.cash };
+    var s = E.smart({ p: p, levStart: v.levStart, levNew: v.levNew, lockRatio: v.lock, downRate: v.down, pledged: v.pledged, initialTotal: v.initial });
+    if (!s.ok) return [];
+    var nm = NAMES[v.region] || [t.tBase, t.tLev, t.tCash];
+    var act;
+    if (!s.action) act = t.doNone;
+    else if (s.type === "up") act = t.doUp.replace("{a}", fmt(s.action.amount)).replace("{from}", nm[1]).replace("{to}", nm[2]);
+    else act = t.doDown.replace("{a}", fmt(s.action.amount)).replace("{to_}", nm[2]).replace("{lev}", nm[1]);
+    var rows = [
+      [t.kType, { up: t.up, down: t.downY, flat: t.flat }[s.type]],
+      [t.kGain, fmt(s.pureGain)],
+      [t.cmp, act]
+    ];
+    rows.push([nm[0] + " / " + nm[1] + " / " + nm[2],
+      fmt(s.after.base) + " / " + fmt(s.after.lev) + " / " + fmt(s.after.cash)]);
+    rows.push([t.cBeta, fmt(s.beta, 2)]);
+    return rows.slice(0, 5);
+  }
+
+  A.mount({
+    I18N: I18N, fields: fields, render: render, summary: summary,
+    next: [{ href: "/planner/withdrawal/", key: "nWithdraw" }]
+  });
 })();

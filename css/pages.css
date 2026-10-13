@@ -1,0 +1,49 @@
+/* Extras for the stand-alone content pages (/terms/, /privacy/, /join/, /planner/subscribed/).
+   The base look comes from /calculator/calculator.css; the top bar from /css/site-bar.css.
+   No inline styles (site CSP: style-src 'self'). */
+
+.doc { max-width: 78ch; }
+.doc h2 { margin-top: 26px; }
+.doc h2:first-of-type { margin-top: 6px; }
+.doc h3 { font-size: 15px; margin: 18px 0 4px; font-weight: 600; }
+.doc p { margin: 8px 0; }
+.doc ul { margin: 8px 0; padding-left: 22px; }
+.doc li { margin-bottom: 5px; }
+.doc .updated { color: var(--muted); font-size: 13px; margin: 0 0 18px; }
+
+/* language switching: only the matching-language block is shown */
+html[lang="en"] .l-zh { display: none; }
+html:not([lang="en"]) .l-en { display: none; }
+
+.stack { display: grid; gap: 10px; }
+.lead { font-size: 16px; color: var(--ink); }
+
+/* /join/ QR blocks */
+.qrgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+@media (max-width: 700px) { .qrgrid { grid-template-columns: 1fr; } }
+.qrbox { text-align: center; }
+.qrbox img { display: block; width: 100%; max-width: 280px; height: auto; margin: 0 auto 12px;
+  border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+.qrbox .qr-title { font-weight: 600; font-size: 16px; margin: 0 0 4px; }
+.qrbox .qr-note { color: var(--muted); font-size: 13px; margin: 0; }
+
+/* /planner/subscribed/ status cards */
+.statuscard { display: grid; gap: 12px; justify-items: start; }
+.statusicon { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 24px; font-weight: 700; line-height: 1; }
+.statusicon.ok { background: var(--good-soft); color: var(--good); }
+.statusicon.bad { background: var(--bad-soft); color: var(--bad); }
+.statusicon.info { background: var(--teal-soft); color: var(--teal); }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px;
+  font: inherit; font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer;
+  border: 1px solid var(--line); background: var(--sheet); color: var(--ink); }
+.btn:hover, .btn:focus-visible { border-color: var(--teal); }
+.btn.primary { background: var(--teal); border-color: var(--teal); color: #fff; }
+.btn.primary:hover, .btn.primary:focus-visible { background: #0B4A44; }
+
+/* privacy "your identifier" block */
+.idbox { display: grid; gap: 10px; margin-top: 10px; }
+.idrow { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.idrow input { flex: 1 1 260px; min-width: 0; font-family: ui-monospace, Consolas, monospace; }
+.idmsg { font-size: 13px; color: var(--muted); margin: 0; min-height: 18px; }

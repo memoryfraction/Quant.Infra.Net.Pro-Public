@@ -16,6 +16,7 @@
       tenFive: "“10 + 5” comparison: 10× spending in the income fund, 5× split 70/30",
       warnRescue: "Emergency plan for insufficient assets: covered-call funds trade future upside for income today. Not for people still building wealth.",
       kBook: "Return − inflation", kUsual: "Common 4% rule",
+      nSS: "When should I claim Social Security? → Claiming-age break-even",
       bookNote: "The lower the return, the lower the safe draw.",
       fwd: "Bad years first", rev: "Good years first", badInput: "Enter comma-separated numbers.",
       seqNote: "Without withdrawals both orders end equal; with yearly withdrawals the path that meets the crash first ends far lower.",
@@ -44,6 +45,7 @@
       tenFive: "“10 + 5”对照：10 倍年开销放收益型基金，5 倍按 70/30 配置",
       warnRescue: "这是资产不足时的应急方案：备兑策略用未来的上涨空间换现在的现金流，还在累积资产的人不应使用。",
       kBook: "收益率 − 通胀率", kUsual: "常用 4% 法则",
+      nSS: "社安金该什么时候领？→ 领取年龄盈亏平衡",
       bookNote: "收益率越低，能安全取的比例越低。",
       fwd: "先遇到差的年份", rev: "先遇到好的年份", badInput: "请输入用逗号分隔的数字。",
       seqNote: "不取钱时两种顺序终值相同；每年取钱时，先遇到大跌的路径终值会低很多。",
@@ -104,8 +106,23 @@
     out.push(A.panel(t.s4, p4));
     return out;
   }
+  // Compact summary for the share link / saved plan / /api/calc report (<=5 rows).
+  function summary(v, t) {
+    var l = E.ladder({ assets: v.assets, expense: v.expense });
+    if (!l.ok) return [];
+    var rule = E.cashRule(l.rate, v.lev), rk = { "433": "r433", "514": "r514", "505": "r505", "80/20": "r8020", "65/35": "r6535", "50/50": "r5050", qqqi: "rq" }[rule];
+    var rows = [
+      [t.kMult, fmt(l.multiple, 1) + "×"],
+      [t.kTier, t[l.tier]],
+      [t.kRate, pct(l.rate, 2)],
+      [t.ruleTitle, t[rk]]
+    ];
+    return rows.slice(0, 5);
+  }
+
   A.mount({
-    I18N: I18N, fields: fields, render: render,
+    I18N: I18N, fields: fields, render: render, summary: summary,
+    next: [{ href: "/planner/social-security/", key: "nSS" }],
     after: function () {
       var cv = document.getElementById("seqChart"); if (!cv || !seq) return;
       A.drawLines(cv, [{ color: "#0F5C55", pts: seq.forward }, { color: "#B8892B", pts: seq.reversed }], { xs: seq.forward.map(function (_, i) { return String(i + 1); }), fmtY: function (x) { return fmt(x, 0); } });

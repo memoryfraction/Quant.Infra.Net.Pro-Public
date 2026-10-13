@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscription status | Alpha Wealth Lab</title>
+<meta name="description" content="Confirmation and unsubscribe status for the annual rebalancing reminder.">
+<link rel="canonical" href="https://www.alpha-wealth-lab.com/planner/subscribed/">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site-bar.css?v=20261013">
+<link rel="stylesheet" href="/calculator/calculator.css?v=20261013">
+<link rel="stylesheet" href="/planner/assets/planner.css?v=20261013">
+<link rel="stylesheet" href="/css/pages.css?v=20261013">
+</head>
+<body>
+<div class="sitebar"><div class="sitebar-in"><a href="/planner/"><span aria-hidden="true">←</span> <span class="sb-zh">财富规划工具箱</span><span class="sb-en">Planner tools</span></a>
+  <div class="lang-select"><select id="langSelect" aria-label="Language"><option value="en">English</option><option value="zh">中文</option></select></div></div></div>
+
+<div class="wrap">
+  <header><div>
+    <p class="brand">Alpha Wealth Lab</p>
+    <h1><span class="l-en">Subscription</span><span class="l-zh">订阅状态</span></h1>
+  </div></header>
+
+  <section class="panel">
+    <!-- ok=1 : confirmation succeeded -->
+    <div class="statuscard" id="caseOk" hidden>
+      <div class="statusicon ok" aria-hidden="true">✓</div>
+      <h2><span class="l-en">You're confirmed</span><span class="l-zh">确认成功</span></h2>
+      <p class="lead"><span class="l-en">Thanks — your subscription is active. We'll email you on <strong>December 1</strong> each year to remind you to rebalance.</span><span class="l-zh">谢谢，订阅已生效。每年 <strong>12 月 1 日</strong>我们会发邮件提醒你做年度再平衡。</span></p>
+      <p class="hint"><span class="l-en">That is the only email we will send unless you ask us for something. Every reminder includes a one-click unsubscribe link.</span><span class="l-zh">除非你主动联系我们，否则我们只会发这一类邮件。每封提醒里都有「一键退订」链接。</span></p>
+      <div class="actions">
+        <a class="btn primary" href="/planner/rebalance/"><span class="l-en">Open the rebalancing planner</span><span class="l-zh">打开再平衡计算器</span></a>
+        <a class="btn" href="/planner/"><span class="l-en">All tools</span><span class="l-zh">全部工具</span></a>
+      </div>
+    </div>
+
+    <!-- ok=0 : confirmation link invalid -->
+    <div class="statuscard" id="caseBad" hidden>
+      <div class="statusicon bad" aria-hidden="true">!</div>
+      <h2><span class="l-en">That link didn't work</span><span class="l-zh">链接无效</span></h2>
+      <p class="lead"><span class="l-en">This confirmation link is invalid or has already been used. If you just confirmed successfully, you can ignore this page.</span><span class="l-zh">该确认链接无效，或已经被使用过。如果你刚刚确认成功，可以忽略本页。</span></p>
+      <p class="hint"><span class="l-en">To try again, subscribe from any tool page and use the newest email we sent you — older links expire.</span><span class="l-zh">想再试一次，请在任意工具页重新订阅，并使用我们最新发出的那封邮件——较早的链接会失效。</span></p>
+      <div class="actions">
+        <a class="btn primary" href="/planner/"><span class="l-en">Back to the tools</span><span class="l-zh">返回工具箱</span></a>
+        <a class="btn" href="mailto:alphawealthlab@outlook.com">alphawealthlab@outlook.com</a>
+      </div>
+    </div>
+
+    <!-- unsub=1 : unsubscribed -->
+    <div class="statuscard" id="caseUnsub" hidden>
+      <div class="statusicon info" aria-hidden="true">✓</div>
+      <h2><span class="l-en">You're unsubscribed</span><span class="l-zh">已退订</span></h2>
+      <p class="lead"><span class="l-en">Done — you will not receive the annual rebalancing reminder any more. Your address is deleted from our list within 30 days.</span><span class="l-zh">已完成，你不会再收到年度再平衡提醒。你的邮箱将在 30 天内从我们的名单中删除。</span></p>
+      <p class="hint"><span class="l-en">You can still use every calculator on the site; nothing is locked behind the subscription.</span><span class="l-zh">站内所有计算器仍然可以正常使用，订阅并不解锁任何功能。</span></p>
+      <div class="actions">
+        <a class="btn primary" href="/planner/"><span class="l-en">Back to the tools</span><span class="l-zh">返回工具箱</span></a>
+        <a class="btn" href="mailto:alphawealthlab@outlook.com"><span class="l-en">Subscribed by mistake?</span><span class="l-zh">误退订了？</span></a>
+      </div>
+    </div>
+
+    <!-- No recognised parameter (?ok/?unsub missing or out of range) -->
+    <div class="statuscard" id="caseNone" hidden>
+      <div class="statusicon info" aria-hidden="true">i</div>
+      <h2><span class="l-en">Nothing to show here</span><span class="l-zh">这里没有需要显示的内容</span></h2>
+      <p class="lead"><span class="l-en">This page opens from the links in our emails. If you got here some other way, head back to the tools.</span><span class="l-zh">本页是从我们邮件里的链接打开的。如果你是其他方式来到这里，请返回工具箱。</span></p>
+      <div class="actions">
+        <a class="btn primary" href="/planner/"><span class="l-en">All tools</span><span class="l-zh">全部工具</span></a>
+      </div>
+    </div>
+  </section>
+
+  <p class="disc"><span class="l-en">See our <a href="/terms/">Terms of Use</a> and <a href="/privacy/">Privacy Notice</a>.</span><span class="l-zh">详见<a href="/terms/">《使用条款》</a>与<a href="/privacy/">《隐私说明》</a>。</span></p>
+</div>
+
+<script src="/js/site-lang.js?v=20261013"></script>
+<script src="/planner/subscribed/subscribed.js?v=20261013"></script>
+<script src="/planner/assets/lib.js?v=20261013"></script>
+<script src="/assets/hit.js?v=20261013"></script>
+</body>
+</html>

@@ -11,6 +11,7 @@
       kAfter: "After-tax mortgage rate", kReal: "Real rate (after inflation)", helps: "Inflation is paying down your loan",
       kInvest: "Invest the money", kPrepay: "Prepay the loan", kDiff: "Invest is ahead by", kSpread: "Rough spread-only estimate",
       kB: "Portfolio after the period", kAdv: "Advantage vs. paying off at the start", kTax: "Tax on the gain", kBook: "Rough estimate",
+      nFI: "Where does this leave my financial-independence date? → FI calculator",
       kN: "Leverage N (loan ÷ down payment)", kRoi: "Return on the down payment", kLev: "From leverage", drag: "Leverage is dragging your return",
       tDown: "Down payment", sens: "Return on down payment (loan rate from above)",
       method: [
@@ -33,6 +34,7 @@
       kAfter: "税后房贷利率", kReal: "真实利率（扣通胀）", helps: "通胀在帮你还贷",
       kInvest: "拿去投资", kPrepay: "提前还贷", kDiff: "投资领先", kSpread: "只按利差的粗算",
       kB: "期末投资组合", kAdv: "比一开始就还清多出", kTax: "收益税", kBook: "粗算",
+      nFI: "这笔钱对财务自由的时间表有什么影响？→ 财务自由计算器",
       kN: "杠杆 N（贷款÷首付）", kRoi: "首付的收益率", kLev: "杠杆贡献", drag: "杠杆在拖累收益",
       tDown: "首付", sens: "首付收益率（贷款利率取上面的值）",
       method: [
@@ -78,5 +80,26 @@
     out.push(A.panel(t.s4, p4));
     return out;
   }
-  A.mount({ I18N: I18N, fields: fields, render: render });
+  // Compact summary for the share link / saved plan / /api/calc report (<=5 rows).
+  function summary(v, t) {
+    if (![v.i, v.t, v.pi, v.r, v.X, v.Y, v.P, v.cg, v.R, v.D, v.dp].every(isFinite) || v.Y < 1 || v.Y > 80) return [];
+    var real = E.realRate(v.i, v.t, v.pi);
+    var y = E.yearlyExtra({ X: v.X, Y: v.Y, r: v.r, i: v.i, t: v.t });
+    var L = E.lumpSum({ P: v.P, Y: v.Y, r: v.r, i: v.i, t: v.t, cg: v.cg });
+    var rows = [
+      [t.kReal, pct(real, 2)],
+      [t.kAfter, pct(E.afterTaxRate(v.i, v.t), 2)],
+      [t.kInvest, fmt(y.invest)],
+      [t.kPrepay, fmt(y.prepay)],
+      [t.kDiff, fmt(y.diff)]
+    ];
+    // keep the single-period advantage too when it is available and there is room
+    if (rows.length < 5 && isFinite(L.advantage)) rows.push([t.kAdv, fmt(L.advantage)]);
+    return rows.slice(0, 5);
+  }
+
+  A.mount({
+    I18N: I18N, fields: fields, render: render, summary: summary,
+    next: [{ href: "/planner/fi/", key: "nFI" }]
+  });
 })();

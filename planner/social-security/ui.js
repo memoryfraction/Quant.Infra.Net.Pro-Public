@@ -8,6 +8,7 @@
       s1: "Inputs", birth: "Birth year", pia: "Monthly benefit at full retirement age", piaHint: "See your statement at ssa.gov.",
       cA: "Compare age A", cB: "Compare age B", cC: "Compare age C", life: "Expected age at death",
       kFra: "Full retirement age", ym: "{y} y {m} m", tbl: "Comparison", tAge: "Claim at", tF: "Factor", tM: "Per month", tY: "Per year", tCum: "Total by expected age",
+      nWithdraw: "How does this fit the rest of my retirement income? → Withdrawal ladder",
       be: "Break-even ages", vs: "{a} vs {b}", chart: "Cumulative benefits by age", bad: "Age out of range.",
       concl: "If you live past {x}, claiming at {b} beats {a}.",
       method: [
@@ -24,6 +25,7 @@
       s1: "输入", birth: "出生年份", pia: "完全退休年龄时每月可领", piaHint: "可在 ssa.gov 的账户里查到。",
       cA: "比较年龄 A", cB: "比较年龄 B", cC: "比较年龄 C", life: "预计寿命",
       kFra: "完全退休年龄", ym: "{y} 岁 {m} 个月", tbl: "对比", tAge: "开始领取", tF: "系数", tM: "每月", tY: "每年", tCum: "到预计寿命累计",
+      nWithdraw: "这笔钱和退休后的其他收入怎么配合？→ 退休提领率阶梯",
       be: "盈亏平衡年龄", vs: "{a} 对 {b}", chart: "累计领取额", bad: "年龄超出范围。",
       concl: "如果你活过 {x} 岁，{b} 岁开始领比 {a} 岁开始领更划算。",
       method: [
@@ -70,8 +72,21 @@
     cv = { cols: cols, fra: fra, pia: v.pia, life: v.life };
     return [A.panel(null, p1)];
   }
+  // Compact summary for the share link / saved plan / /api/calc report (<=5 rows).
+  function summary(v, t) {
+    if (![v.birth, v.pia, v.life].every(isFinite) || v.birth < 1900 || v.birth > 2100 || v.pia <= 0) return [];
+    var fra = E.fraMonths(Math.floor(v.birth));
+    var fraTxt = t.ym.replace("{y}", Math.floor(fra / 12)).replace("{m}", fra % 12);
+    var rows = [[t.kFra, fraTxt]];
+    var cols = [v.cA, v.cB, v.cC].map(function (x) { var m = Number(x) * 12; return { age: Number(x), m: m, f: E.factor(m, fra) }; });
+    // one row per claiming age: monthly amount and the factor applied
+    cols.forEach(function (c) { rows.push([t.tAge + " " + c.age, fmt(v.pia * c.f) + " (" + fmt(c.f * 100, 1) + "%)"]); });
+    return rows.slice(0, 5);
+  }
+
   A.mount({
-    I18N: I18N, fields: fields, render: render,
+    I18N: I18N, fields: fields, render: render, summary: summary,
+    next: [{ href: "/planner/withdrawal/", key: "nWithdraw" }],
     after: function () {
       var c = document.getElementById("ssChart"); if (!c || !cv) return;
       var xs = [], k; for (k = 62; k <= 100; k++) xs.push(k);

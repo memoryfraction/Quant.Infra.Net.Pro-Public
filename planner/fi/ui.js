@@ -12,6 +12,7 @@
       s: "Savings rate", g: "Real return after inflation", w: "Withdrawal rate", a0: "Current assets (multiple of yearly income)",
       kF: "Target financial assets", kGrown: "Your assets grow to", kGap: "Gap to fill", kEnough: "Already enough", kY: "Invest each year", kInf: "Inflation factor", kDiff: "Difference vs. today's assets",
       kYears: "Years to work", over100: "> 100 years", safe: "Rule of thumb: return − inflation", multTitle: "Accumulation multiple P (invest 1 per year)", yrs: "Years", cols: "Savings rate vs. years",
+      nAlloc: "How should I split the assets I already have? → 433 Allocation & Beta",
       tYears: "Years", tSave: "Savings rate", tYr: "Years to FI",
       method: [
         "inflation factor = (1 + inflation) ^ years",
@@ -35,6 +36,7 @@
       s: "储蓄率", g: "扣除通胀后的实际收益率", w: "提取率", a0: "现有资产（年收入的几倍）",
       kF: "目标金融资产", kGrown: "现有资产增长到", kGap: "还差", kEnough: "已经足够", kY: "每年需投入", kInf: "通胀因子", kDiff: "与现有资产的差额",
       kYears: "需要工作的年数", over100: "超过 100 年", safe: "经验法则：收益率 − 通胀率", multTitle: "累积投资倍数 P（每年投入 1）", yrs: "年数", cols: "储蓄率与所需年数",
+      nAlloc: "手上已有的资产该怎么分配？→ 433 配置与 Beta 体检",
       tYears: "年数", tSave: "储蓄率", tYr: "所需年数",
       method: [
         "通胀因子 = (1 + 通胀率) ^ 年数",
@@ -96,5 +98,24 @@
     out.push(A.panel(t.secB, [A.kpis([[t.kYears, y.years === null ? t.over100 : fmt(y.years, 1)]]), A.table([t.tSave, t.tYr], rowsB, { hl: hl })]));
     return out;
   }
-  A.mount({ I18N: I18N, fields: fields, render: render });
+  // Compact summary for the share link / saved plan / /api/calc report (<=5 rows).
+  // Uses only numbers already computed above — no formula is changed.
+  function summary(v, t) {
+    var now = v.mode === "now";
+    var years = now ? 0 : v.years, rep = now ? 1 : v.replace, other = now ? 0 : v.otherF;
+    var ta = E.targetAssets({ expenseNow: v.expenseNow, inflation: v.inflation, years: years, replaceRatio: rep, rentNow: v.rentNow, otherPassiveFuture: other, swr: v.swr });
+    if (!ta.ok || !isFinite(v.current) || !isFinite(v.r)) return [];
+    var gp = E.gap({ F: ta.F, current: v.current, r: v.r, years: years });
+    var rows = [[t.kF, fmt(ta.F)]];
+    rows.push(gp.D <= 0 ? [t.kEnough, "✓"] : [now ? t.kDiff : t.kGap, fmt(gp.D)]);
+    if (!now) rows.push([t.kY, fmt(E.yearlyNeeded({ D: gp.D, r: v.r, years: years }))]);
+    var y = E.yearsToFI({ s: v.s, g: v.g, w: v.w, a0: v.a0 });
+    rows.push([t.kYears, y.ok ? (y.years === null ? t.over100 : fmt(y.years, 1)) : "—"]);
+    return rows.slice(0, 5);
+  }
+
+  A.mount({
+    I18N: I18N, fields: fields, render: render, summary: summary,
+    next: [{ href: "/planner/allocation/", key: "nAlloc" }]
+  });
 })();

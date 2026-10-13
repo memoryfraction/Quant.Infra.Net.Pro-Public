@@ -6,8 +6,8 @@
 <meta name="robots" content="noindex,nofollow">
 <title>访问统计 | Alpha Wealth Lab</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/calculator/calculator.css?v=20261008">
-<link rel="stylesheet" href="/planner/assets/planner.css?v=20261008">
+<link rel="stylesheet" href="/calculator/calculator.css?v=20261013">
+<link rel="stylesheet" href="/planner/assets/planner.css?v=20261013">
 </head>
 <body>
 <div class="wrap">
@@ -20,8 +20,23 @@
     </div>
     <p><button id="load" type="button">加载</button> <button id="clear" type="button">清除 token</button> <span id="msg" class="note"></span></p>
   </section>
+  <section class="panel">
+    <h2>导出 CSV</h2>
+    <p class="hint">token 只保存在本机会话里，不写入任何文件。</p>
+    <div class="fields">
+      <div><label for="exportTable">数据表</label><select id="exportTable">
+        <option value="calcs" selected>calcs（计算记录）</option>
+        <option value="profiles">profiles（画像）</option>
+        <option value="feedback">feedback（反馈）</option>
+        <option value="subscribers">subscribers（订阅）</option>
+        <option value="hits">hits（访问）</option>
+      </select></div>
+      <div><label for="exportDays">天数</label><select id="exportDays"><option>7</option><option>30</option><option selected>90</option><option>365</option><option>730</option></select></div>
+    </div>
+    <p><button id="export" type="button">导出 CSV</button></p>
+  </section>
   <div id="out"></div>
 </div>
-<script src="/stats/stats.js?v=20261008"></script>
+<script src="/stats/stats.js?v=20261013"></script>
 </body>
 </html>
