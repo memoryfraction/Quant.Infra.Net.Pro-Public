@@ -125,3 +125,80 @@ shaped like the real response with all 10 blocks asserted.
 `/e/Github/memoryfraction/node_modules`, not in the site worktree. Node resolves `node_modules` relative
 to the *script path*, so `cd` alone still fails with `Cannot find module 'playwright'`. Use:
 `NODE_PATH=/e/Github/memoryfraction/node_modules node scripts/verify-site.js`
+
+---
+
+## Phase 1 — DEPLOY + ONLINE SMOKE, and two worker bugs found only in production (2026-10-12 ~23:00 ET)
+
+Deployed `awl-analytics` to Cloudflare (version `487c6097`, route `www.alpha-wealth-lab.com/api/*`)
+with D1 migrations 0002/0003 applied remotely and all three secrets set (`IP_SALT`, `STATS_TOKEN`,
+`BREVO_API_KEY`). Then smoke-tested every endpoint against the live database.
+
+**The smoke test's real value was not the 204s — it was checking whether the data actually landed.**
+Every write endpoint answered `204 OK`, which on its own reads as success. Two of them were lying.
+
+### Bug #7 — `POST /api/hit` wrote nothing, ever (SEVERE)
+
+The endpoint's INSERT listed **28 columns but supplied only 27 `?` placeholders**, so real D1 raised
+`SQLITE_ERROR` on every single write. The rejection was drained with `.catch(() => {})`, which meant:
+
+- the endpoint still answered `204`, so clients saw success;
+- `wrangler tail` showed nothing, so operators saw success;
+- the dashboard just showed no new data — indistinguishable from "nobody visited yet".
+
+Evidence that settled it: five valid hits in a row, each returning 204, while
+`SELECT COUNT(*) FROM hits` sat unchanged at 212 before and after. The D1 result arrived only after
+a *manual* INSERT (using the identical 28-column list) succeeded, which proved the schema and the
+column names were fine and pushed the fault back into the worker's own statement.
+
+Fix: the missing 28th placeholder, plus replacing the silent catch with a payload-free
+`console.error("hit_insert_failed", e.message)`. The original `.catch(() => {})` is what let a total
+collection outage masquerade as a healthy service, so removing it is the more important half.
+
+### Bug #8 — `GET /api/admin/subscribers` returned 500 when unfiltered
+
+The statement conditionally gained a `WHERE status=?`, but `.bind()` was called **unconditionally**.
+With no `?status=` filter that bound 1 value to a statement containing 0 placeholders, which D1
+rejects (error code 1101). The `?status=confirmed` path worked, so the endpoint looked fine unless
+you happened to call it the normal way.
+
+Fix: bind only when the clause is actually present.
+
+### Why 62 green tests missed both
+
+The in-memory D1 stub in `test/index.test.mjs` accepted **any** `bind()` arity. It mapped `args[i]`
+onto columns by position and never once compared counts, so it was strictly more permissive than the
+real service. A stub that tolerates what production rejects converts production failures into green
+tests.
+
+The stub now enforces the invariant from both sides — INSERT column count vs placeholder count, and
+`bind()` value count vs placeholder count — and I proved the assertions actually bite by re-injecting
+each defect and confirming precise failures:
+
+```
+INSERT INTO hits: 28 columns but 27 placeholders
+bind() arity mismatch: statement has 0 placeholder(s) but 1 value(s) bound
+```
+
+Both bugs are now covered by tests that fail loudly if the pattern returns.
+
+### Verified working after the fixes
+
+A fresh hit writes a complete row (id 213/214/215) with `device`/`os`/`browser` parsed from the UA,
+`utm_*` preserved, and `ip_hash` as a 16-hex HMAC; `/api/stats` reflects it immediately; the full
+subscribe loop closes (`pending` -> Brevo `delivered` event -> `/api/confirm` -> `confirmed` with a
+timestamp); `/api/admin/export` returns real CSV for all five tables; auth returns 401 without a
+token and the emails in the admin view are masked. Privacy audit re-confirmed: 29 columns in `hits`,
+**no plaintext IP or User-Agent column anywhere**, `ip_hash` length 16.
+
+### Request-shape notes worth keeping
+
+- `/api/hit` uses short keys (`e`,`p`,`r`,`v`,`d`,`sc`), and whitelists are exact — an unknown event
+  is a 400, an unknown visitor tag is silently dropped, and an unrecognised path normalises to
+  `/other` by design.
+- `/api/subscribe` silently returns 204 unless the form-dwell field `t` is >= 1500 ms and the honeypot
+  `website` is empty. My first smoke request omitted `t`, so "nothing happened" was correct behaviour.
+- Rate limiting is 5 requests / 60 s per client, so back-to-back probe calls need a ~65 s gap.
+- In this sandbox node **cannot spawn child processes** (`spawnSync` fails with `EBUSY` for every
+  binary, including bare `python`). The Brevo login therefore ran its mailbox poller as a separate
+  top-level process and passed the 2FA code through a file.
