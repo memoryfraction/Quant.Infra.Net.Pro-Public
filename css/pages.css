@@ -47,3 +47,4 @@ html:not([lang="en"]) .l-en { display: none; }
 .idrow { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .idrow input { flex: 1 1 260px; min-width: 0; font-family: ui-monospace, Consolas, monospace; }
 .idmsg { font-size: 13px; color: var(--muted); margin: 0; min-height: 18px; }
+.qrbox[hidden],.alert[hidden],#qrExpiredNote[hidden]{display:none!important}

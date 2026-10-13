@@ -239,7 +239,7 @@ module.exports = function (t) {
   {
     const zh = bootPage({ lang: "zh" });
     const zt = textOf(get(zh, "results"));
-    t.ok(/关注 \/ 进群|关注公众号/.test(zt) || /进群/.test(zt), "zh: join button present");
+    t.ok(/进微信群/.test(zt), "zh: join button present");
     t.ok(/\/join\//.test(zt) === false, "zh: join is a link, not text (href checked below)");
 
     const en = bootPage({ lang: "en" });
