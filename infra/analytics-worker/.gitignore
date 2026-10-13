@@ -1,2 +1,10 @@
 .wrangler/
 node_modules/
+
+# never commit secrets / local artifacts
+_pr/
+*.token
+*.secret
+*.secret.txt
+secrets/
+_apply*.sql
