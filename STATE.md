@@ -25,13 +25,13 @@ Push branches + open PRs (do NOT merge). Do NOT commit before 17:00 ET (now 18:0
 - Bump ?v= on every changed js/css reference.
 - Bilingual zh/en for all new copy.
 - Never print/commit IP_SALT, BREVO_API_KEY, STATS_TOKEN, Brevo SMTP key, CF password.
-  STATS_TOKEN read ONLY from _pr/planner/STATS_TOKEN.txt for curl (not printed, not committed).
+  STATS_TOKEN read ONLY from C:/Users/rongf/.awl-cf-profile/secrets/STATS_TOKEN.txt (OUTSIDE the repo) for curl (not printed, not committed).
 
 ## Repo / worktree map
 - main     = worker tree  -> infra/analytics-worker/   (deployed already; D1 awl_analytics)
 - gh-pages = site tree    -> static HTML
 - Worktrees:
-  - E:/Github/Quant.Infra.Net.Pro-Public [fix/allocation-defaults]  (PRIMARY; STATE/LOG live here; _pr/planner/STATS_TOKEN.txt)
+  - E:/Github/Quant.Infra.Net.Pro-Public [fix/allocation-defaults]  (PRIMARY; STATE/LOG live here; C:/Users/rongf/.awl-cf-profile/secrets/STATS_TOKEN.txt (OUTSIDE the repo))
   - E:/Github/QIN-worker-p1  [feature/phase1-worker]  <- WORKER HERE (== main)
   - E:/Github/QIN-site-p1    [feature/phase1-site]    <- SITE HERE (== gh-pages)
   - E:/Github/QIN-worker     [chore/worker-db-id]     (old, ignore)
@@ -54,7 +54,7 @@ Push branches + open PRs (do NOT merge). Do NOT commit before 17:00 ET (now 18:0
 - [x] D1 migrations applied --remote: 0002 (4 tables) + 0003 (hits 14 -> 29 cols, 10 indexes).
       DB UUID 82684561-1447-4e7d-997b-1a1e8a8425d4.
 - [x] `wrangler secret put IP_SALT` (32 random bytes, generated inline, never printed/persisted).
-- [x] `STATS_TOKEN` pre-existing and MATCHES _pr/planner/STATS_TOKEN.txt (verified via live 200).
+- [x] `STATS_TOKEN` pre-existing and MATCHES C:/Users/rongf/.awl-cf-profile/secrets/STATS_TOKEN.txt (OUTSIDE the repo) (verified via live 200).
 - [x] `wrangler secret put BREVO_API_KEY` (an `xkeysib-*` REST key, created in the Brevo dashboard).
 - [x] `wrangler deploy` -> version 487c6097, route www.alpha-wealth-lab.com/api/*.
 - [x] Brevo sender alphawealthlab@outlook.com confirmed ACTIVE via GET /v3/senders (id=1).
@@ -100,7 +100,7 @@ Push branches + open PRs (do NOT merge). Do NOT commit before 17:00 ET (now 18:0
 - [note] The `xsmtpsib-...` string Rex supplied is an **SMTP-relay** key; it returns 401
   "Key not found" against api.brevo.com/v3, so it cannot be used as BREVO_API_KEY. Only an
   `xkeysib-...` key works for the REST API.
-- [ok]   STATS_TOKEN           -> in _pr/planner/STATS_TOKEN.txt (file; read for curl only).
+- [ok]   STATS_TOKEN           -> in C:/Users/rongf/.awl-cf-profile/secrets/STATS_TOKEN.txt (OUTSIDE the repo) (file; read for curl only).
 
 ## PROGRESS — Task A: WORKER (QIN-worker-p1/infra/analytics-worker)
 Existing single-file src/index.js (hit/stats/health), schema.sql (hits only), wrangler.toml.
