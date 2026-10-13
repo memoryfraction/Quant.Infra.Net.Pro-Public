@@ -98,13 +98,20 @@ module.exports = function (t) {
     const w = {
       document: doc, console,
       SiteLang: { get: () => "zh", subscribe() {} },
-      AWL_TOOLS: TOOLS, AWL_TOOL_TAGS: TAG_IDS, AWL_TAG_COPY: TAG_COPY, AWL_REGISTRY_COPY: COPY,
+      AWL_TOOLS: TOOLS, AWL_AUTHORS: win.AWL_AUTHORS, AWL_TOOL_TAGS: TAG_IDS, AWL_TAG_COPY: TAG_COPY, AWL_REGISTRY_COPY: COPY,
     };
     w.window = w;
     vm.runInContext(fs.readFileSync(path.join(ROOT, "hub.js"), "utf8"), vm.createContext(w), { filename: "hub.js" });
 
-    const cards = byId.cards.children;
+    // Cards now sit inside one <section.agroup> per author; count real tool cards
+    // (the dashed "coming soon" placeholder is not a tool).
+    const all = [];
+    (function walk(n) { (n.children || []).forEach((c) => { all.push(c); walk(c); }); })(byId.cards);
+    const hasCls = (n, k) => String(n.className || "").split(/\s+/).indexOf(k) >= 0;
+    const cards = all.filter((n) => hasCls(n, "card") && !hasCls(n, "soon"));
     t.eq(cards.length, TOOLS.length, "hub: renders one card per registry entry");
+    t.eq(all.filter((n) => hasCls(n, "agroup")).length, 4, "hub: 4 author groups (clec, silicon_valley, mine, beiban-soon)");
+    t.eq(all.filter((n) => hasCls(n, "card") && hasCls(n, "soon")).length, 1, "hub: one coming-soon placeholder (beiban)");
     const text = byId.cards.textContent;
     PLANNER.forEach((slug) => {
       const e = TOOLS.find((x) => x.slug === slug);
@@ -114,4 +121,31 @@ module.exports = function (t) {
     t.ok(/方法论参考/.test(text), "hub: attribution prefix rendered in zh");
     t.ok(/全部/.test(byId.filters.textContent), "hub: tag filter rendered");
   }
+
+  // ---- author classification -------------------------------------------------
+  const AUTHORS = win.AWL_AUTHORS;
+  t.ok(Array.isArray(AUTHORS) && AUTHORS.length >= 4, "authors: AWL_AUTHORS declared");
+  const aid = {};
+  AUTHORS.forEach((a) => {
+    t.ok(!aid[a.id], `authors: id "${a.id}" unique`); aid[a.id] = 1;
+    t.ok(a.en && a.zh && a.descEn && a.descZh, `authors: ${a.id} has bilingual name + description`);
+  });
+  t.ok(AUTHORS.some((a) => a.id === "beiban" && a.soon), "authors: beiban is a coming-soon group");
+  t.ok(AUTHORS.some((a) => a.id === "adam_khoo" && a.hidden), "authors: adam_khoo is reserved and hidden");
+  TOOLS.forEach((x) => t.ok(!!aid[x.author], `authors: ${x.slug} has a known author (${x.author})`));
+  // Attribution must match the book each method comes from.
+  const EXPECT = { fi: "silicon_valley", mortgage: "silicon_valley", "social-security": "silicon_valley",
+    allocation: "clec", margin: "clec", rebalance: "clec", withdrawal: "clec", calculator: "mine", macro: "mine" };
+  Object.keys(EXPECT).forEach((slug) => {
+    const e = TOOLS.find((x) => x.slug === slug);
+    t.eq(e && e.author, EXPECT[slug], `authors: ${slug} belongs to ${EXPECT[slug]}`);
+  });
+  ["allocation", "margin", "rebalance", "withdrawal"].forEach((slug) => {
+    const e = TOOLS.find((x) => x.slug === slug);
+    t.ok(/CLEC/.test(e.source.name), `authors: ${slug} source names CLEC`);
+  });
+  ["fi", "mortgage", "social-security"].forEach((slug) => {
+    const e = TOOLS.find((x) => x.slug === slug);
+    t.ok(/硅谷居士|Wealth Shortcut/.test(e.source.name), `authors: ${slug} source names 硅谷居士`);
+  });
 };
