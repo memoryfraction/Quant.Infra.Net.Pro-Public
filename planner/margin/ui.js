@@ -17,6 +17,7 @@
       kMult: "Cash (or pledgeable assets) at least × loan",
       tYear: "Year", tLoan: "Loan", tColl: "Collateral", tRatio: "Ratio", tSt: "Status",
       first: "First time below", never: "not within the period", chart: "Ratio by year",
+      nRebal: "Know the risk — now plan this year's move → Smart rebalancing",
       method: [
         "ratio = collateral / loan = 1 / (loan-to-value)",
         "ratio after a fall d = (1 − d) / LTV        fall to hit line T = 1 − T × LTV",
@@ -43,6 +44,7 @@
       kMult: "现金（或可质押资产）至少是借款的倍数",
       tYear: "年", tLoan: "借款余额", tColl: "担保品", tRatio: "维持率", tSt: "状态",
       first: "首次低于", never: "期间内不会", chart: "逐年维持率",
+      nRebal: "看清风险之后，规划今年的操作 → 聪明再平衡执行器",
       method: [
         "维持率 = 担保品市值 / 借款余额 = 1 / 借款成数",
         "下跌 d 后的维持率 = (1 − d) / 借款成数        跌到某条线 T 的幅度 = 1 − T × 借款成数",
@@ -118,8 +120,25 @@
     out.push(A.panel(t.s3, p3));
     return out;
   }
+  // Compact summary for the share link / saved plan / /api/calc report (<=5 rows).
+  function summary(v, t) {
+    if (![v.collateral, v.loan, v.renew, v.warn, v.call].every(isFinite) || v.collateral <= 0 || v.loan < 0) return [];
+    var th = { renew: v.renew, warn: v.warn, call: v.call };
+    var cur = E.current({ collateral: v.collateral, loan: v.loan, th: th });
+    var below = function (d) { return d < 0 ? t.already : pct(d, 1); };
+    if (cur.status === "no_loan") return [[t.kStatus, t.no_loan]];
+    var rows = [
+      [t.kRatio, pct(cur.ratio, 0)],
+      [t.kStatus, t[cur.status]],
+      [t.kToWarn, below(cur.dWarn)],
+      [t.kToCall, below(cur.dCall)]
+    ];
+    return rows.slice(0, 5);
+  }
+
   A.mount({
-    I18N: I18N, fields: fields, render: render,
+    I18N: I18N, fields: fields, render: render, summary: summary,
+    next: [{ href: "/planner/rebalance/", key: "nRebal" }],
     after: function () {
       var cv = document.getElementById("projChart"); if (!cv || !lastProj) return;
       var pr = lastProj.pr, th = lastProj.th;
