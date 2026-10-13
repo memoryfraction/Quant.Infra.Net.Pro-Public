@@ -417,4 +417,14 @@ module.exports = function (t) {
       t.ok(!!win.AWL.mount.last.summary, `${tool}: summary exposed after mount`);
     });
   }
+
+  // ---- 11. regression: the profile card survives input repaints -------------
+  // paint() clears #results on every input; the card used to be appended once
+  // (profileShown flag) and then vanished after the first edit.
+  {
+    const win = bootPage({});
+    const inputs = get(win, "inputs");
+    for (let i = 0; i < 3; i++) inputs.fire("input");
+    t.ok(/Help us know you better|帮我们更懂你/.test(textOf(get(win, "results"))), "profile: card still present after 3 input repaints");
+  }
 };

@@ -682,7 +682,7 @@
     };
     var lastV = null;
     var reporter = makeReporter(slug, cfg, state);
-    var keepEl = null, zhCache = null, profileShown = false;
+    var keepEl = null, zhCache = null, profileEls = {};
     var bannerEl = null;
 
     function isZhNow() { return lang === "zh"; }
@@ -704,13 +704,16 @@
     }
 
     // (d) profile card — first successful calc only, once per device.
+    // paint() clears #results on every input, so the card must be re-attached each time.
+    // One element is cached per language so answers typed so far survive repaints.
     function maybeProfile(t) {
-      if (profileShown || !localStore || !L || !state.vid()) return;
+      if (!localStore || !L || !state.vid()) return;
       var done = null;
       try { done = localStore.getItem("awl_profile_done"); } catch (e) { done = null; }
       if (done) return;
-      profileShown = true;
-      resultsEl.appendChild(profileCard(t));
+      var lg = window.SiteLang ? window.SiteLang.get() : "en";
+      if (!profileEls[lg]) profileEls[lg] = profileCard(t);
+      resultsEl.appendChild(profileEls[lg]);
     }
 
     function profileCard(t) {
