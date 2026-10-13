@@ -27,7 +27,12 @@ function json(obj, status = 200) {
 }
 function noStore() { return new Response(null, { status: 204, headers: { "Cache-Control": "no-store" } }); }
 function redirect(loc) { return new Response(null, { status: 302, headers: { Location: loc, "Cache-Control": "no-store" } }); }
-function csv(headers, rows) { return new Response(toCSV(headers, rows), { headers: { "Content-Type": "text/csv; charset=utf-8", "Cache-Control": "no-store" } }); }
+// UTF-8 BOM so Excel opens Chinese text correctly; Content-Disposition names the download.
+function csv(headers, rows, filename) {
+  const h = { "Content-Type": "text/csv; charset=utf-8", "Cache-Control": "no-store" };
+  if (filename) h["Content-Disposition"] = 'attachment; filename="' + filename + '"';
+  return new Response("﻿" + toCSV(headers, rows), { headers: h });
+}
 
 async function readJson(request, limit = 8192) {
   const text = await request.text();
@@ -413,7 +418,7 @@ async function adminExport(request, env, url) {
     calcs: { sql: "SELECT id,ts,day,vid,sid,tool,lang,inputs,result,country,region,city FROM calcs WHERE day>=? ORDER BY ts ASC LIMIT 50000", date: false },
     profiles: { sql: "SELECT vid,created_ts,updated_ts,lang,age_band,asset_band,goal,markets,follows,leverage_exp,country FROM profiles WHERE updated_ts>=? ORDER BY updated_ts ASC LIMIT 50000", date: false },
     feedback: { sql: "SELECT id,ts,tool,lang,vid,rating,message,contact,wtp,country FROM feedback WHERE ts>=? ORDER BY ts ASC LIMIT 50000", date: false },
-    subscribers: { sql: "SELECT email,vid,lang,source,status,token,created_ts,confirmed_ts,last_confirm_sent_ts,last_sent_year FROM subscribers WHERE created_ts>=? ORDER BY created_ts ASC LIMIT 50000", date: false },
+    subscribers: { sql: "SELECT email,vid,lang,source,status,created_ts,confirmed_ts,last_confirm_sent_ts,last_sent_year FROM subscribers WHERE created_ts>=? ORDER BY created_ts ASC LIMIT 50000", date: false },
     hits: { sql: "SELECT id,ts,day,path,event,country,region,city,postal,lat,lon,tz,metro,ref,visitor,vid,sid,ip_hash,device,os,browser,blang,vw,utm_source,utm_medium,utm_campaign,campaign,dur_ms,scroll FROM hits WHERE day>=? ORDER BY ts ASC LIMIT 50000", date: true },
   };
   if (!allowed[table]) return json({ error: "bad_table" }, 400);
@@ -424,7 +429,7 @@ async function adminExport(request, env, url) {
   const cutoffDay = new Date(Date.now() - (days - 1) * 86400000).toISOString().slice(0, 10);
   const rows = await env.DB.prepare(allowed[table].sql).bind(allowed[table].date ? cutoffDay : cutoffSec).all();
   const keys = Object.keys(rows.results[0] || { x: 1 });
-  return csv(keys, rows.results.map((r) => keys.map((k) => r[k])));
+  return csv(keys, rows.results.map((r) => keys.map((k) => r[k])), table + "-" + new Date().toISOString().slice(0, 10) + ".csv");
 }
 
 async function adminDelete(request, env) {

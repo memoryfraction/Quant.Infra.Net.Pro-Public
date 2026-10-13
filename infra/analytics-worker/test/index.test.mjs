@@ -876,3 +876,21 @@ test("unknown route -> 404; wrong method -> 405", async () => {
   assert.equal((await call("/api/hit", { method: "GET" })).status, 405);
   assert.equal((await call("/api/stats", { method: "POST" })).status, 405, "method guard runs before auth");
 });
+
+test("GET /api/admin/export has UTF-8 BOM, attachment filename, and no subscriber tokens", async () => {
+  const e = env();
+  e.DB._tables.feedback.push({
+    id: 2, ts: Math.floor(Date.now() / 1000), tool: "fi", lang: "zh", vid: "",
+    rating: 4, message: '=HYPERLINK("http://x")', contact: "", wtp: "", country: "CN",
+  });
+  const res = await call("/api/admin/export?table=feedback&days=90", { method: "GET", headers: { Authorization: "Bearer " + STATS_TOKEN } }, e);
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get("content-disposition") || "", /attachment; filename="feedback-\d{4}-\d{2}-\d{2}\.csv"/);
+  // Response.text() strips a leading BOM, so check the raw bytes.
+  const bytes = new Uint8Array(await res.clone().arrayBuffer());
+  assert.deepEqual([bytes[0], bytes[1], bytes[2]], [0xef, 0xbb, 0xbf], "starts with UTF-8 BOM");
+  const text = await res.text();
+  assert.ok(text.includes("'=HYPERLINK"), "formula neutralised");
+  const sub = await call("/api/admin/export?table=subscribers&days=90", { method: "GET", headers: { Authorization: "Bearer " + STATS_TOKEN } }, env());
+  assert.ok(!(await sub.text()).split("\r\n")[0].split(",").includes("token"), "no token column");
+});

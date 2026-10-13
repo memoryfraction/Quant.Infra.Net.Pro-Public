@@ -193,3 +193,11 @@ test("profile whitelists (age/asset/goal/markets/follows/leverage/wtp)", () => {
   assert.deepEqual(L.cleanMulti("pdf_report,none", L.WTP), ["pdf_report","none"]);
   assert.deepEqual(L.cleanMulti("yoy_compare", L.WTP), ["yoy_compare"]);
 });
+test("csvEscape neutralises spreadsheet formulas in strings but not numbers", () => {
+  assert.equal(L.csvEscape("=1+1"), "'=1+1");
+  assert.equal(L.csvEscape("+86 138"), "'+86 138");
+  assert.equal(L.csvEscape("-cmd"), "'-cmd");
+  assert.equal(L.csvEscape("@SUM(A1)"), "'@SUM(A1)");
+  assert.equal(L.csvEscape(-5), "-5");
+  assert.equal(L.csvEscape("a=b"), "a=b");
+});

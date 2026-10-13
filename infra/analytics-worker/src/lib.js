@@ -148,7 +148,11 @@ export function randomTokenHex(byteLen = 32) {
 
 // ---- CSV ----
 export function csvEscape(v) {
-  const s = v === null || v === undefined ? "" : String(v);
+  let s = v === null || v === undefined ? "" : String(v);
+  // Spreadsheet formula injection: a user-supplied STRING that starts with = + - @ (or tab/CR)
+  // would be executed by Excel/Sheets when the export is opened. Prefix an apostrophe.
+  // Real numbers are left untouched (negative numbers stay numeric).
+  if (typeof v === "string" && /^[=+\-@\t\r]/.test(s)) s = "'" + s;
   if (/[",\r\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
   return s;
 }
