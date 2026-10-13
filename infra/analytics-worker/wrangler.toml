@@ -11,4 +11,30 @@ binding = "DB"
 database_name = "awl_analytics"
 database_id = "82684561-1447-4e7d-997b-1a1e8a8425d4"   # from `wrangler d1 create awl_analytics`
 
-# STATS_TOKEN is a secret: `wrangler secret put STATS_TOKEN`
+# ---- non-secret config ----
+# MAIL_FROM: the Brevo-verified sender. Confirmed by the site owner as
+# alphawealthlab@outlook.com; the address must exist as a verified sender in Brevo
+# or every /api/subscribe send is rejected.
+[vars]
+MAIL_FROM = "alphawealthlab@outlook.com"
+
+# Annual rebalance reminder: early December (day 1-5, 14:00 UTC), best-effort.
+# scheduled() is idempotent per year (last_sent_year), so repeated runs never double-send.
+[triggers]
+crons = ["0 14 1-5 12 *"]
+
+# ---- anti-abuse: Workers Rate Limiting binding (spec 3.3 ④) ----
+# Keys on the client identity; nothing is written to the database.
+# If this binding is unavailable, src/index.js falls back to an in-isolate counter
+# keyed on the salted ip_hash (never the raw IP). See README.
+[[unsafe.bindings]]
+name = "RL"
+type = "ratelimit"
+namespace_id = "1001"
+# 5 requests per 60 seconds per client (matches the spec).
+simple = { limit = 5, period = 60 }
+
+# ---- secrets (NEVER committed; set with `wrangler secret put <NAME>` from a shell) ----
+#   STATS_TOKEN      Bearer token guarding /api/stats and /api/admin/* (constant-time compare)
+#   BREVO_API_KEY    Brevo transactional API key (v3). If unset, /api/subscribe returns 503.
+#   IP_SALT          32-byte hex HMAC salt for ip_hash. If unset, ip_hash is stored as "" (raw IP never stored either way).

@@ -1,0 +1,10 @@
+{
+  "name": "awl-analytics-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Worker + D1 analytics & engagement API for www.alpha-wealth-lab.com (same-origin /api/*). No third-party packages.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
