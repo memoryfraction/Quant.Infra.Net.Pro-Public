@@ -181,3 +181,37 @@ export function addDaysUTC(dayStr, n) {
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
 }
+
+// ---- join page config (WeChat group QR that changes every ~7 days) ----
+export const JOIN_MAX_BYTES = 400 * 1024;
+export function isValidDay(str) {
+  if (typeof str !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(str)) return false;
+  const d = new Date(str + "T00:00:00Z");
+  return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === str;
+}
+// whole days from `fromDay` to `toDay` (both YYYY-MM-DD); negative when toDay is earlier
+export function daysBetween(fromDay, toDay) {
+  return Math.round((Date.parse(toDay + "T00:00:00Z") - Date.parse(fromDay + "T00:00:00Z")) / 86400000);
+}
+// Accepts "data:image/png;base64,..." or bare base64. Checks the real file signature
+// (not just the declared type) and the size. Returns {ok,dataUrl} or {ok:false,error}.
+export function parseQrImage(input) {
+  if (typeof input !== "string" || !input) return { ok: false, error: "no_image" };
+  let b64 = input.trim();
+  const m = /^data:image\/(png|jpeg|jpg|webp);base64,(.*)$/i.exec(b64);
+  if (m) b64 = m[2];
+  else if (/^data:/i.test(b64)) return { ok: false, error: "bad_type" };
+  b64 = b64.replace(/\s+/g, "");
+  if (!/^[A-Za-z0-9+/]+={0,2}$/.test(b64)) return { ok: false, error: "bad_base64" };
+  if (Math.floor(b64.length * 3 / 4) > JOIN_MAX_BYTES + 3) return { ok: false, error: "too_large" };
+  let bin;
+  try { bin = atob(b64); } catch (e) { return { ok: false, error: "bad_base64" }; }
+  if (bin.length > JOIN_MAX_BYTES) return { ok: false, error: "too_large" };
+  const hex = (i) => bin.charCodeAt(i);
+  let mime = "";
+  if (bin.length > 8 && hex(0) === 0x89 && bin.slice(1, 4) === "PNG") mime = "image/png";
+  else if (bin.length > 3 && hex(0) === 0xff && hex(1) === 0xd8 && hex(2) === 0xff) mime = "image/jpeg";
+  else if (bin.length > 12 && bin.slice(0, 4) === "RIFF" && bin.slice(8, 12) === "WEBP") mime = "image/webp";
+  if (!mime) return { ok: false, error: "bad_type" };
+  return { ok: true, dataUrl: "data:" + mime + ";base64," + b64 };
+}

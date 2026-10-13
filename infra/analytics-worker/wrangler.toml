@@ -21,7 +21,7 @@ MAIL_FROM = "alphawealthlab@outlook.com"
 # Annual rebalance reminder: early December (day 1-5, 14:00 UTC), best-effort.
 # scheduled() is idempotent per year (last_sent_year), so repeated runs never double-send.
 [triggers]
-crons = ["0 14 1-5 12 *"]
+crons = ["0 14 1-5 12 *", "0 13 * * *"]   # Dec 1-5 subscriber reminder; daily WeChat-QR expiry check
 
 # ---- anti-abuse: Workers Rate Limiting binding (spec 3.3 ④) ----
 # Keys on the client identity; nothing is written to the database.

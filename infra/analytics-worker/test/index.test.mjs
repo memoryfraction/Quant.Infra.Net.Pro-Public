@@ -12,7 +12,7 @@ import worker from "../src/index.js";
 // SQL subset our handlers use. Good enough to exercise real handler logic.
 // ---------------------------------------------------------------------------
 function makeDB() {
-  const tables = { hits: [], calcs: [], profiles: [], feedback: [], subscribers: [] };
+  const tables = { hits: [], calcs: [], profiles: [], feedback: [], subscribers: [], site_config: [] };
   const counters = { hits: 0, calcs: 0, feedback: 0 };
 
   // Columns declared NOT NULL in migrations/0002 + 0003. Real D1 rejects a NULL
@@ -893,4 +893,110 @@ test("GET /api/admin/export has UTF-8 BOM, attachment filename, and no subscribe
   assert.ok(text.includes("'=HYPERLINK"), "formula neutralised");
   const sub = await call("/api/admin/export?table=subscribers&days=90", { method: "GET", headers: { Authorization: "Bearer " + STATS_TOKEN } }, env());
   assert.ok(!(await sub.text()).split("\r\n")[0].split(",").includes("token"), "no token column");
+});
+
+// ---------------------------------------------------------------------------
+// /api/join + /api/admin/join + daily QR-expiry cron
+// ---------------------------------------------------------------------------
+const PNG_1PX = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+const ADMIN = { Authorization: "Bearer " + STATS_TOKEN };
+const dayPlus = (n) => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
+const setQr = (e, body) => call("/api/admin/join", { method: "POST", headers: ADMIN, body }, e);
+
+test("GET /api/join with nothing configured -> no group, short public cache", async () => {
+  const res = await call("/api/join", { method: "GET" });
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get("cache-control") || "", /public, max-age=60/);
+  assert.deepEqual(await res.json(), { group: null, expired: false });
+});
+
+test("POST /api/admin/join requires the admin token", async () => {
+  const e = env();
+  const none = await call("/api/admin/join", { method: "POST", body: { img: PNG_1PX, expires: dayPlus(3) } }, e);
+  assert.equal(none.status, 401);
+  const bad = await call("/api/admin/join", { method: "POST", headers: { Authorization: "Bearer nope" }, body: { img: PNG_1PX, expires: dayPlus(3) } }, e);
+  assert.equal(bad.status, 401);
+  assert.equal(e.DB._tables.site_config.length, 0, "nothing written without auth");
+});
+
+test("set a QR -> public GET returns it until it expires", async () => {
+  const e = env();
+  const ok = await setQr(e, { img: PNG_1PX, expires: dayPlus(5), name: "Global Investors" });
+  assert.equal(ok.status, 200);
+  const j = await (await call("/api/join", { method: "GET" }, e)).json();
+  assert.ok(j.group && j.group.img.startsWith("data:image/png;base64,"), "stored as a png data URL");
+  assert.equal(j.group.expires, dayPlus(5));
+  assert.equal(j.group.name, "Global Investors");
+  assert.equal(j.expired, false);
+  // a data URL is accepted too
+  const ok2 = await setQr(e, { img: "data:image/png;base64," + PNG_1PX, expires: dayPlus(6) });
+  assert.equal(ok2.status, 200);
+  assert.equal(e.DB._tables.site_config.filter((r) => r.key === "join_group").length, 1, "one row, replaced not duplicated");
+});
+
+test("an expired QR is never served; the page is told it expired", async () => {
+  const e = env();
+  e.DB._tables.site_config.push({ key: "join_group", value: JSON.stringify({ img: "data:image/png;base64," + PNG_1PX, expires: "2020-01-01", name: "" }), updated_ts: 1 });
+  const j = await (await call("/api/join", { method: "GET" }, e)).json();
+  assert.deepEqual(j, { group: null, expired: true });
+});
+
+test("admin/join rejects bad input", async () => {
+  const e = env();
+  const gif = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+  assert.equal((await setQr(e, { img: gif, expires: dayPlus(3) })).status, 400, "GIF is not allowed");
+  assert.equal((await setQr(e, { img: Buffer.from("hello world, not an image").toString("base64"), expires: dayPlus(3) })).status, 400, "wrong signature");
+  assert.equal((await setQr(e, { img: "data:text/html;base64,PGI+", expires: dayPlus(3) })).status, 400, "html data URL");
+  assert.equal((await setQr(e, { img: "not base64 !!", expires: dayPlus(3) })).status, 400);
+  assert.equal((await setQr(e, { img: PNG_1PX, expires: "2020-01-01" })).status, 400, "already expired");
+  assert.equal((await setQr(e, { img: PNG_1PX, expires: dayPlus(90) })).status, 400, "too far ahead");
+  assert.equal((await setQr(e, { img: PNG_1PX, expires: "2026-02-31" })).status, 400, "impossible date");
+  assert.equal((await setQr(e, { img: PNG_1PX })).status, 400, "missing date");
+  const big = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), Buffer.alloc(420 * 1024, 1)]).toString("base64");
+  assert.equal((await setQr(e, { img: big, expires: dayPlus(3) })).status, 413, "over 400 KB");
+  assert.equal(e.DB._tables.site_config.length, 0, "no bad input was stored");
+});
+
+test("admin/join {clear:true} removes the QR", async () => {
+  const e = env();
+  await setQr(e, { img: PNG_1PX, expires: dayPlus(4) });
+  const r = await setQr(e, { clear: true });
+  assert.equal(r.status, 200);
+  assert.deepEqual(await (await call("/api/join", { method: "GET" }, e)).json(), { group: null, expired: false });
+});
+
+test("daily cron mails the owner once when the QR is about to expire", async () => {
+  const e = env(); e.BREVO_API_KEY = "test-key";
+  await setQr(e, { img: PNG_1PX, expires: dayPlus(1) });
+  await worker.scheduled({ cron: "0 13 * * *" }, e, { waitUntil() {} });
+  assert.equal(mailCalls.length, 1, "one mail");
+  const sent = JSON.parse(mailCalls[0].init.body);
+  assert.equal(sent.to[0].email, "alphawealthlab@outlook.com");
+  assert.match(sent.subject, /二维码/);
+  await worker.scheduled({ cron: "0 13 * * *" }, e, { waitUntil() {} });
+  assert.equal(mailCalls.length, 1, "not repeated for the same QR");
+  // a new QR re-arms the reminder
+  await setQr(e, { img: PNG_1PX, expires: dayPlus(2) });
+  await worker.scheduled({ cron: "0 13 * * *" }, e, { waitUntil() {} });
+  assert.equal(mailCalls.length, 2, "re-armed after the QR was replaced");
+});
+
+test("daily cron stays quiet when the QR is fresh, missing, or mail is not configured", async () => {
+  const e = env(); e.BREVO_API_KEY = "test-key";
+  await worker.scheduled({ cron: "0 13 * * *" }, e, { waitUntil() {} });
+  assert.equal(mailCalls.length, 0, "no QR -> no mail");
+  await setQr(e, { img: PNG_1PX, expires: dayPlus(6) });
+  await worker.scheduled({ cron: "0 13 * * *" }, e, { waitUntil() {} });
+  assert.equal(mailCalls.length, 0, "6 days left -> too early");
+  const e2 = env(); // no BREVO_API_KEY
+  await setQr(e2, { img: PNG_1PX, expires: dayPlus(1) });
+  await worker.scheduled({ cron: "0 13 * * *" }, e2, { waitUntil() {} });
+  assert.equal(mailCalls.length, 0, "no key -> silently skipped, no crash");
+});
+
+test("daily cron never sends the annual subscriber reminder", async () => {
+  const e = env(); e.BREVO_API_KEY = "test-key";
+  e.DB._tables.subscribers.push({ email: "x@example.com", vid: "", lang: "en", source: "fi", status: "confirmed", token: "t".repeat(64), created_ts: 1, confirmed_ts: 2, last_confirm_sent_ts: 1, last_sent_year: null });
+  await worker.scheduled({ cron: "0 13 * * *" }, e, { waitUntil() {} });
+  assert.equal(mailCalls.length, 0, "confirmed subscriber was not mailed by the daily cron");
 });

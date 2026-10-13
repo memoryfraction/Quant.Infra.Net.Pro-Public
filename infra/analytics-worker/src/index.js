@@ -17,6 +17,7 @@ import {
   EVENTS, isBot, normalizePath, refHost, safeEqual, num,
   cleanStr, clampInt, cleanEnum, cleanMulti, isValidVid, isValidEmail, maskEmail,
   parseUA, hmacHexPrefix, randomTokenHex, toCSV, percentile, addDaysUTC,
+  isValidDay, daysBetween, parseQrImage, JOIN_MAX_BYTES,
   AGE_BANDS, ASSET_BANDS, GOALS, MARKETS, FOLLOWS, LEVERAGE, WTP, CAMPAIGN_SOURCES, VISITOR_TAGS, TOOLS,
 } from "./lib.js";
 
@@ -575,6 +576,78 @@ async function handleStats(request, env, url) {
   });
 }
 
+// ============================ join page config ============================
+// The WeChat group QR expires every ~7 days, so it lives in D1 (not in the repo):
+//   GET  /api/join          public: {group:{img,expires,name}|null, expired:bool}
+//   POST /api/admin/join    Bearer: set {img, expires:"YYYY-MM-DD", name?} or {clear:true}
+const JOIN_KEY = "join_group";
+const JOIN_REMINDED_KEY = "join_reminded";
+const todayUTC = () => new Date().toISOString().slice(0, 10);
+
+async function readConfig(env, key) {
+  const row = await env.DB.prepare("SELECT value FROM site_config WHERE key=?").bind(key).first();
+  return row ? row.value : null;
+}
+async function writeConfig(env, key, value) {
+  await env.DB.prepare("DELETE FROM site_config WHERE key=?").bind(key).run();
+  await env.DB.prepare("INSERT INTO site_config(key,value,updated_ts) VALUES(?,?,?)").bind(key, value, Math.floor(Date.now() / 1000)).run();
+}
+async function readJoin(env) {
+  const raw = await readConfig(env, JOIN_KEY);
+  if (!raw) return null;
+  try { const g = JSON.parse(raw); return g && g.img && isValidDay(g.expires) ? g : null; } catch (e) { return null; }
+}
+
+async function handleJoin(request, env) {
+  const g = await readJoin(env);
+  let body = { group: null, expired: false };
+  if (g) {
+    if (g.expires >= todayUTC()) body = { group: { img: g.img, expires: g.expires, name: g.name || "" }, expired: false };
+    else body = { group: null, expired: true };
+  }
+  // Short edge cache: a swapped QR shows up within a minute without a deploy.
+  return new Response(JSON.stringify(body), { status: 200, headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=60" } });
+}
+
+async function adminJoin(request, env) {
+  let body; try { body = await readJson(request, JOIN_MAX_BYTES * 2); } catch (e) { return new Response(null, { status: e.status }); }
+  if (body && body.clear === true) {
+    await env.DB.prepare("DELETE FROM site_config WHERE key=?").bind(JOIN_KEY).run();
+    await env.DB.prepare("DELETE FROM site_config WHERE key=?").bind(JOIN_REMINDED_KEY).run();
+    return json({ cleared: true });
+  }
+  if (!body || !isValidDay(body.expires)) return json({ error: "bad_expires" }, 400);
+  const ahead = daysBetween(todayUTC(), body.expires);
+  if (ahead < 0) return json({ error: "already_expired" }, 400);
+  if (ahead > 60) return json({ error: "too_far_ahead" }, 400);
+  const img = parseQrImage(body.img);
+  if (!img.ok) return json({ error: img.error }, img.error === "too_large" ? 413 : 400);
+  const name = cleanStr(body.name || "", 40);
+  await writeConfig(env, JOIN_KEY, JSON.stringify({ img: img.dataUrl, expires: body.expires, name }));
+  await env.DB.prepare("DELETE FROM site_config WHERE key=?").bind(JOIN_REMINDED_KEY).run();
+  return json({ ok: true, expires: body.expires, days: ahead });
+}
+
+// Daily cron: one email to the owner when the QR is about to expire (once per QR).
+async function checkJoinExpiry(env) {
+  const g = await readJoin(env);
+  if (!g) return { sent: false, reason: "no_qr" };
+  const left = daysBetween(todayUTC(), g.expires);
+  if (left > 2) return { sent: false, reason: "not_yet" };
+  if ((await readConfig(env, JOIN_REMINDED_KEY)) === g.expires) return { sent: false, reason: "already_reminded" };
+  if (!env.BREVO_API_KEY) return { sent: false, reason: "mail_not_configured" };
+  const owner = env.OWNER_EMAIL || "alphawealthlab@outlook.com";
+  const when = left < 0 ? "已过期" : left === 0 ? "今天过期" : left + " 天后过期";
+  await sendMail(env, {
+    to: owner,
+    subject: "微信群二维码" + when + "（" + g.expires + "）— 请更换 / WeChat group QR expires",
+    text: "网站 /join/ 页面上的微信群二维码将在 " + g.expires + " 过期（" + when + "）。\n过期后页面会自动隐藏二维码，改为提示发邮件。\n\n更换方法：在微信里重新进入群聊生成新二维码，保存图片，然后在本机运行：\n  pwsh infra/analytics-worker/scripts/set-join-qr.ps1 -Image <新二维码图片> -Expires <YYYY-MM-DD>\n\nThe WeChat group QR on /join/ expires on " + g.expires + ". After that the page hides it automatically.",
+    html: "<p>网站 /join/ 页面上的微信群二维码将在 <b>" + g.expires + "</b> 过期（" + when + "）。过期后页面会自动隐藏二维码。</p><p>更换：重新生成群二维码，保存图片，运行 <code>set-join-qr.ps1 -Image &lt;图片&gt; -Expires &lt;YYYY-MM-DD&gt;</code>。</p><p>The WeChat group QR on /join/ expires on " + g.expires + ".</p>",
+  });
+  await writeConfig(env, JOIN_REMINDED_KEY, g.expires);
+  return { sent: true };
+}
+
 // ============================ dispatch ============================
 export default {
   async fetch(request, env, ctx) {
@@ -592,10 +665,18 @@ export default {
     if (url.pathname === "/api/admin/subscribers") return authed(request, env) ? adminSubscribers(request, env, url) : json({ error: "unauthorized" }, 401);
     if (url.pathname === "/api/admin/send-reminder") return authed(request, env) ? (m === "POST" ? adminSendReminder(request, env, url) : new Response(null, { status: 405 })) : json({ error: "unauthorized" }, 401);
     if (url.pathname === "/api/admin/export") return authed(request, env) ? (m === "GET" ? adminExport(request, env, url) : new Response(null, { status: 405 })) : json({ error: "unauthorized" }, 401);
+    if (url.pathname === "/api/join") return m === "GET" ? handleJoin(request, env) : new Response(null, { status: 405 });
+    if (url.pathname === "/api/admin/join") return authed(request, env) ? (m === "POST" ? adminJoin(request, env) : new Response(null, { status: 405 })) : json({ error: "unauthorized" }, 401);
     if (url.pathname === "/api/admin/delete") return authed(request, env) ? (m === "POST" ? adminDelete(request, env) : new Response(null, { status: 405 })) : json({ error: "unauthorized" }, 401);
     return json({ error: "not_found" }, 404);
   },
   async scheduled(event, env, ctx) {
+    // Two crons (wrangler.toml): the daily one only watches the WeChat QR expiry;
+    // every other trigger is the annual Dec 1-5 subscriber reminder.
+    if (event && event.cron === "0 13 * * *") {
+      try { await checkJoinExpiry(env); } catch (e) { /* best-effort owner notice */ }
+      return;
+    }
     try { await sendReminder(env, { dry: false, limit: 250 }); } catch (e) { /* best-effort annual reminder */ }
     return;
   },
