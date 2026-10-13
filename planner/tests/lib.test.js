@@ -335,4 +335,11 @@ module.exports = function (t) {
     t.eq(L.wxFavDismiss(bad), false, "wxFavDismiss: unusable storage returns false");
     t.eq(L.wxFavWanted(WX, null), true, "wxFavWanted: no storage still shows the tip");
   }
+
+  // ---- copyright line ----
+  {
+    t.ok(/© 2026 Alpha Wealth Lab\. All rights reserved/.test(L.copyrightLine("en")), "copyright: en");
+    t.ok(/保留所有权利/.test(L.copyrightLine("zh")), "copyright: zh");
+    t.ok(/written permission/.test(L.copyrightLine("en")) && /书面许可/.test(L.copyrightLine("zh")), "copyright: both mention permission");
+  }
 };

@@ -461,4 +461,49 @@ module.exports = function (t) {
     const again = bootPage({ ua: WX, localStore: store });
     t.ok(!/收藏/.test(textOf(get(again, "results"))), "wx tip: not shown again after being dismissed");
   }
+
+  // ---- 13. members waitlist ("fake door") -----------------------------------
+  {
+    const calls = [];
+    const win = bootPage({ lang: "en", fetch: (url, init) => { calls.push({ url, body: JSON.parse(init.body) }); return Promise.resolve({ ok: true, status: 204 }); } });
+    const results = get(win, "results");
+    const all = [];
+    (function walk(n) { (n.children || []).forEach((x) => { all.push(x); walk(x); }); })(results);
+    const cls = (n) => String((n.attrs && n.attrs.cls) || n.className || "");
+    const det = all.filter((n) => /\bawl-pro\b/.test(cls(n)))[0];
+    t.ok(!!det, "waitlist: block rendered under the result");
+    t.ok(/Members/.test(det ? det.textContent : ""), "waitlist: title present");
+    const attr = (n, k) => (n.attrs && n.attrs[k] !== undefined ? n.attrs[k] : n[k]);
+    const boxes = det ? all.filter((n) => n.tagName === "INPUT" && attr(n, "name") === "awlPro") : [];
+    t.eq(boxes.length, 4, "waitlist: four feature checkboxes");
+    const send = det ? all.filter((n) => n.tagName === "BUTTON" && /Notify me/.test(n.textContent)) [0] : null;
+    t.ok(!!send, "waitlist: send button present");
+
+    // nothing ticked -> nothing is sent
+    if (send) send.fire("click");
+    t.eq(calls.length, 0, "waitlist: no request when nothing is ticked");
+    t.ok(/Pick at least one/.test(det.textContent), "waitlist: asks for at least one pick");
+
+    // tick two -> one POST to /api/feedback with the fixed marker and the picks
+    boxes[0].checked = true; boxes[2].checked = true;
+    if (send) send.fire("click");
+    t.eq(calls.length, 1, "waitlist: exactly one request");
+    const sent = calls[0] || { body: {} };
+    t.eq(sent.url, "/api/feedback", "waitlist: reuses /api/feedback");
+    t.eq(sent.body.message, "[waitlist]", "waitlist: marked as a waitlist entry");
+    t.eq(sent.body.wtp, "multi_plans,yoy_compare", "waitlist: carries the ticked features");
+    t.eq(sent.body.tool, "fi", "waitlist: records which tool page it came from");
+
+    // already signed up on this device -> block is not shown again
+    const mk = () => { const m = { awl_pro_done: "1" }; return { getItem: (k) => (k in m ? m[k] : null), setItem: (k, v) => { m[k] = String(v); }, removeItem: (k) => { delete m[k]; } }; };
+    const done = bootPage({ lang: "en", localStore: mk() });
+    t.ok(!/Members/.test(textOf(get(done, "results"))), "waitlist: hidden after signing up");
+  }
+
+  // ---- 14. copyright line under the disclaimer -------------------------------
+  {
+    const win = bootPage({ lang: "en" });
+    const cp = get(win, "copyright");
+    t.ok(!!cp && /All rights reserved/.test(cp.textContent), "copyright: line present (en)");
+  }
 };

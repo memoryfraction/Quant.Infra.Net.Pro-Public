@@ -65,6 +65,13 @@
     document.getElementById("pageTitle").textContent = t.title;
     document.getElementById("pageSub").textContent = t.sub;
     document.getElementById("disc").textContent = t.disc;
+    var disc = document.getElementById("disc");
+    var cp = document.getElementById("copyright");
+    if (!cp && disc && disc.parentNode) {
+      cp = el("p", "disc"); cp.id = "copyright";
+      disc.parentNode.insertBefore(cp, disc.nextSibling);
+    }
+    if (cp) cp.textContent = window.AWLLib && window.AWLLib.copyrightLine ? window.AWLLib.copyrightLine(l) : "";
 
     // Only offer filters that some tool actually uses.
     var used = {};
