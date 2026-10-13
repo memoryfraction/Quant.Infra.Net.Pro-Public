@@ -195,7 +195,11 @@ Existing single-file src/index.js (hit/stats/health), schema.sql (hits only), wr
             origin (`THIRD_PARTY` regex).
       (iii) share-button click: the button is far below the fold; a synthetic DOM click replaces
             `locator.click()` for this link-generation assertion.
-- [ ] Push branch + PR -> gh-pages (do NOT merge)
+- [x] **PUSHED + PR OPEN**: `PR #21` https://github.com/memoryfraction/Quant.Infra.Net.Pro-Public/pull/21
+      (`feature/phase1-site` -> `gh-pages`). 6 commits, all with Co-Authored-By: Codex.
+      Secret scan of the diff = clean. NOT merged (as instructed). mergeable=MERGEABLE.
+      (Playwright needed `NODE_PATH=/e/Github/memoryfraction/node_modules` — node resolves
+       node_modules relative to the SCRIPT path, so `cd` alone fails.)
 
 ## DECISIONS / ASSUMPTIONS (state in final report)
 - Email: use Brevo REST API (spec) with env.BREVO_API_KEY. SMTP creds = fallback. MAIL_FROM default
@@ -219,10 +223,18 @@ Existing single-file src/index.js (hit/stats/health), schema.sql (hits only), wr
    h) [DONE] Playwright verification (spec 5c) -> **131 passed, 0 failed** (14 sections).
               node planner/tests/run.js -> **1125 passed, 0 failed**.
               Found+fixed real bug #6 (stats.js vs worker response shapes, 8/10 blocks dead).
-   i) [NEXT] Commit + push + PR -> gh-pages (do NOT merge).
-3. Deploy (LAST, needs CF token via Playwright): d1 0002 --remote, apply-0003 --remote,
-   IP_SALT secret, BREVO_API_KEY secret, wrangler deploy, full online smoke.
-4. Final report with the 6 required sections (spec 8).
+   i) [DONE] Committed (6 commits) + pushed `feature/phase1-site` + **PR #21 OPEN** (not merged).
+2b. **[NEXT] DEPLOY** (needs CF token via Playwright browser login — Rex chose this path):
+   - Cloudflare login leadertech@126.com (password NOT on disk; read from STATE/ask Rex)
+   - create an API token with Workers + D1 + account scope -> put it ONLY in env, never on disk
+   - `npx wrangler d1 migrations apply awl_analytics --remote` (0002)
+   - `node scripts/apply-0003.mjs --remote`
+   - `npx wrangler secret put IP_SALT`  (random 32+ bytes)
+   - create Brevo v3 API key via browser (alphawealthlab@outlook.com) -> `wrangler secret put BREVO_API_KEY`
+   - `npx wrangler deploy`  (worker tree E:/Github/QIN-worker-p1)
+   - full online smoke: /api/health, a real hit, a calc, subscribe->confirm email, /stats/ with STATS_TOKEN
+   - Confirm MAIL_FROM=alphawealthlab@outlook.com is a VERIFIED Brevo sender (else send fails)
+3. Final report with the 6 required sections (spec 8).
 
 ## ETA
 - Task A (worker): **DONE** at ~20:40 ET (code+tests+README+PR #20).
