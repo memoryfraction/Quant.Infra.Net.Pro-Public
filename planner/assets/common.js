@@ -33,6 +33,9 @@
       shareNative: "Share", shareLinkLabel: "Your link (select all and copy):",
       save: "Save on this device", saved: "Saved on this device",
       saveNote: "Saved in this browser only — to move devices, copy the link.",
+      proTitle: "Members — coming soon",
+      proLead: "Which of these would you want? Tick any, leave an email or WeChat ID if you like, and we will tell you when it opens. Nothing to pay now.",
+      proContact: "Email or WeChat ID (optional)", proSend: "Notify me", proNeed: "Pick at least one.", proThanks: "Thanks — you are on the list.",
       wxFav: "Want to come back easily? Tap \u201c\u00b7\u00b7\u00b7\u201d at the top right of WeChat \u2192 \u201cFavorites\u201d, then open it any time from Me \u2192 Favorites.", wxGotIt: "Got it",
       loadBanner: "You saved a plan on {date}.", loadBtn: "Load", dismiss: "Dismiss",
       loadBannerOld: "It has been almost a year — compare with last year's plan?",
@@ -68,6 +71,9 @@
       shareNative: "分享", shareLinkLabel: "你的链接（全选后复制）：",
       save: "保存到本机", saved: "已保存到本机",
       saveNote: "只保存在这台设备的浏览器里，换设备请复制链接。",
+      proTitle: "会员功能 — 即将推出",
+      proLead: "你最想要哪些？勾选后可留下邮箱或微信号，上线时第一时间通知你。现在不收费。",
+      proContact: "邮箱或微信号（选填）", proSend: "上线时通知我", proNeed: "请至少勾选一项。", proThanks: "谢谢，已登记，上线时通知你。",
       wxFav: "想下次直接用？点微信右上角「···」→「收藏」，以后从「我 → 收藏」就能直接打开。", wxGotIt: "知道了",
       loadBanner: "你在 {date} 保存过一份方案。", loadBtn: "载入", dismiss: "忽略",
       loadBannerOld: "已经快一年了，要对比去年的方案吗？",
@@ -501,6 +507,61 @@
     return det;
   }
 
+  // (g) members "fake door": measures real interest before any paid feature is built.
+  // Reuses POST /api/feedback (message "[waitlist]", the wtp field carries the ticks).
+  var PRO_OPTS = ["multi_plans", "pdf_report", "yoy_compare", "more_authors"];
+  function proBlock(slug, t, state) {
+    var det = h("details", { cls: "awl-fb awl-pro" });
+    det.appendChild(h("summary", { text: t.proTitle }));
+    var body = h("div", { cls: "awl-fbbody" });
+    body.appendChild(h("p", { cls: "awl-hint", text: t.proLead }));
+
+    var row = h("div", { cls: "awl-chips" });
+    PRO_OPTS.forEach(function (w) {
+      var id = "awlPro_" + w;
+      row.appendChild(h("span", { cls: "awl-chip" }, [
+        h("input", { id: id, type: "checkbox", name: "awlPro", value: w }),
+        h("label", { "for": id, text: t["w_" + w] })
+      ]));
+    });
+    body.appendChild(row);
+
+    var contact = h("input", { type: "text", cls: "awl-in", maxlength: "120", placeholder: t.proContact, "aria-label": t.proContact });
+    body.appendChild(contact);
+    var honey = h("input", { type: "text", name: "website", tabindex: "-1", autocomplete: "off", "aria-hidden": "true", cls: "awl-hp" });
+    body.appendChild(honey);
+
+    var btn = h("button", { type: "button", cls: "awl-btn primary", text: t.proSend });
+    var out = h("p", { cls: "awl-hint" });
+    body.appendChild(h("div", { cls: "awl-actions" }, [btn]));
+    body.appendChild(out);
+    det.appendChild(body);
+
+    var opened = 0;
+    det.addEventListener("toggle", function () { if (det.open && !opened) opened = Date.now(); });
+
+    btn.addEventListener("click", function () {
+      var picks = readGroup(row);
+      if (!picks.length) { out.textContent = t.proNeed; return; }
+      if (honey.value) { out.textContent = t.proThanks; return; } // silent
+      btn.disabled = true;
+      out.textContent = "";
+      postJSON("/api/feedback", {
+        tool: slug, lang: state.lang(), vid: state.vid(), rating: 0,
+        message: "[waitlist]", contact: (contact.value || "").trim(), wtp: picks.join(","),
+        website: "", t: Date.now() - (opened || Date.now())
+      }, function (ok) {
+        btn.disabled = false;
+        if (ok) {
+          out.textContent = t.proThanks;
+          btn.disabled = true;
+          try { if (state.store) state.store.setItem("awl_pro_done", String(Date.now())); } catch (e) { /* ignore */ }
+        } else out.textContent = t.subErr;
+      });
+    });
+    return det;
+  }
+
   function postJSON(url, payload, cb) {
     try {
       window.fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) })
@@ -698,7 +759,7 @@
     };
     var lastV = null;
     var reporter = makeReporter(slug, cfg, state);
-    var keepEl = null, zhCache = null, profileEls = {};
+    var keepEl = null, zhCache = null, profileEls = {}, proEls = {};
     var bannerEl = null;
 
     function isZhNow() { return lang === "zh"; }
@@ -720,6 +781,15 @@
     }
 
     // (d) profile card — first successful calc only, once per device.
+    // Members waitlist: one element per language so ticks survive repaints; gone once signed up.
+    function maybePro(t) {
+      var done = null;
+      try { done = localStore && localStore.getItem("awl_pro_done"); } catch (e) { done = null; }
+      if (done) return;
+      var lg = window.SiteLang ? window.SiteLang.get() : "en";
+      if (!proEls[lg]) proEls[lg] = proBlock(slug, t, state);
+      resultsEl.appendChild(proEls[lg]);
+    }
     // paint() clears #results on every input, so the card must be re-attached each time.
     // One element is cached per language so answers typed so far survive repaints.
     function maybeProfile(t) {
@@ -803,6 +873,7 @@
       if (ok) {
         resultsEl.appendChild(shareBlock(slug, v, t, cfg, state));
         resultsEl.appendChild(feedbackBlock(slug, t, state));
+        maybePro(t);
         var nx = nextBlock(cfg, t);
         if (nx) resultsEl.appendChild(nx);
         resultsEl.appendChild(keepEl);
@@ -818,6 +889,14 @@
       document.getElementById("pageTitle").textContent = t.title;
       document.getElementById("pageSub").textContent = t.subtitle;
       document.getElementById("disc").textContent = t.disclaimer;
+      (function () {
+        var d = document.getElementById("disc"), cp = document.getElementById("copyright");
+        if (!cp && d && d.parentNode) {
+          cp = document.createElement("p"); cp.className = "disc"; cp.id = "copyright";
+          d.parentNode.insertBefore(cp, d.nextSibling);
+        }
+        if (cp && window.AWLLib && window.AWLLib.copyrightLine) cp.textContent = window.AWLLib.copyrightLine(window.SiteLang ? window.SiteLang.get() : "en");
+      })();
       document.querySelectorAll("[data-c]").forEach(function (e) { e.textContent = t[e.getAttribute("data-c")]; });
       renderSource();
       labels();

@@ -391,6 +391,13 @@
     try { if (storage) storage.setItem(WX_KEY, String(Date.now())); return true; } catch (e) { return false; }
   }
 
+  // ---- copyright line shown under the disclaimer ----
+  function copyrightLine(lang) {
+    return lang === "zh"
+      ? "© 2026 Alpha Wealth Lab 保留所有权利。本站代码、设计与原创内容未经书面许可，不得复制、镜像或用于商业用途；欢迎个人学习，以及注明出处的引用。"
+      : "© 2026 Alpha Wealth Lab. All rights reserved. The code, design and original content may not be copied, mirrored or used commercially without written permission; personal study and credited quotation are welcome.";
+  }
+
   return {
     // constants
     AGE_BANDS: AGE_BANDS, ASSET_BANDS: ASSET_BANDS, GOALS: GOALS, MARKETS: MARKETS,
@@ -399,6 +406,7 @@
     KEYS: { VID: KEY_VID, SID: KEY_SID, LAST: KEY_LAST, PLANS: KEY_PLANS, NOTICE: KEY_NOTICE, PROFILE: KEY_PROFILE },
     // privacy
     gpcOn: gpcOn,
+    copyrightLine: copyrightLine,
     isWeChat: isWeChat,
     wxFavWanted: wxFavWanted,
     wxFavDismiss: wxFavDismiss,

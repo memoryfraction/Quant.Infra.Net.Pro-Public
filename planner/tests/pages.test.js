@@ -350,4 +350,15 @@ module.exports = function (t) {
     t.eq(copied, vid, "privacy: copy fallback copies the identifier verbatim");
     t.ok(/Copied/.test(r.nodes.vidMsg.textContent), "privacy: copy confirms");
   }
+
+  // ---- licence + terms IP clause ----
+  {
+    const lic = read("LICENSE");
+    t.ok(/All rights reserved/.test(lic) && /NOT open source/.test(lic), "license: all rights reserved, not open source");
+    t.ok(/MAY NOT/.test(lic) && /commercial/i.test(lic), "license: forbids commercial reuse");
+    t.ok(/third-party books/.test(lic) && /not affiliated/i.test(lic), "license: carves out third-party works and non-affiliation");
+    const terms = read("terms/index.html");
+    t.ok(/protected by copyright \(see the LICENSE file\)/.test(terms), "terms: en IP clause");
+    t.ok(/受版权保护（见仓库中的 LICENSE 文件）/.test(terms), "terms: zh IP clause");
+  }
 };
