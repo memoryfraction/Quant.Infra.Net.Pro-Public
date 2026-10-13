@@ -15,6 +15,29 @@ function makeDB() {
   const tables = { hits: [], calcs: [], profiles: [], feedback: [], subscribers: [] };
   const counters = { hits: 0, calcs: 0, feedback: 0 };
 
+  // Columns declared NOT NULL in migrations/0002 + 0003. Real D1 rejects a NULL
+  // for any of these; the stub used to accept them, which is how "an invalid
+  // enum is stored as NULL" passed here while production threw
+  // `NOT NULL constraint failed: profiles.age_band`.
+  const NOT_NULL = new Set([
+    "hits:path", "hits:event", "hits:day", "hits:ts",
+    "calcs:ts", "calcs:day", "calcs:tool", "calcs:lang", "calcs:inputs", "calcs:result",
+    "profiles:vid", "profiles:created_ts", "profiles:updated_ts", "profiles:lang",
+    "profiles:age_band", "profiles:asset_band", "profiles:goal",
+    "profiles:markets", "profiles:follows", "profiles:leverage_exp", "profiles:country",
+    "feedback:ts", "feedback:lang", "feedback:message",
+    "subscribers:email", "subscribers:lang", "subscribers:source",
+    "subscribers:status", "subscribers:token", "subscribers:created_ts",
+  ]);
+
+  function assertNotNull(table, rec) {
+    for (const [col, val] of Object.entries(rec)) {
+      if (val === null && NOT_NULL.has(`${table}:${col}`)) {
+        throw new Error(`D1_ERROR: NOT NULL constraint failed: ${table}.${col}`);
+      }
+    }
+  }
+
   function run(sql, args) {
     const s = sql.replace(/\s+/g, " ").trim();
 
@@ -38,6 +61,7 @@ function makeDB() {
       );
       const rec = {};
       cols.forEach((c, i) => { rec[c] = args[i]; });
+      assertNotNull(table, rec);
       if (table === "hits") { rec.id = ++counters.hits; }
       if (table === "calcs") { rec.id = ++counters.calcs; }
       if (table === "feedback") { rec.id = ++counters.feedback; }
@@ -66,7 +90,10 @@ function makeDB() {
       let n = 0, si = 0;
       for (const row of tables[table]) {
         if (!matchWhere(row, where, whereArgs.slice())) continue;
-        for (const [col, valExpr] of sets) row[col] = valExpr === "?" ? setVals[si++] : valExpr.replace(/'/g, "");
+        const patch = {};
+        for (const [col, valExpr] of sets) patch[col] = valExpr === "?" ? setVals[si++] : valExpr.replace(/'/g, "");
+        assertNotNull(table, patch);
+        Object.assign(row, patch);
         n++;
       }
       return { meta: { changes: n } };
@@ -465,7 +492,12 @@ test("POST /api/profile upserts and drops illegal values", async () => {
   assert.equal(res.status, 204);
   let p = e.DB._tables.profiles[0];
   assert.equal(p.age_band, "40-49");
-  assert.equal(p.asset_band, null, "illegal enum dropped (stored as NULL/empty)");
+  // An illegal enum must be DROPPED, not written as NULL: every one of these
+  // columns is NOT NULL in the real schema, and the previous expectation here
+  // (`=== null`, described as "stored as NULL/empty") is exactly what made the
+  // production 500 invisible. Dropped means "kept empty", never SQL NULL.
+  assert.equal(p.asset_band, "", "illegal enum dropped (column stays an empty string, never NULL)");
+  assert.notEqual(p.asset_band, null, "a dropped enum must never reach the column as NULL");
   assert.equal(p.markets, "us,cn", "illegal market dropped, order normalised");
   assert.equal(p.follows, "clec,satoshi");
   const createdTs = p.created_ts;
@@ -477,6 +509,43 @@ test("POST /api/profile upserts and drops illegal values", async () => {
   assert.equal(p.goal, "retire");
   assert.equal(p.age_band, "40-49", "existing field preserved");
   assert.equal(p.created_ts, createdTs, "created_ts preserved");
+});
+
+test("POST /api/profile with an out-of-whitelist enum still writes every NOT NULL column", async () => {
+  // Regression for the 500: a client sending a value outside the whitelist used
+  // to store SQL NULL and trip `NOT NULL constraint failed: profiles.age_band`.
+  // Invalid input must be ignored, and the request must still succeed.
+  const e = env();
+  const res = await call("/api/profile", {
+    body: {
+      vid: VID, lang: "en",
+      age_band: "35-44",       // not in AGE_BANDS (<30,30-39,40-49,50-59,60+)
+      asset_band: "100k-500k", // not in ASSET_BANDS (<100k,100k-300k,300k-1m,1m-3m,3m+)
+      goal: "retire",
+      leverage_exp: "bogus",
+    },
+  }, e);
+  assert.equal(res.status, 204, "an unrecognised enum must be ignored, not fatal");
+  const p = e.DB._tables.profiles[0];
+  assert.ok(p, "the row is still written");
+  for (const col of ["age_band", "asset_band", "goal", "markets", "follows", "leverage_exp", "country", "lang"]) {
+    assert.notEqual(p[col], null, `${col} must not be NULL (NOT NULL column)`);
+    assert.notEqual(p[col], undefined, `${col} must be bound`);
+  }
+  assert.equal(p.age_band, "", "rejected age_band falls back to its default");
+  assert.equal(p.asset_band, "", "rejected asset_band falls back to its default");
+  assert.equal(p.goal, "retire", "the valid field in the same request is still applied");
+  assert.equal(p.leverage_exp, "", "rejected leverage_exp falls back to its default");
+});
+
+test("POST /api/profile keeps the previously stored value when a later enum is invalid", async () => {
+  const e = env();
+  await call("/api/profile", { body: { vid: VID, lang: "en", age_band: "40-49" } }, e);
+  assert.equal(e.DB._tables.profiles[0].age_band, "40-49");
+  // A bad value on the next call must not blank out what we already knew.
+  const res = await call("/api/profile", { body: { vid: VID, lang: "en", age_band: "nonsense" } }, e);
+  assert.equal(res.status, 204);
+  assert.equal(e.DB._tables.profiles[0].age_band, "40-49", "invalid update leaves the stored value intact");
 });
 
 test("POST /api/profile without/invalid vid -> 400", async () => {

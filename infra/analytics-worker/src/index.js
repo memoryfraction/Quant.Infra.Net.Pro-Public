@@ -249,15 +249,20 @@ async function handleProfile(request, env) {
 
   const existing = await env.DB.prepare("SELECT * FROM profiles WHERE vid=?").bind(vid).first();
   const country = cf.country || (existing && existing.country) || "";
+  // cleanEnum returns null (not undefined) for a value outside the whitelist, so
+  // these must be tested against null: comparing to `undefined` was always true
+  // and let a rejected value reach the column as SQL NULL, violating NOT NULL
+  // and turning "silently drop the bad field" into a 500 for the whole request.
   const base = existing || { age_band: "", asset_band: "", goal: "", markets: "", follows: "", leverage_exp: "", country: "" };
+  const keep = (raw, cleaned) => (has(raw) && cleaned !== null ? cleaned : undefined);
   const rec = {
     lang,
-    age_band: has("age_band") && age !== undefined ? age : base.age_band,
-    asset_band: has("asset_band") && asset !== undefined ? asset : base.asset_band,
-    goal: has("goal") && goal !== undefined ? goal : base.goal,
+    age_band: keep("age_band", age) ?? base.age_band,
+    asset_band: keep("asset_band", asset) ?? base.asset_band,
+    goal: keep("goal", goal) ?? base.goal,
     markets: has("markets") ? markets : base.markets,
     follows: has("follows") ? follows : base.follows,
-    leverage_exp: has("leverage_exp") && lev !== undefined ? lev : base.leverage_exp,
+    leverage_exp: keep("leverage_exp", lev) ?? base.leverage_exp,
     country,
   };
   await env.DB.prepare(
