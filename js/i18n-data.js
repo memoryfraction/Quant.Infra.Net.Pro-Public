@@ -70,7 +70,8 @@ window.i18nData.en = {
     "tos": "Terms of Service",
     "githubProfile": "GitHub Profile: @memoryfraction",
     "ebook": "E-Book",
-    "changelog": "Version History"
+    "changelog": "Version History",
+    "terms": "Terms of Use"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",
@@ -492,7 +493,8 @@ window.i18nData.zh = {
     "tos": "服务条款",
     "githubProfile": "GitHub 主页：@memoryfraction",
     "ebook": "电子书",
-    "changelog": "版本历史"
+    "changelog": "版本历史",
+    "terms": "使用条款"
   },
   "hero": {
     "badge": "Quant.Infra.Net.Pro",

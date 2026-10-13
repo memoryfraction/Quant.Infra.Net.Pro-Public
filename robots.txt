@@ -7,5 +7,7 @@
 User-agent: *
 Allow: /
 Disallow: /stats/
+Disallow: /join/
+Disallow: /planner/subscribed/
 
 Sitemap: https://www.alpha-wealth-lab.com/sitemap.xml
