@@ -318,6 +318,38 @@ And never trust the status code alone — confirm the row with a D1 SELECT.
       (Playwright needed `NODE_PATH=/e/Github/memoryfraction/node_modules` — node resolves
        node_modules relative to the SCRIPT path, so `cd` alone fails.)
 
+## SECRET HYGIENE — VERIFIED (2026-10-13)
+
+Audited the public repo for leaked credentials:
+- **No secret ever committed.** Full-history scan (`git log --all -p`) finds no key, token or
+  password value. The only `xkeysib-*` / `xsmtpsib-...` strings in tracked files are the key
+  *type prefixes* used as prose documentation in this file — no real value (`xsmtpsib-[A-Za-z0-9]{20,}`
+  and `xkeysib-[A-Za-z0-9]{20,}` both match nothing anywhere in the tree).
+- **One account identifier WAS in pushed history**: `leadertech@126.com` (the Cloudflare login
+  email, never the password) appears in 3 commits on `origin/fix/allocation-defaults`
+  (`266c611`, `84c215f`, `5980ea3`). It is not in the current tree — already scrubbed — but it
+  remains in the git history. Low severity (email only, no credential); rotating that account's
+  password is not required, but be aware it is publicly readable.
+- **`STATS_TOKEN.txt` moved OUT of the repo.** It used to sit at `_pr/planner/STATS_TOKEN.txt`.
+  It was git-excluded via `.git/info/exclude` and never committed (`git ls-files _pr/` = 0), but
+  it still lived inside the public repo directory. Now at
+  `C:\Users\rongf\.awl-cf-profile\secrets\STATS_TOKEN.txt`; the 4 references in this file and the
+  smoke script were updated, and the token still authenticates (`/api/stats` -> 200).
+- `_pr/` (via `.git/info/exclude`) and `.workbuddy/` (via `.gitignore:6`) are both excluded.
+  Final report + admin guide live under `_pr/` and therefore never go public.
+
+## ADMIN DATA ACCESS — see `_pr/planner/Admin-Data-Guide.md`
+
+Written on request. Covers: `/stats/` web console (28 data blocks, `sessionStorage` token),
+`/api/stats` (JSON, `?days=` 1-400), `/api/admin/subscribers` (`?status=`, emails **masked**),
+`/api/admin/export?table=` (**required**; `hits|calcs|profiles|feedback|subscribers`; `?days=` 1-730;
+50k-row cap; subscribers/profiles export **plaintext**), `/api/admin/send-reminder`
+(`?dry=1` + idempotent), `/api/admin/delete` (by `vid`, cascades 5 tables), plus direct D1 queries
+via `wrangler d1 execute` and `wrangler tail`.
+All 5 documented curl commands were executed verbatim against production and returned 200;
+the masked-vs-plaintext difference between `/api/admin/subscribers` and `?table=subscribers`
+was confirmed live.
+
 ## DECISIONS / ASSUMPTIONS (state in final report)
 - Email: use Brevo REST API (spec) with env.BREVO_API_KEY. SMTP creds = fallback. MAIL_FROM default
   planner@alpha-wealth-lab.com (MUST be a verified Brevo sender; confirm with Rex). replyTo alphawealthlab@outlook.com.
