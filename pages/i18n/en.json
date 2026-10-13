@@ -18,7 +18,10 @@
     "plRebal": "Smart Rebalancing",
     "plWd": "Withdrawal Ladder",
     "plMort": "Prepay Mortgage or Invest",
-    "plSS": "Social Security Age"
+    "plSS": "Social Security Age",
+    "groupClec": "CLEC · James",
+    "groupSV": "硅谷居士 · Wealth Shortcut",
+    "groupMine": "Original tools"
   },
   "gallery": {
     "title": "Product Gallery",
