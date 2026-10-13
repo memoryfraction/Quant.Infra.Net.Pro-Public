@@ -96,3 +96,12 @@ a.card:hover,a.card:focus-visible{border-color:var(--teal);box-shadow:0 2px 10px
   .awl-actions .awl-btn{flex:1 1 auto;justify-content:center}
   .awl-toast{left:12px;right:12px;transform:none;max-width:none}
 }
+
+/* ============ hub: tools grouped by author ============ */
+.agroups{display:block}
+.agroup{margin:0 0 30px}
+.agroup h2{font-size:19px;margin:0 0 4px}
+.agroup .acount{font-size:13px;font-weight:400;color:var(--muted)}
+.agroup .adesc{margin:0 0 12px;font-size:13.5px;color:var(--muted)}
+.card.soon{border-style:dashed}
+.card .src{margin-top:8px;font-size:12px;color:var(--muted)}

@@ -22,7 +22,10 @@ window.i18nData.en = {
     "plRebal": "Smart Rebalancing",
     "plWd": "Withdrawal Ladder",
     "plMort": "Prepay Mortgage or Invest",
-    "plSS": "Social Security Age"
+    "plSS": "Social Security Age",
+    "groupClec": "CLEC · James",
+    "groupSV": "硅谷居士 · Wealth Shortcut",
+    "groupMine": "Original tools"
   },
   "gallery": {
     "title": "Product Gallery",
@@ -445,7 +448,10 @@ window.i18nData.zh = {
     "plRebal": "聪明再平衡",
     "plWd": "退休提领率",
     "plMort": "提前还房贷？",
-    "plSS": "美国社安金"
+    "plSS": "美国社安金",
+    "groupClec": "CLEC · James 老师",
+    "groupSV": "硅谷居士 · 《财富捷径》",
+    "groupMine": "原创工具"
   },
   "gallery": {
     "title": "产品图库",

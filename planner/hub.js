@@ -1,5 +1,5 @@
 // Tool hub. The tool list lives in registry.js (window.AWL_TOOLS); this file
-// only renders it and wires the tag filter. Add a tool by editing registry.js.
+// only renders it, grouped by author (window.AWL_AUTHORS), and wires the tag filter. Add a tool by editing registry.js.
 (function () {
   "use strict";
 
@@ -76,12 +76,49 @@
     if (fbox) renderFilters(fbox, tags, copy, l, render);
 
     box.textContent = "";
+    box.className = "agroups"; // grouped by author; each group has its own .cards grid
     var shown = tools.filter(function (x) { return activeTag === "all" || (x.tags || []).indexOf(activeTag) >= 0; });
-    if (!shown.length) {
-      box.appendChild(el("p", "empty", t.empty));
-      return;
+    var authors = (window.AWL_AUTHORS || []).filter(function (a) { return !a.hidden; });
+    var any = false;
+
+    authors.forEach(function (a) {
+      var mine = shown.filter(function (x) { return x.author === a.id; });
+      var soonOnly = !mine.length && a.soon && activeTag === "all";
+      if (!mine.length && !soonOnly) return;
+      any = true;
+      var sec = el("section", "agroup");
+      var head = el("h2", null, a[l]);
+      if (mine.length) head.appendChild(el("span", "acount", " · " + mine.length + copy.count));
+      sec.appendChild(head);
+      sec.appendChild(el("p", "adesc", l === "zh" ? a.descZh : a.descEn));
+      var grid = el("div", "cards");
+      if (soonOnly) {
+        var c = el("div", "card soon");
+        c.appendChild(el("h3", null, copy.soon));
+        var p = el("p", null, copy.ask + " ");
+        var m = el("a", "awl-link", "alphawealthlab@outlook.com");
+        m.href = "mailto:alphawealthlab@outlook.com";
+        p.appendChild(m);
+        c.appendChild(p);
+        grid.appendChild(c);
+      } else {
+        mine.forEach(function (x) { grid.appendChild(card(x, l, copy)); });
+      }
+      sec.appendChild(grid);
+      box.appendChild(sec);
+    });
+
+    // Tools whose author is unknown still show up (never silently dropped).
+    var known = {};
+    authors.forEach(function (a) { known[a.id] = 1; });
+    var orphans = shown.filter(function (x) { return !known[x.author]; });
+    if (orphans.length) {
+      any = true;
+      var grid2 = el("div", "cards");
+      orphans.forEach(function (x) { grid2.appendChild(card(x, l, copy)); });
+      box.appendChild(grid2);
     }
-    shown.forEach(function (x) { box.appendChild(card(x, l, copy)); });
+    if (!any) box.appendChild(el("p", "empty", t.empty));
   }
 
   window.SiteLang.subscribe(render);
