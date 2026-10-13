@@ -201,3 +201,31 @@ test("csvEscape neutralises spreadsheet formulas in strings but not numbers", ()
   assert.equal(L.csvEscape(-5), "-5");
   assert.equal(L.csvEscape("a=b"), "a=b");
 });
+
+test("isValidDay / daysBetween", () => {
+  assert.equal(L.isValidDay("2026-10-20"), true);
+  assert.equal(L.isValidDay("2026-02-31"), false);
+  assert.equal(L.isValidDay("20261020"), false);
+  assert.equal(L.isValidDay(20261020), false);
+  assert.equal(L.daysBetween("2026-10-13", "2026-10-20"), 7);
+  assert.equal(L.daysBetween("2026-10-20", "2026-10-13"), -7);
+  assert.equal(L.daysBetween("2026-12-31", "2027-01-01"), 1);
+});
+
+test("parseQrImage checks the real signature and size", () => {
+  const PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+  const ok = L.parseQrImage(PNG);
+  assert.equal(ok.ok, true);
+  assert.ok(ok.dataUrl.startsWith("data:image/png;base64,"));
+  assert.equal(L.parseQrImage("data:image/png;base64," + PNG).ok, true);
+  // declared png but the bytes are not -> rejected
+  assert.equal(L.parseQrImage("data:image/png;base64," + Buffer.from("<script>alert(1)</script>").toString("base64")).ok, false);
+  assert.equal(L.parseQrImage("data:image/gif;base64,R0lGODlh").ok, false);
+  assert.equal(L.parseQrImage("").ok, false);
+  assert.equal(L.parseQrImage(null).ok, false);
+  const jpg = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(32)]).toString("base64");
+  assert.equal(L.parseQrImage(jpg).ok, true);
+  assert.equal(L.parseQrImage(jpg).dataUrl.startsWith("data:image/jpeg;base64,"), true);
+  const webp = Buffer.concat([Buffer.from("RIFF"), Buffer.alloc(4), Buffer.from("WEBPVP8 "), Buffer.alloc(20)]).toString("base64");
+  assert.equal(L.parseQrImage(webp).ok, true);
+});

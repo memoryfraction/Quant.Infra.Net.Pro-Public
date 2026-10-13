@@ -252,3 +252,17 @@ node --test            # 62 个用例：lib 纯函数 + 全部接口（含反例
 - `/api/hit` 的写入是 `waitUntil` 后置的，极端冷启动下可能偶发丢点（可接受）。
 - 速率限制的退化实现为 per-isolate，见 §4.4。
 - 条款 / 隐私页为 AI 起草，**上线前请律师审阅**，并确认适用法律与管辖地。
+
+## 微信群二维码（/join/ 页面）
+群二维码每 7 天过期，所以不放在代码仓库里，而是存在 D1，页面实时读取。
+
+- 迁移（只需一次）：`npx wrangler d1 execute awl_analytics --remote --file=migrations/0004_site_config.sql`
+- 更换二维码（不需要部署、不需要提交）：
+  ```powershell
+  pwsh scripts/set-join-qr.ps1 -Image C:\path\qr.jpg -Expires 2026-10-20
+  ```
+  口令从 `%USERPROFILE%\secrets\stats-token.txt` 读取。图片只接受 PNG/JPEG/WebP，最大 400 KB，有效期最多 60 天。
+- 隐藏二维码：`pwsh scripts/set-join-qr.ps1 -Clear`
+- 过期后页面自动隐藏二维码，改为提示发邮件。
+- 过期前 2 天（每天 13:00 UTC 检查，同一张码只提醒一次），Worker 会发邮件到站长邮箱（`OWNER_EMAIL`，默认 alphawealthlab@outlook.com），需要已设置 `BREVO_API_KEY`。
+- 接口：`GET /api/join`（公开，缓存 60 秒）、`POST /api/admin/join`（需口令）。
