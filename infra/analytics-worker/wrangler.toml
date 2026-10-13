@@ -12,9 +12,11 @@ database_name = "awl_analytics"
 database_id = "82684561-1447-4e7d-997b-1a1e8a8425d4"   # from `wrangler d1 create awl_analytics`
 
 # ---- non-secret config ----
-# MAIL_FROM: set this to a Brevo-verified sender (Rex will confirm). Default is a placeholder.
+# MAIL_FROM: the Brevo-verified sender. Confirmed by the site owner as
+# alphawealthlab@outlook.com; the address must exist as a verified sender in Brevo
+# or every /api/subscribe send is rejected.
 [vars]
-MAIL_FROM = "planner@alpha-wealth-lab.com"
+MAIL_FROM = "alphawealthlab@outlook.com"
 
 # Annual rebalance reminder: early December (day 1-5, 14:00 UTC), best-effort.
 # scheduled() is idempotent per year (last_sent_year), so repeated runs never double-send.
