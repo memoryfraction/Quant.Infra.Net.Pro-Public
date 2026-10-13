@@ -86,12 +86,13 @@ module.exports = function (t) {
   t.ok(/name="robots" content="noindex,nofollow"/.test(join), "join: noindex,nofollow");
   t.ok(/加 入 我 们/.test(join.replace(/<[^>]+>/g, "")) || /加入我们/.test(join), "join: zh title 加入我们");
   t.ok(/Join us/i.test(join), "join: en title");
-  t.ok(/assets\/join\/official\.png/.test(join), "join: official account image");
-  t.ok(/assets\/join\/group\.png/.test(join), "join: group image");
-  t.ok(/关注公众号/.test(join), "join: zh 关注公众号 block");
+  t.ok(/\/join\/join\.js/.test(join), "join: loads the dynamic QR script");
+  t.ok(/id="qrImg"/.test(join) && /id="qrNone"/.test(join), "join: QR box and no-QR fallback exist");
+  t.ok(!/assets\/join\/(group|official)\.png/.test(join), "join: no committed QR image is referenced (the code expires weekly)");
+  t.ok(!/关注公众号/.test(join), "join: no official-account block (account not created yet)");
   t.ok(/进微信群/.test(join), "join: zh 进微信群 block");
   // The expired-QR fallback the spec asks for, verbatim in meaning.
-  t.ok(/二维码过期了？发邮件到/.test(join), "join: expired-QR fallback in zh");
+  t.ok(/没有可用的群二维码。发邮件到/.test(join), "join: no-active-QR fallback in zh");
   t.ok(/alphawealthlab@outlook\.com/.test(join), "join: fallback email present");
   t.ok(/href="\/terms\/"/.test(join) && /href="\/privacy\/"/.test(join), "join: links to terms + privacy");
 
