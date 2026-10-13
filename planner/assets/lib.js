@@ -376,6 +376,21 @@
     return typeof s === "string" && /^[a-z0-9-]{1,40}$/.test(s);
   }
 
+  // ---- WeChat in-app browser: no ordinary bookmarks there, so we point at its Favorites ----
+  var WX_KEY = "awl_wxfav";
+  function isWeChat(ua) {
+    return typeof ua === "string" && /MicroMessenger/i.test(ua);
+  }
+  // True when the hint should be shown: WeChat browser and not dismissed before.
+  // Unusable storage -> still show (it is a harmless one-line tip) but it cannot be remembered.
+  function wxFavWanted(ua, storage) {
+    if (!isWeChat(ua)) return false;
+    try { return !(storage && storage.getItem(WX_KEY)); } catch (e) { return true; }
+  }
+  function wxFavDismiss(storage) {
+    try { if (storage) storage.setItem(WX_KEY, String(Date.now())); return true; } catch (e) { return false; }
+  }
+
   return {
     // constants
     AGE_BANDS: AGE_BANDS, ASSET_BANDS: ASSET_BANDS, GOALS: GOALS, MARKETS: MARKETS,
@@ -384,6 +399,9 @@
     KEYS: { VID: KEY_VID, SID: KEY_SID, LAST: KEY_LAST, PLANS: KEY_PLANS, NOTICE: KEY_NOTICE, PROFILE: KEY_PROFILE },
     // privacy
     gpcOn: gpcOn,
+    isWeChat: isWeChat,
+    wxFavWanted: wxFavWanted,
+    wxFavDismiss: wxFavDismiss,
     // ids
     getVid: getVid, getSid: getSid, visitorTag: visitorTag, uuid: uuid,
     // query

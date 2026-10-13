@@ -130,7 +130,7 @@ module.exports = function (t) {
         hostname: opts.hostname || "www.alpha-wealth-lab.com",
       },
       navigator: {
-        userAgent: "node-test", language: "zh-CN",
+        userAgent: opts.ua || "node-test", language: "zh-CN",
         sendBeacon: () => true,
         globalPrivacyControl: !!opts.gpc,
       },
@@ -426,5 +426,39 @@ module.exports = function (t) {
     const inputs = get(win, "inputs");
     for (let i = 0; i < 3; i++) inputs.fire("input");
     t.ok(/Help us know you better|帮我们更懂你/.test(textOf(get(win, "results"))), "profile: card still present after 3 input repaints");
+  }
+
+  // ---- 12. WeChat "add to Favorites" tip ------------------------------------
+  {
+    const WX = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 MicroMessenger/8.0.44";
+    const plain = bootPage({});
+    t.ok(!/收藏/.test(textOf(get(plain, "results"))), "wx tip: not shown in an ordinary browser");
+
+    const mkStore = () => {
+      const m = {};
+      return {
+        getItem: (k) => (k in m ? m[k] : null),
+        setItem: (k, v) => { m[k] = String(v); },
+        removeItem: (k) => { delete m[k]; },
+        _m: m,
+      };
+    };
+    const store = mkStore();
+    const wx = bootPage({ ua: WX, localStore: store });
+    const results = get(wx, "results");
+    t.ok(/点微信右上角「···」→「收藏」/.test(textOf(results)), "wx tip: shown (zh) inside the WeChat browser");
+
+    const findAll = (node, pred, out) => { out = out || []; if (pred(node)) out.push(node); (node.children || []).forEach((c) => findAll(c, pred, out)); return out; };
+    const hasCls = (n, k) => String((n.attrs && n.attrs.cls) || n.className || "").split(/\s+/).indexOf(k) >= 0;
+    const box = findAll(results, (n) => hasCls(n, "awl-wxfav"))[0];
+    t.ok(!!box, "wx tip: container rendered");
+    const btn = box && findAll(box, (n) => n.tagName === "BUTTON")[0];
+    t.ok(!!btn, "wx tip: dismiss button present");
+    if (btn) btn.fire("click");
+    t.ok(!!store._m.awl_wxfav, "wx tip: dismissal remembered in localStorage");
+    t.ok(box && box.hidden === true, "wx tip: hidden right after dismissing");
+
+    const again = bootPage({ ua: WX, localStore: store });
+    t.ok(!/收藏/.test(textOf(get(again, "results"))), "wx tip: not shown again after being dismissed");
   }
 };

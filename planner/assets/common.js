@@ -33,6 +33,7 @@
       shareNative: "Share", shareLinkLabel: "Your link (select all and copy):",
       save: "Save on this device", saved: "Saved on this device",
       saveNote: "Saved in this browser only — to move devices, copy the link.",
+      wxFav: "Want to come back easily? Tap \u201c\u00b7\u00b7\u00b7\u201d at the top right of WeChat \u2192 \u201cFavorites\u201d, then open it any time from Me \u2192 Favorites.", wxGotIt: "Got it",
       loadBanner: "You saved a plan on {date}.", loadBtn: "Load", dismiss: "Dismiss",
       loadBannerOld: "It has been almost a year — compare with last year's plan?",
       loadBtnOld: "Load and compare", compareTitle: "Compared with your saved plan",
@@ -67,6 +68,7 @@
       shareNative: "分享", shareLinkLabel: "你的链接（全选后复制）：",
       save: "保存到本机", saved: "已保存到本机",
       saveNote: "只保存在这台设备的浏览器里，换设备请复制链接。",
+      wxFav: "想下次直接用？点微信右上角「···」→「收藏」，以后从「我 → 收藏」就能直接打开。", wxGotIt: "知道了",
       loadBanner: "你在 {date} 保存过一份方案。", loadBtn: "载入", dismiss: "忽略",
       loadBannerOld: "已经快一年了，要对比去年的方案吗？",
       loadBtnOld: "载入并对比", compareTitle: "与保存时对比",
@@ -320,6 +322,20 @@
 
     wrap.appendChild(linkBox);
     wrap.appendChild(h("p", { cls: "awl-hint", text: t.saveNote }));
+
+    // WeChat's in-app browser has no normal bookmarks: tell people to use its Favorites (once).
+    var ua = (window.navigator && window.navigator.userAgent) || "";
+    if (L && L.wxFavWanted && L.wxFavWanted(ua, state.store)) {
+      var fav = h("div", { cls: "awl-wxfav" });
+      fav.appendChild(h("p", { cls: "awl-hint", text: t.wxFav }));
+      var gotIt = h("button", { type: "button", cls: "awl-link", text: t.wxGotIt });
+      gotIt.addEventListener("click", function () {
+        if (L.wxFavDismiss) L.wxFavDismiss(state.store);
+        fav.hidden = true;
+      });
+      fav.appendChild(gotIt);
+      wrap.appendChild(fav);
+    }
     return wrap;
   }
 

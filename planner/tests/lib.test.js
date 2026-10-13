@@ -317,4 +317,22 @@ module.exports = function (t) {
   t.eq(L.CAMPAIGNS.join(","), "card,share,wechat,email,join", "campaigns match the Worker");
   t.eq(L.FOLLOWS.join(","), "value,beiban,adam_khoo,clec,silicon_valley,satoshi,other,none", "follows match the Worker");
   t.eq(L.WTP.join(","), "multi_plans,pdf_report,yoy_compare,more_authors,none", "wtp options match the Worker");
+
+  // ---- WeChat favorites tip helpers ----
+  {
+    const WX = "Mozilla/5.0 (Linux; Android 13) MicroMessenger/8.0.44";
+    t.eq(L.isWeChat(WX), true, "isWeChat: MicroMessenger UA");
+    t.eq(L.isWeChat("Mozilla/5.0 Chrome/120 Safari/537.36"), false, "isWeChat: ordinary UA");
+    t.eq(L.isWeChat(undefined), false, "isWeChat: undefined");
+    const m = {};
+    const st = { getItem: (k) => (k in m ? m[k] : null), setItem: (k, v) => { m[k] = String(v); } };
+    t.eq(L.wxFavWanted(WX, st), true, "wxFavWanted: first time in WeChat");
+    t.eq(L.wxFavDismiss(st), true, "wxFavDismiss: stored");
+    t.eq(L.wxFavWanted(WX, st), false, "wxFavWanted: false after dismissal");
+    t.eq(L.wxFavWanted("Chrome", st), false, "wxFavWanted: false outside WeChat");
+    const bad = { getItem() { throw new Error("blocked"); }, setItem() { throw new Error("blocked"); } };
+    t.eq(L.wxFavWanted(WX, bad), true, "wxFavWanted: unusable storage still shows the tip");
+    t.eq(L.wxFavDismiss(bad), false, "wxFavDismiss: unusable storage returns false");
+    t.eq(L.wxFavWanted(WX, null), true, "wxFavWanted: no storage still shows the tip");
+  }
 };
