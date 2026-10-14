@@ -271,10 +271,83 @@ document.addEventListener("DOMContentLoaded", () => {
     const ok = await copyText(email);
     showToast(ok ? contactMessage("contact.copied", "Email copied: {email}", email) : contactMessage("contact.manual", "Email us at {email}", email));
   };
+  // The top-nav Contact link opens a small panel right under it (visible feedback where the
+  // click happened); every other mailto link keeps the copy + toast behaviour.
+  const POP_TXT = {
+    en: { title: "Contact us", copy: "Copy address", copied: "Copied \u2713", open: "Open mail app", hint: "No mail app? Copy the address and paste it into your webmail." },
+    zh: { title: "联系我们", copy: "复制邮箱地址", copied: "已复制 \u2713", open: "用邮件程序打开", hint: "没有安装邮件程序？复制地址，粘贴到网页邮箱即可。" }
+  };
+  const popLang = () => (localStorage.getItem("lang") === "zh" ? "zh" : "en");
+  let popEl = null;
+  const closePop = () => { if (popEl) { popEl.remove(); popEl = null; } };
+  const openPop = (anchor, email) => {
+    closePop();
+    const tx = POP_TXT[popLang()];
+    const box = document.createElement("div");
+    box.className = "contact-pop";
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-label", tx.title);
+    const title = document.createElement("strong");
+    title.textContent = tx.title;
+    const addr = document.createElement("div");
+    addr.className = "contact-pop-addr";
+    addr.textContent = email;
+    const row = document.createElement("div");
+    row.className = "contact-pop-row";
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "contact-pop-btn primary";
+    copyBtn.textContent = tx.copy;
+    copyBtn.addEventListener("click", async () => {
+      const ok = await copyText(email);
+      if (ok) {
+        copyBtn.textContent = tx.copied;
+      } else {
+        // clipboard blocked: select the address so Ctrl/Cmd+C works
+        const range = document.createRange();
+        range.selectNodeContents(addr);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
+    const mailBtn = document.createElement("a");
+    mailBtn.className = "contact-pop-btn";
+    mailBtn.href = "mailto:" + email;
+    mailBtn.textContent = tx.open;
+    row.appendChild(copyBtn);
+    row.appendChild(mailBtn);
+    const hint = document.createElement("p");
+    hint.className = "contact-pop-hint";
+    hint.textContent = tx.hint;
+    box.appendChild(title);
+    box.appendChild(addr);
+    box.appendChild(row);
+    box.appendChild(hint);
+    document.body.appendChild(box);
+    const r = anchor.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth || window.innerWidth || 360;
+    const width = Math.min(320, vw - 24);
+    box.style.width = width + "px";
+    box.style.top = Math.round(r.bottom + 10) + "px";
+    box.style.left = Math.max(12, Math.min(Math.round(r.left), vw - width - 12)) + "px";
+    popEl = box;
+  };
   document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
     const email = link.getAttribute("href").slice(7).split("?")[0];
+    if (link.closest("#navLinks")) {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (popEl) closePop(); else openPop(link, email);
+      });
+      return;
+    }
     link.addEventListener("click", () => { copyEmail(email); });
   });
+  document.addEventListener("click", (event) => { if (popEl && !popEl.contains(event.target)) closePop(); });
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape") closePop(); });
+  window.addEventListener("scroll", closePop, { passive: true });
   document.querySelectorAll("[data-copy]").forEach((button) => {
     button.addEventListener("click", () => { copyEmail(button.dataset.copy); });
   });
