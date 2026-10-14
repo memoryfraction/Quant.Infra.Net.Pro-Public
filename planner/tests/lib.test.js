@@ -342,4 +342,23 @@ module.exports = function (t) {
     t.ok(/保留所有权利/.test(L.copyrightLine("zh")), "copyright: zh");
     t.ok(/written permission/.test(L.copyrightLine("en")) && /书面许可/.test(L.copyrightLine("zh")), "copyright: both mention permission");
   }
+
+  // ---- exclude-me switch ----
+  {
+    const mk = (seed) => { const m = Object.assign({}, seed || {}); return { _m: m, getItem: (k) => (k in m ? m[k] : null), setItem: (k, v) => { m[k] = String(v); }, removeItem: (k) => { delete m[k]; } }; };
+    const st = mk();
+    t.eq(L.isSelf(st), false, "self: not excluded by default");
+    t.eq(L.applySelfParam("?awl_self=1", st), "on", "self: ?awl_self=1 -> on");
+    t.eq(L.isSelf(st), true, "self: flag stored");
+    t.eq(L.getVid(st), "", "self: getVid is empty while excluded");
+    t.eq(L.visitorTag(st, Date.now()), "", "self: visitorTag is empty while excluded");
+    t.eq(L.applySelfParam("?awl_self=0", st), "off", "self: ?awl_self=0 -> off");
+    t.eq(L.isSelf(st), false, "self: flag cleared");
+    t.eq(L.applySelfParam("?x=1", st), "", "self: absent param is ignored");
+    t.eq(L.applySelfParam("?awl_self=maybe", st), "", "self: junk value is ignored");
+    const bad = { getItem() { throw new Error("blocked"); }, setItem() { throw new Error("blocked"); }, removeItem() { throw new Error("blocked"); } };
+    t.eq(L.applySelfParam("?awl_self=1", bad), "", "self: unusable storage does not throw");
+    t.eq(L.isSelf(bad), false, "self: unusable storage -> not excluded");
+    t.eq(L.getVid(mk({ awl_vid: "abcdef12-0000-4000-8000-000000000001" })).length > 0, true, "self: ordinary storage still yields a vid");
+  }
 };

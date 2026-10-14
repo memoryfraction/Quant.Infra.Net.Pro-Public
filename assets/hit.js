@@ -23,7 +23,7 @@
   "use strict";
 
   var PROD_HOST = "www.alpha-wealth-lab.com";
-  var KEEP = { vid: "awl_vid", sid: "awl_sid", last: "awl_last", notice: "awl_notice" };
+  var KEEP = { vid: "awl_vid", sid: "awl_sid", last: "awl_last", notice: "awl_notice", self: "awl_self" };
   var DAY_MS = 86400000;
   var EVENTS = ["calc", "share", "save", "load", "join"];
 
@@ -197,6 +197,22 @@
     if (location.hostname !== PROD_HOST) return;
 
     injectCss();
+
+    // "Exclude me": ?awl_self=1 marks this browser as the owner's (no tracking at all),
+    // ?awl_self=0 turns tracking back on. Mirrors AWLLib.applySelfParam / isSelf.
+    var selfLs = store("local");
+    try {
+      var sv = new URLSearchParams(location.search || "").get("awl_self") || "";
+      if (selfLs && (sv === "1" || sv === "on")) selfLs.setItem(KEEP.self, "1");
+      else if (selfLs && (sv === "0" || sv === "off")) selfLs.removeItem(KEEP.self);
+    } catch (e) { /* ignore */ }
+    var excluded = false;
+    try { excluded = !!selfLs && selfLs.getItem(KEEP.self) === "1"; } catch (e) { excluded = false; }
+    if (excluded) {
+      window.AWL_track = function () {};
+      try { console.info("[awl] this browser is excluded from analytics. Open any page with ?awl_self=0 to count it again."); } catch (e) { /* ignore */ }
+      return;
+    }
     try {
       var ls = store("local");
       var seen = ls && ls.getItem(KEEP.notice) === "1";

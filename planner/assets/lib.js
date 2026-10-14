@@ -37,6 +37,7 @@
   var KEY_LAST = "awl_last";
   var KEY_PLANS = "awl_plans_v1";
   var KEY_NOTICE = "awl_notice";
+  var KEY_SELF = "awl_self";
   var KEY_PROFILE = "awl_profile_done";
   var MAX_SLUGS = 20;
 
@@ -46,6 +47,30 @@
   function gpcOn() {
     try { return (typeof navigator !== "undefined") && navigator.globalPrivacyControl === true; }
     catch (e) { return false; }
+  }
+
+  // ---------------------------------------------------------------------------
+  // "exclude me": the owner's own browser must not pollute the numbers.
+  //   open any page with ?awl_self=1  -> this browser is excluded (flag in localStorage)
+  //   open any page with ?awl_self=0  -> counted again
+  // While excluded: no ids, no beacons, no counter.dev (see assets/hit.js).
+  // ---------------------------------------------------------------------------
+  function isSelf(storage) {
+    try { return !!storage && storage.getItem(KEY_SELF) === "1"; } catch (e) { return false; }
+  }
+  function selfOn(storage) {
+    if (isSelf(storage)) return true;
+    try { return typeof window !== "undefined" && isSelf(window.localStorage); } catch (e) { return false; }
+  }
+  // Returns "on" | "off" | "" (param absent/ignored) and applies it to `storage`.
+  function applySelfParam(search, storage) {
+    var v = "";
+    try { v = new URLSearchParams(search || "").get("awl_self") || ""; } catch (e) { return ""; }
+    try {
+      if (v === "1" || v === "on") { storage.setItem(KEY_SELF, "1"); return "on"; }
+      if (v === "0" || v === "off") { storage.removeItem(KEY_SELF); return "off"; }
+    } catch (e) { /* unusable storage: cannot persist */ }
+    return "";
   }
 
   // ---------------------------------------------------------------------------
@@ -80,7 +105,7 @@
   // Never falls back to an in-memory-only id: an id the next page load cannot
   // reproduce would inflate the independent-visitor count with phantom visitors.
   function getVid(storage) {
-    if (gpcOn()) return "";
+    if (gpcOn() || selfOn(storage)) return "";
     if (!storage) return "";
     var cur = readStore(storage, KEY_VID);
     if (cur && /^[a-z0-9-]{8,64}$/.test(cur)) return cur;
@@ -90,7 +115,7 @@
   }
   // Per-tab-session id; same rules as getVid.
   function getSid(sessionStorage) {
-    if (gpcOn()) return "";
+    if (gpcOn() || selfOn(null)) return "";
     if (!sessionStorage) return "";
     var cur = readStore(sessionStorage, KEY_SID);
     if (cur && /^[a-z0-9-]{8,64}$/.test(cur)) return cur;
@@ -115,7 +140,7 @@
    * This function also records the current day as the new "last" day.
    */
   function visitorTag(storage, nowMs) {
-    if (gpcOn()) return "";
+    if (gpcOn() || selfOn(storage)) return "";
     var now = typeof nowMs === "number" ? nowMs : Date.now();
     var today = dayStartMs(now);
     var raw = readStore(storage, KEY_LAST);
@@ -398,6 +423,10 @@
       : "© 2026 Alpha Wealth Lab. All rights reserved. The code, design and original content may not be copied, mirrored or used commercially without written permission; personal study and credited quotation are welcome.";
   }
 
+  try {
+    if (typeof window !== "undefined" && window.location && window.localStorage) applySelfParam(window.location.search, window.localStorage);
+  } catch (e) { /* never break the page */ }
+
   return {
     // constants
     AGE_BANDS: AGE_BANDS, ASSET_BANDS: ASSET_BANDS, GOALS: GOALS, MARKETS: MARKETS,
@@ -406,6 +435,8 @@
     KEYS: { VID: KEY_VID, SID: KEY_SID, LAST: KEY_LAST, PLANS: KEY_PLANS, NOTICE: KEY_NOTICE, PROFILE: KEY_PROFILE },
     // privacy
     gpcOn: gpcOn,
+    isSelf: isSelf,
+    applySelfParam: applySelfParam,
     copyrightLine: copyrightLine,
     isWeChat: isWeChat,
     wxFavWanted: wxFavWanted,

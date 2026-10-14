@@ -340,4 +340,46 @@ module.exports = function (t) {
     t.ok(!/["']ip["']\s*:/.test(code), "privacy: hit.js never sends an ip field");
     t.ok(!/X-Forwarded-For/i.test(code), "privacy: hit.js never touches forwarding headers");
   }
+
+  // ---- 99. "exclude me" switch (?awl_self=1 / 0) --------------------------
+  [false, true].forEach((withLib) => {
+    const tag = withLib ? "with lib" : "fallback";
+
+    // flag already set -> nothing is sent, no counter.dev, AWL_track is a no-op
+    {
+      const local = mkStore({ awl_self: "1" });
+      const win = boot({ local, withLib });
+      t.eq(api(win).length, 0, `self (${tag}): no /api/hit beacon on load`);
+      t.eq(typeof win.AWL_track, "function", `self (${tag}): AWL_track still callable`);
+      win.AWL_track("calc");
+      t.eq(api(win).length, 0, `self (${tag}): AWL_track sends nothing`);
+      win.__fire("pagehide");
+      t.eq(api(win).length, 0, `self (${tag}): no leave beacon either`);
+      const counter = win.document.head.children.concat(win.document.body.children).filter((n) => /counter\.dev/.test(n.attrs.src || ""));
+      t.eq(counter.length, 0, `self (${tag}): counter.dev is not injected`);
+      t.ok(!local._m.awl_vid, `self (${tag}): no visitor id is created`);
+    }
+
+    // ?awl_self=1 sets the flag and that very page view is not counted
+    {
+      const local = mkStore(null);
+      const win = boot({ local, withLib, search: "?awl_self=1" });
+      t.eq(local._m.awl_self, "1", `self (${tag}): ?awl_self=1 stores the flag`);
+      t.eq(api(win).length, 0, `self (${tag}): the page that set the flag is not counted`);
+    }
+
+    // ?awl_self=0 clears it and tracking resumes
+    {
+      const local = mkStore({ awl_self: "1" });
+      const win = boot({ local, withLib, search: "?awl_self=0" });
+      t.ok(!("awl_self" in local._m), `self (${tag}): ?awl_self=0 clears the flag`);
+      t.eq(api(win).length, 1, `self (${tag}): counted again after switching off`);
+    }
+
+    // ordinary visitors are unaffected
+    {
+      const win = boot({ withLib });
+      t.eq(api(win).length, 1, `self (${tag}): normal visitor still counted`);
+    }
+  });
 };
