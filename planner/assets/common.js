@@ -201,14 +201,19 @@
   var L = (typeof window !== "undefined" && window.AWLLib) || null;
 
   var PROD_HOST = "www.alpha-wealth-lab.com";
-  var CALC_MAX_PER_LOAD = 5, CALC_IDLE_MS = 3000, CALC_TEXT_MAX = 60;
+  var CALC_MAX_PER_LOAD = 5, CALC_IDLE_MS = 4000, CALC_TEXT_MAX = 60;
 
   function slugOf() {
     var m = /^\/planner\/([a-z-]+)\//.exec(window.location.pathname || "");
     return m ? m[1] : "";
   }
+  function isBot() {
+    try {
+      return !!(window.navigator && window.navigator.webdriver === true);
+    } catch (e) { return false; }
+  }
   function mayReport() {
-    return window.location.hostname === PROD_HOST;
+    return window.location.hostname === PROD_HOST && !isBot();
   }
 
   // Access to storage that never throws (Safari private mode, blocked cookies,
@@ -644,8 +649,8 @@
   }
 
   // ---- calc reporting (c) -------------------------------------------------
-  function makeReporter(slug, cfg, state) {
-    var sent = 0, timer = null, firstDone = false;
+  function makeReporter(slug, cfg, state, touched) {
+    var sent = 0, timer = null, lastSig = "";
 
     function rawInputs() {
       var out = {};
@@ -673,18 +678,24 @@
       if (!mayReport() || !state.vid()) return;
       var rows = typeof cfg.summary === "function" ? cfg.summary(v, t) : [];
       if (!rows.length) return;
+      var inputs = rawInputs();
+      // Same inputs as the last report -> nothing new to say (language switch, resize, repaint).
+      var sig = JSON.stringify(inputs);
+      if (sig === lastSig) return;
+      lastSig = sig;
       sent++;
       send("/api/calc", {
         tool: slug, lang: state.lang(), vid: state.vid(), sid: state.sid(),
-        inputs: rawInputs(), result: rows
+        inputs: inputs, result: rows
       });
     }
 
     return {
-      // Called on every successful paint.
+      // Called on every successful paint. Untouched pages (defaults only) never report;
+      // a report goes out once the user has stopped editing for CALC_IDLE_MS.
       onPaint: function (v, t) {
-        if (!firstDone) { firstDone = true; fire(v, t); }
         clearTimeout(timer);
+        if (!touched()) return;
         timer = setTimeout(function () { fire(v, t); }, CALC_IDLE_MS);
       }
     };
@@ -758,7 +769,7 @@
       cfgRef: { cfg: cfg }
     };
     var lastV = null;
-    var reporter = makeReporter(slug, cfg, state);
+    var reporter = makeReporter(slug, cfg, state, function () { return userTouched; });
     var keepEl = null, zhCache = null, profileEls = {}, proEls = {};
     var bannerEl = null;
 
