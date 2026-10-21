@@ -13,6 +13,7 @@
  *
  * Privacy:
  *   - Only runs on the production host, so local previews never pollute numbers.
+ *   - Skips automated (navigator.webdriver) browsers.
  *   - When Global Privacy Control is on, or no visitor id can be created, we send
  *     only the basic fields (path / event / referrer): no vid, sid, tag, utm, vw, bl.
  *   - planner/assets/lib.js is the preferred source of ids/utm/tag. Pages that do
@@ -195,6 +196,8 @@
   // ---- main --------------------------------------------------------------
   try {
     if (location.hostname !== PROD_HOST) return;
+    // Automated (webdriver) browsers: no beacons, no notice bar. We never read the UA string.
+    try { if (window.navigator && window.navigator.webdriver === true) return; } catch (e) { /* ignore */ }
 
     injectCss();
 
