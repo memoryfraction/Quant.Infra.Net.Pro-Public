@@ -1,13 +1,13 @@
 {
- "generated_utc": "2026-10-21T00:45:00Z",
+ "generated_utc": "2026-10-22T01:59:08Z",
  "run": {
-  "trigger": "schedule",
-  "commit": "bc5ff3baf14c3dc34309afc4e21faa6f1e3cf211",
-  "run_id": "39523047312",
+  "trigger": "workflow_dispatch",
+  "commit": "1ac5dd7611017e0263c7137b1a0f9550a6288c64",
+  "run_id": "39708261036",
   "repository": "memoryfraction/macro-cycle-spectrum"
  },
  "python": "3.14.8",
- "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+ "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
  "libraries": {
   "pandas": "3.0.6",
   "numpy": "2.5.3",
@@ -104,15 +104,15 @@
   },
   {
    "path": "raw/prices_monthly.csv",
-   "sha256": "330dd93db8b650994a3a6f5f98e9c2e2ebbfb6d408e019ac9c598aa56782e7a5",
+   "sha256": "1cce7fd7465c010105880b97fa5ef4852dab739b6559bfd0ebc781d2525c9228",
    "rows": 1187,
-   "bytes": 130482
+   "bytes": 130514
   },
   {
    "path": "raw/spy_daily.csv",
-   "sha256": "bb367003e42f81a818eccddb9edd5fb4bc20e49f24b47d67329094afb33fe177",
-   "rows": 750,
-   "bytes": 21371
+   "sha256": "fe12bf790ca7d441ddc934f3e98bdb4e4f6258a1c72da7b26f1315cce25fe2ae",
+   "rows": 752,
+   "bytes": 21428
   },
   {
    "path": "alfred/CPIAUCSL.csv",
