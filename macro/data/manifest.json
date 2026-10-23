@@ -1,13 +1,13 @@
 {
- "generated_utc": "2026-10-22T01:59:08Z",
+ "generated_utc": "2026-10-23T00:48:33Z",
  "run": {
-  "trigger": "workflow_dispatch",
-  "commit": "1ac5dd7611017e0263c7137b1a0f9550a6288c64",
-  "run_id": "39708261036",
+  "trigger": "schedule",
+  "commit": "eea124f2dde2cc89c3a6aa5f54abec0661fff2bd",
+  "run_id": "39880124777",
   "repository": "memoryfraction/macro-cycle-spectrum"
  },
  "python": "3.14.8",
- "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+ "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
  "libraries": {
   "pandas": "3.0.6",
   "numpy": "2.5.3",
@@ -32,15 +32,15 @@
   },
   {
    "path": "raw/DFF.csv",
-   "sha256": "e1cfddb6d8868bad3687f55bfaf6f072582aeaa102ce73f2fbd8908f4023b5cf",
-   "rows": 26409,
-   "bytes": 418772
+   "sha256": "6e7561049f963da774900591918f4a04729a7e88a33469d6d73abfb151c91f85",
+   "rows": 26411,
+   "bytes": 418804
   },
   {
    "path": "raw/DGS2.csv",
-   "sha256": "3c70795c80563098fc042eaab7977b3f8e4e07b1e70fb6eb02042f400edb6f39",
-   "rows": 12592,
-   "bytes": 201395
+   "sha256": "7bb9b28edee6cc6bd931cb4ff99cfaac91be389a6c697b44d6697156675fc168",
+   "rows": 12594,
+   "bytes": 201427
   },
   {
    "path": "raw/GFDEGDQ188S.csv",
@@ -56,9 +56,9 @@
   },
   {
    "path": "raw/ICSA.csv",
-   "sha256": "c9e3f91557391430a6f42986eb73182d72c9cdf0564211324ff2e848c22106ba",
-   "rows": 3119,
-   "bytes": 62422
+   "sha256": "95c50a2bcdd64adfe2d87b6319cefa1fb80cae1f0f1e5f5367a7c5aa2583a12b",
+   "rows": 3120,
+   "bytes": 62442
   },
   {
    "path": "raw/INDPRO.csv",
@@ -68,9 +68,9 @@
   },
   {
    "path": "raw/NFCI.csv",
-   "sha256": "7c27150f31dd1eff2d0d25be2a097630d1d89e1bb5d43db583107877c577ac81",
-   "rows": 2910,
-   "bytes": 51258
+   "sha256": "f729d43efb3af591dc667ffd0ba4c91780bd8d56bc17fce1b06ca989fec04268",
+   "rows": 2911,
+   "bytes": 51291
   },
   {
    "path": "raw/QUSPAM770A.csv",
@@ -104,15 +104,15 @@
   },
   {
    "path": "raw/prices_monthly.csv",
-   "sha256": "1cce7fd7465c010105880b97fa5ef4852dab739b6559bfd0ebc781d2525c9228",
+   "sha256": "1ce2406af55983dc5b85f166287c525f29900bbd4f99c328a796b2e3fdf9edb2",
    "rows": 1187,
-   "bytes": 130514
+   "bytes": 130491
   },
   {
    "path": "raw/spy_daily.csv",
-   "sha256": "fe12bf790ca7d441ddc934f3e98bdb4e4f6258a1c72da7b26f1315cce25fe2ae",
+   "sha256": "ec30b4e102c302daaf42cb6f91504933d3f21d3d0fd0874551d036a99b688ac6",
    "rows": 752,
-   "bytes": 21428
+   "bytes": 21471
   },
   {
    "path": "alfred/CPIAUCSL.csv",
