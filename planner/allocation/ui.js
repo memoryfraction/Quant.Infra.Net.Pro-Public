@@ -16,7 +16,11 @@
       s1: "1 · Cash first", s2: "2 · Pick a mix", s3: "3 · Household exposure",
       assets: "Total investable assets (USD)", expense: "Yearly spending (USD)",
       age: "Age", salaried: "Steady salary (not living off the portfolio)", withdrawing: "I need to draw living costs from the portfolio", pledge: "Pledge-loan line is set up", novice: "First time investing",
-      region: "Labels", rGen: "Generic", rUS: "US tickers", rTW: "Taiwan tickers",
+      region: "Labels", rGen: "Generic", rUS: "US tickers", rTW: "Taiwan tickers", rCN: "Mainland China tickers",
+      nmCN1: "513100 / 159501 (Nasdaq-100 ETF)", nmCN2: "No direct 2x ETF", nmCN3: "Money-market fund / short bonds",
+      cnLevNote: "Mainland China generally has no matching 2x leveraged ETF — check what your broker actually offers. If you cannot buy one, use a no-leverage mix (703 / 802 / 505).",
+      qsTitle: "Quick start", qsSafe: "No leverage (703)", qsSafer: "More conservative (802)", qsRetired: "I live off my portfolio", qsClassic: "Classic 433",
+      qsHint: "Most readers here prefer a no-leverage mix. Pick one, then adjust the numbers.",
       preset: "Mix (base / 2x / cash)", custom: "Custom", cBase: "Base index", cLev: "2x leveraged", cCash: "Cash / T-bills",
       house: "Property value", stock1x: "1x stocks / base index", stock2x: "2x leveraged ETFs", stock3x: "3x leveraged ETFs", cash: "Cash & T-bills",
       mortSelf: "Home mortgage balance", mortInvest: "Investment-purpose mortgage", creditLoan: "Credit loan balance", creditLineTotal: "Credit line (total)", creditLineUsed: "Credit line (used)",
@@ -47,7 +51,11 @@
       s1: "1 · 先留现金", s2: "2 · 选阵型", s3: "3 · 全家资产曝险",
       assets: "可投资总资产（美元）", expense: "年开销（美元）",
       age: "年龄", salaried: "有稳定工资（不靠组合生活）", withdrawing: "需要从投资组合里拿生活费", pledge: "已开通质押额度", novice: "第一次投资",
-      region: "标的名称", rGen: "通用", rUS: "美股标的", rTW: "台股标的",
+      region: "标的名称", rGen: "通用", rUS: "美股标的", rTW: "台股标的", rCN: "大陆标的",
+      nmCN1: "513100 / 159501（纳指 100 ETF）", nmCN2: "无直接对应的二倍 ETF", nmCN3: "货币基金 / 短债",
+      cnLevNote: "大陆境内一般没有对应的二倍杠杆 ETF，请以你的券商实际可买的为准。买不到的话，请改用无杠杆阵型（703 / 802 / 505）。",
+      qsTitle: "快速开始", qsSafe: "不用杠杆（703）", qsSafer: "更保守（802）", qsRetired: "我靠资产生活（退休）", qsClassic: "经典 433",
+      qsHint: "这里多数读者更偏好不用杠杆的方案。先选一个，再改成自己的数字。",
       preset: "阵型（原型/二倍/现金）", custom: "自定义", cBase: "大盘指数基金", cLev: "二倍杠杆", cCash: "现金/短债",
       house: "房产市值", stock1x: "1 倍股票/大盘指数基金", stock2x: "二倍杠杆 ETF", stock3x: "三倍杠杆 ETF", cash: "现金与短债",
       mortSelf: "自住房贷余额", mortInvest: "投资用途房贷余额", creditLoan: "信贷余额", creditLineTotal: "信贷额度（总）", creditLineUsed: "信贷额度（已用）",
@@ -82,7 +90,7 @@
     { id: "withdrawing", type: "chk", def: false, lbl: "withdrawing" },
     { id: "pledge", type: "chk", def: false, lbl: "pledge" },
     { id: "novice", type: "chk", def: false, lbl: "novice" },
-    { id: "region", type: "sel", def: "US", lbl: "region", opts: [["GEN", "rGen"], ["US", "rUS"], ["TW", "rTW"]] },
+    { id: "region", type: "sel", def: (window.AWLLib && window.AWLLib.guessRegion) ? window.AWLLib.guessRegion(window.navigator && window.navigator.language) : "US", lbl: "region", opts: [["GEN", "rGen"], ["US", "rUS"], ["TW", "rTW"], ["CN", "rCN"]] },
     { id: "preset", type: "sel", def: "433", lbl: "preset", opts: presetOpts },
     { id: "cBase", type: "pct", def: 40, lbl: "cBase", show: function (v) { return v.preset === "custom"; } },
     { id: "cLev", type: "pct", def: 30, lbl: "cLev", show: function (v) { return v.preset === "custom"; } },
@@ -99,6 +107,31 @@
     { id: "creditLineUsed", type: "num", def: 0, lbl: "creditLineUsed" }
   ];
   var ui;
+  // Row labels for the three sleeves. Mainland tickers come from the translated dictionary.
+  function names(v, t) {
+    if (v.region === "CN") return [t.nmCN1, t.nmCN2, t.nmCN3];
+    return NAMES[v.region] || [t.base, t.lev, t.cashL];
+  }
+  function quickStart(t) {
+    var go = function (preset, retired) {
+      return function () {
+        ui.set("preset", preset);
+        if (retired) { ui.set("salaried", false); ui.set("withdrawing", true); }
+      };
+    };
+    var btn = function (label, fn) {
+      var b = h("button", { type: "button", cls: "awl-btn", text: label });
+      b.addEventListener("click", fn);
+      return b;
+    };
+    return A.panel(t.qsTitle, [
+      h("p", { cls: "hint", text: t.qsHint }),
+      h("div", { cls: "awl-actions" }, [
+        btn(t.qsSafe, go("703", false)), btn(t.qsSafer, go("802", false)),
+        btn(t.qsRetired, go("703", true)), btn(t.qsClassic, go("433", false))
+      ])
+    ]);
+  }
   function render(v, t) {
     var zh = document.documentElement.lang !== "en" ? 1 : 0;
     var c = E.cashFloor({ assets: v.assets, annualExpense: v.expense });
@@ -106,8 +139,8 @@
     var sug = E.suggest({ age: v.age, salaried: v.salaried, withdrawing: v.withdrawing, pledge: v.pledge, novice: v.novice });
     var w = v.preset === "custom" ? { base: v.cBase, lev: v.cLev, cash: v.cCash } : E.PRESETS[v.preset];
     if (![w.base, w.lev, w.cash].every(isFinite)) return false;
-    var nm = NAMES[v.region] || [t.base, t.lev, t.cashL];
-    var out = [];
+    var nm = names(v, t);
+    var out = [quickStart(t)];
     var p1 = [A.kpis([[t.kFloor, fmt(c.floor)], [t.kInv, fmt(c.investable)], [t.kSug, sug]])];
     if (c.beginner) p1.push(h("p", { cls: "alert info", text: t.beginner }));
     out.push(A.panel(t.s1, p1));
@@ -126,6 +159,7 @@
       p2.push(A.table(["", t.tW, ""], [
         [nm[0], pct(w.base, 0), fmt(inv * w.base)], [nm[1], pct(w.lev, 0), fmt(inv * w.lev)], [nm[2], pct(w.cash, 0), fmt(inv * w.cash)]
       ]));
+      if (v.region === "CN" && w.lev > 0) p2.push(h("p", { cls: "alert info", text: t.cnLevNote }));
       var rules = E.checkRules({ w: w, age: v.age, salaried: v.salaried, withdrawing: v.withdrawing, pledge: v.pledge });
       p2.push(h("div", null, rules.map(function (r) { return h("div", null, [A.badge(t["r_" + r.code], r.level)]); })));
     }
@@ -149,7 +183,7 @@
     if (!c.ok || !isFinite(v.age)) return [];
     var w = v.preset === "custom" ? { base: v.cBase, lev: v.cLev, cash: v.cCash } : E.PRESETS[v.preset];
     if (![w.base, w.lev, w.cash].every(isFinite) || Math.abs(w.base + w.lev + w.cash - 1) > 0.001) return [];
-    var nm = NAMES[v.region] || [t.base, t.lev, t.cashL];
+    var nm = names(v, t);
     var inv = c.investable;
     var rows = [
       [t.tMix, Math.round(w.base * 100) + " / " + Math.round(w.lev * 100) + " / " + Math.round(w.cash * 100)],

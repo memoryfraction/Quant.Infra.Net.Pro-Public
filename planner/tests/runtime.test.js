@@ -130,7 +130,7 @@ module.exports = function (t) {
         hostname: opts.hostname || "www.alpha-wealth-lab.com",
       },
       navigator: {
-        userAgent: opts.ua || "node-test", language: "zh-CN",
+        userAgent: opts.ua || "node-test", language: opts.language || "zh-CN",
         sendBeacon: () => true,
         globalPrivacyControl: !!opts.gpc,
       },
@@ -505,5 +505,39 @@ module.exports = function (t) {
     const win = bootPage({ lang: "en" });
     const cp = get(win, "copyright");
     t.ok(!!cp && /All rights reserved/.test(cp.textContent), "copyright: line present (en)");
+  }
+
+  // ---- 15. allocation: ticker set follows the browser language, quick-start presets ----
+  {
+    const allText = (w) => get(w, "results").textContent;
+    const cn = bootPage({ tool: "allocation", language: "zh-CN", lang: "zh" });
+    t.eq(get(cn, "region").value, "CN", "allocation: zh-CN browser -> mainland tickers");
+    t.ok(/513100/.test(allText(cn)), "allocation: mainland tickers shown (513100 / 159501)");
+    t.ok(/大陆境内一般没有对应的二倍杠杆/.test(allText(cn)), "allocation: mainland + leverage shows the heads-up note");
+
+    const tw = bootPage({ tool: "allocation", language: "zh-TW", lang: "zh" });
+    t.eq(get(tw, "region").value, "TW", "allocation: zh-TW browser -> Taiwan tickers");
+    t.ok(/00662/.test(allText(tw)), "allocation: Taiwan tickers shown");
+
+    const us = bootPage({ tool: "allocation", language: "en-US", lang: "en" });
+    t.eq(get(us, "region").value, "US", "allocation: English browser -> US tickers");
+    t.ok(/Quick start/.test(allText(us)), "allocation: quick-start panel present (en)");
+    t.ok(/快速开始/.test(allText(cn)), "allocation: quick-start panel present (zh)");
+
+    // clicking the quick-start buttons drives the real inputs
+    const all = [];
+    (function walk(n) { (n.children || []).forEach((x) => { all.push(x); walk(x); }); })(get(cn, "results"));
+    const btn = (label) => all.filter((n) => n.tagName === "BUTTON" && n.textContent === label)[0];
+    const safer = btn("更保守（802）");
+    t.ok(!!safer, "allocation: 802 button exists");
+    if (safer) safer.fire("click");
+    t.eq(get(cn, "preset").value, "802", "allocation: 'more conservative' selects 802");
+    const all2 = [];
+    (function walk(n) { (n.children || []).forEach((x) => { all2.push(x); walk(x); }); })(get(cn, "results"));
+    const retired = all2.filter((n) => n.tagName === "BUTTON" && n.textContent === "我靠资产生活（退休）")[0];
+    if (retired) retired.fire("click");
+    t.eq(get(cn, "preset").value, "703", "allocation: 'I live off my portfolio' selects 703");
+    t.eq(get(cn, "withdrawing").checked, true, "allocation: ... and ticks 'draw living costs from the portfolio'");
+    t.eq(get(cn, "salaried").checked, false, "allocation: ... and clears 'steady salary'");
   }
 };

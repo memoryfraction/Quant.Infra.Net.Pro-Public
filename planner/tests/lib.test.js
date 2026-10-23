@@ -361,4 +361,18 @@ module.exports = function (t) {
     t.eq(L.isSelf(bad), false, "self: unusable storage -> not excluded");
     t.eq(L.getVid(mk({ awl_vid: "abcdef12-0000-4000-8000-000000000001" })).length > 0, true, "self: ordinary storage still yields a vid");
   }
+
+  // ---- default ticker set from the browser language ----
+  {
+    t.eq(L.guessRegion("zh-CN"), "CN", "guessRegion: zh-CN -> CN");
+    t.eq(L.guessRegion("zh"), "CN", "guessRegion: bare zh -> CN");
+    t.eq(L.guessRegion("zh-Hans-CN"), "CN", "guessRegion: zh-Hans -> CN");
+    t.eq(L.guessRegion("zh-SG"), "CN", "guessRegion: zh-SG -> CN");
+    t.eq(L.guessRegion("zh-TW"), "TW", "guessRegion: zh-TW -> TW");
+    t.eq(L.guessRegion("zh-HK"), "TW", "guessRegion: zh-HK -> TW");
+    t.eq(L.guessRegion("zh-Hant"), "TW", "guessRegion: zh-Hant -> TW");
+    t.eq(L.guessRegion("en-US"), "US", "guessRegion: English -> US");
+    t.eq(L.guessRegion(""), "US", "guessRegion: empty -> US");
+    t.eq(L.guessRegion(undefined), "US", "guessRegion: undefined -> US");
+  }
 };

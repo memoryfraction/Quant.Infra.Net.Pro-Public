@@ -427,6 +427,16 @@
     if (typeof window !== "undefined" && window.location && window.localStorage) applySelfParam(window.location.search, window.localStorage);
   } catch (e) { /* never break the page */ }
 
+  // ---- default ticker set from the browser language -------------------------
+  // Simplified Chinese -> mainland tickers, Traditional Chinese -> Taiwan tickers,
+  // anything else -> US tickers. Only a default: the dropdown still lets people switch.
+  function guessRegion(language) {
+    var l = String(language || "").toLowerCase();
+    if (/^zh(-(tw|hk|mo)|-hant)/.test(l)) return "TW";
+    if (/^zh/.test(l)) return "CN";
+    return "US";
+  }
+
   return {
     // constants
     AGE_BANDS: AGE_BANDS, ASSET_BANDS: ASSET_BANDS, GOALS: GOALS, MARKETS: MARKETS,
@@ -435,6 +445,7 @@
     KEYS: { VID: KEY_VID, SID: KEY_SID, LAST: KEY_LAST, PLANS: KEY_PLANS, NOTICE: KEY_NOTICE, PROFILE: KEY_PROFILE },
     // privacy
     gpcOn: gpcOn,
+    guessRegion: guessRegion,
     isSelf: isSelf,
     applySelfParam: applySelfParam,
     copyrightLine: copyrightLine,
