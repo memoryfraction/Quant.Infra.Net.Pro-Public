@@ -120,8 +120,18 @@
     return rows.slice(0, 5);
   }
 
+  function headline(v, t) {
+    var zh = window.SiteLang ? window.SiteLang.get() !== "en" : document.documentElement.lang !== "en";
+    var l = E.ladder({ assets: v.assets, expense: v.expense });
+    if (!l.ok) return "";
+    return zh
+      ? fmt(v.assets) + " 资产、年开销 " + fmt(v.expense) + "：够花 " + fmt(l.multiple, 1) + " 年，提领率 " + pct(l.rate, 2) + "，在「" + t[l.tier] + "」档。"
+      : fmt(v.assets) + " in assets and " + fmt(v.expense) + " a year of spending: " + fmt(l.multiple, 1) + " years of cover, a " + pct(l.rate, 2) + " draw rate — tier: " + t[l.tier] + ".";
+  }
+
   A.mount({
-    I18N: I18N, fields: fields, render: render, summary: summary,
+    I18N: I18N, fields: fields, render: render, summary: summary, headline: headline,
+    pitch: { zh: "退休后每年能安全取多少钱？我用这个工具看了自己在第几档，推荐给快退休的朋友，免费 1 分钟：", en: "How much can you safely withdraw each year in retirement? This tool shows which tier you are on — one for friends nearing retirement. Free, 1 minute:" },
     next: [{ href: "/planner/social-security/", key: "nSS" }],
     after: function () {
       var cv = document.getElementById("seqChart"); if (!cv || !seq) return;

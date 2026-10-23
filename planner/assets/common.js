@@ -29,7 +29,10 @@
       nextTitle: "Next step",
       keepTitle: "Stay in touch",
       saveFail: "Could not save (browser storage is full or blocked)",
-      shareCopy: "Copy link", shareCopied: "Link copied", shareFailed: "Could not copy — select and copy the link below",
+      shareCopy: "Copy link", hlCopy: "Share with a friend", hlImg: "Save a share image", hlTitle: "Your result in one line", hlCopied: "Copied — paste it into a chat",
+      hlCopiedPlan: "Copied — includes your plan and a link that opens it", hlInvite: "Try yours (free, no sign-up):",
+      hlPlan: "Include my plan (amounts and a link that opens my inputs)", hlPlanHint: "Off by default: the message then has only a percentage and a link to the empty tool.",
+      viaPh: "Your name (optional, shown to friends)", viaBadge: "Shared by {name}", viaCard: "Shared by {name}", hlBrand: "Alpha Wealth Lab · alpha-wealth-lab.com", hlNote: "For reference only, not investment advice.", shareCopied: "Link copied", shareFailed: "Could not copy — select and copy the link below",
       shareNative: "Share", shareLinkLabel: "Your link (select all and copy):",
       save: "Save on this device", saved: "Saved on this device",
       saveNote: "Saved in this browser only — to move devices, copy the link.",
@@ -67,7 +70,10 @@
       nextTitle: "下一步",
       keepTitle: "保持联系",
       saveFail: "保存失败（浏览器存储已满或被禁用）",
-      shareCopy: "复制链接", shareCopied: "链接已复制", shareFailed: "复制失败，请手动选择下面的链接复制",
+      shareCopy: "复制链接", hlCopy: "分享给朋友", hlImg: "保存分享图片", hlTitle: "你的结果，一句话", hlCopied: "已复制，可直接粘贴到群里",
+      hlCopiedPlan: "已复制，内含你的配置和能打开它的链接", hlInvite: "你也来测测（免费，不用注册）：",
+      hlPlan: "附上我的配置（含金额，链接会带上我填的数字）", hlPlanHint: "默认关闭：关闭时只发一个百分比和空白工具的链接，不含年龄和金额。",
+      viaPh: "署名（可不填，朋友会看到）", viaBadge: "来自 {name} 的分享", viaCard: "来自 {name} 的分享", hlBrand: "Alpha Wealth Lab · alpha-wealth-lab.com", hlNote: "仅供参考，不构成投资建议。", shareCopied: "链接已复制", shareFailed: "复制失败，请手动选择下面的链接复制",
       shareNative: "分享", shareLinkLabel: "你的链接（全选后复制）：",
       save: "保存到本机", saved: "已保存到本机",
       saveNote: "只保存在这台设备的浏览器里，换设备请复制链接。",
@@ -281,6 +287,129 @@
   }
 
   // ---- result-area UI blocks ---------------------------------------------
+
+  // Free-text sign-off that travels with a shared link (?via=). Letters/digits/space and a few
+  // separators only, 32 chars max — same rule as assets/hit.js, so nothing odd reaches analytics.
+  function cleanVia(s) {
+    var out = String(s == null ? "" : s);
+    try { out = out.replace(/[^\p{L}\p{N} ·\-_']/gu, ""); } catch (e) { out = out.replace(/[^A-Za-z0-9 \-_'\u00b7\u4e00-\u9fff]/g, ""); }
+    return out.replace(/\s+/g, " ").trim().slice(0, 32);
+  }
+  function incomingVia() {
+    try { return cleanVia(new URLSearchParams(window.location.search || "").get("via") || ""); } catch (e) { return ""; }
+  }
+
+  // One plain-language sentence about the result, then one-click sharing. By default the shared
+  // message carries only a percentage (cfg.shareLine) and a link to the empty tool; ticking
+  // "include my plan" sends the full sentence and a link that re-opens the sender's inputs.
+  function headlineBlock(slug, v, t, cfg, state) {
+    var text = "";
+    try { text = typeof cfg.headline === "function" ? String(cfg.headline(v, t) || "") : ""; } catch (e) { text = ""; }
+    if (!text) return null;
+    var card = h("section", { cls: "awl-headline" });
+    var from = incomingVia();
+    if (from) card.appendChild(h("div", { cls: "awl-via", text: t.viaBadge.replace("{name}", from) }));
+    card.appendChild(h("div", { cls: "awl-hl-k", text: t.hlTitle }));
+    card.appendChild(h("p", { cls: "awl-hl-t", text: text }));
+
+    var opts = state.shareOpts;
+    var pitchOf = cfg.pitch && cfg.pitch[state.lang()];
+    var pitchTxt = pitchOf || t.subtitle || t.title;
+    var shortLine = "";
+    try { shortLine = typeof cfg.shareLine === "function" ? String(cfg.shareLine(v, t) || "") : ""; } catch (e) { shortLine = ""; }
+    var via = function () { return cleanVia(opts.via); };
+    var url = function () { return state.shareUrl(opts.plan ? state.buildState(v, cfg) : "", via()); };
+    var lead = function () { return opts.plan ? text : (shortLine ? shortLine + " " + t.hlInvite : pitchTxt); };
+    var msg = function () { return lead() + "\n" + url(); };
+
+    var row = h("div", { cls: "awl-actions" });
+    var bCopy = h("button", { type: "button", cls: "awl-btn primary", text: t.hlCopy });
+    bCopy.addEventListener("click", function () {
+      copyText(msg(), function () { toast(opts.plan ? t.hlCopiedPlan : t.hlCopied); track("share"); }, function () { toast(t.shareFailed); });
+    });
+    row.appendChild(bCopy);
+    if (window.navigator.share) {
+      var bShare = h("button", { type: "button", cls: "awl-btn", text: t.shareNative });
+      bShare.addEventListener("click", function () {
+        try { window.navigator.share({ title: t.title, text: lead(), url: url() }).then(function () { track("share"); }, function () {}); } catch (e) { /* silent */ }
+      });
+      row.appendChild(bShare);
+    }
+    var bImg = h("button", { type: "button", cls: "awl-btn", text: t.hlImg });
+    bImg.addEventListener("click", function () {
+      var by = via() ? t.viaCard.replace("{name}", via()) : "";
+      if (saveCard(lead(), url(), by, t, slug)) track("share"); else toast(t.shareFailed);
+    });
+    row.appendChild(bImg);
+    card.appendChild(row);
+
+    // optional sign-off + opt-in to share the plan itself
+    var viaIn = h("input", { type: "text", cls: "awl-via-in", maxlength: "32", placeholder: t.viaPh, "aria-label": t.viaPh });
+    viaIn.value = opts.via || "";
+    viaIn.addEventListener("input", function () {
+      opts.via = viaIn.value;
+      try { if (state.store) state.store.setItem("awl_via", cleanVia(viaIn.value)); } catch (e) { /* ignore */ }
+    });
+    var chk = h("input", { type: "checkbox", cls: "awl-plan-chk" });
+    chk.checked = !!opts.plan;
+    chk.addEventListener("change", function () { opts.plan = chk.checked; });
+    card.appendChild(h("div", { cls: "awl-share-opts" }, [
+      viaIn,
+      h("label", { cls: "awl-plan-lab" }, [chk, h("span", { text: " " + t.hlPlan })]),
+      h("p", { cls: "awl-hint", text: t.hlPlanHint })
+    ]));
+    return card;
+  }
+
+  function wrapLines(ctx, text, maxW) {
+    var out = [], line = "";
+    String(text).split("").forEach(function (ch) {
+      if (ch === "\n") { out.push(line); line = ""; return; }
+      if (ctx.measureText(line + ch).width > maxW && line) { out.push(line); line = ch; } else line += ch;
+    });
+    if (line) out.push(line);
+    return out;
+  }
+  // Draw the sentence + QR of the share link on a canvas (no external assets) and download a PNG.
+  function saveCard(text, link, by, t, slug) {
+    try {
+      var W = 900, pad = 60, qrBox = 220, cv = document.createElement("canvas");
+      var ctx = cv.getContext("2d");
+      if (!ctx) return false;
+      var font = '"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif';
+      ctx.font = "38px " + font;
+      var lines = wrapLines(ctx, text, W - pad * 2);
+      var H = pad * 2 + 90 + lines.length * 58 + qrBox + 40;
+      cv.width = W; cv.height = H;
+      ctx = cv.getContext("2d");
+      ctx.fillStyle = "#F7F4EC"; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = "#0F5C55"; ctx.fillRect(0, 0, W, 14);
+      ctx.fillStyle = "#0F5C55"; ctx.font = "bold 30px " + font; ctx.textBaseline = "top";
+      ctx.fillText(t.title, pad, pad);
+      ctx.fillStyle = "#1B1B1B"; ctx.font = "38px " + font;
+      lines.forEach(function (l, i) { ctx.fillText(l, pad, pad + 90 + i * 58); });
+      var top = pad + 90 + lines.length * 58 + 40;
+      // QR (skipped silently if the encoder is missing)
+      if (window.AWLQR) {
+        var q = window.AWLQR.encode(link), quiet = 2, scale = Math.floor(qrBox / (q.size + quiet * 2));
+        var side = scale * (q.size + quiet * 2), qx = W - pad - side;
+        ctx.fillStyle = "#FFFFFF"; ctx.fillRect(qx, top, side, side);
+        ctx.fillStyle = "#000000";
+        for (var y = 0; y < q.size; y++) for (var x = 0; x < q.size; x++) if (q.at(x, y)) ctx.fillRect(qx + (x + quiet) * scale, top + (y + quiet) * scale, scale, scale);
+      }
+      ctx.fillStyle = "#0F5C55"; ctx.font = "bold 28px " + font;
+      ctx.fillText(link.replace(/^https?:\/\//, "").replace(/[?#].*$/, ""), pad, top);
+      ctx.fillStyle = "#6B6B6B"; ctx.font = "26px " + font;
+      if (by) ctx.fillText(by, pad, top + 44);
+      ctx.fillText(t.hlBrand, pad, top + 88);
+      ctx.fillText(t.hlNote, pad, top + 132);
+      var a = document.createElement("a");
+      a.href = cv.toDataURL("image/png");
+      a.download = "alpha-wealth-lab-" + slug + ".png";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      return true;
+    } catch (e) { return false; }
+  }
 
   // (a) share + (b) save, rendered once under the results.
   function shareBlock(slug, v, t, cfg, state) {
@@ -758,9 +887,11 @@
       vid: function () { return L ? L.getVid(localStore) : ""; },
       sid: function () { return L ? L.getSid(sessStore) : ""; },
       buildState: buildState,
-      shareUrl: function (s) {
+      shareOpts: { plan: false, via: "" },
+      shareUrl: function (s, via) {
         var base = window.location.origin + window.location.pathname;
-        return s ? base + "?s=" + s + "&from=share" : base + "?from=share";
+        var u = s ? base + "?s=" + s + "&from=share" : base + "?from=share";
+        return via ? u + "&via=" + encodeURIComponent(via) : u;
       },
       applyState: function (s) { applyState(s); },
       lastV: function () { return lastV; },
@@ -769,6 +900,7 @@
       cfgRef: { cfg: cfg }
     };
     var lastV = null;
+    try { state.shareOpts.via = cleanVia(localStore ? localStore.getItem("awl_via") : ""); } catch (e) { state.shareOpts.via = ""; }
     var reporter = makeReporter(slug, cfg, state, function () { return userTouched; });
     var keepEl = null, zhCache = null, profileEls = {}, proEls = {};
     var bannerEl = null;
@@ -866,6 +998,7 @@
         if (f.type === "sel") Array.prototype.forEach.call(r.ctl.options, function (o, i) { o.textContent = t[f.opts[i][1]] || f.opts[i][1]; });
       });
     }
+    function userHeadline(t, v) { return headlineBlock(slug, v, t, cfg, state); }
     function paint() {
       var t = T(), v = read(), ok = true;
       cfg.fields.forEach(function (f) { if (f.show) refs[f.id].box.hidden = !f.show(v); });
@@ -873,7 +1006,11 @@
       try { out = cfg.render(v, t); } catch (e) { out = false; if (window.console) console.warn(e); }
       resultsEl.textContent = "";
       if (!out) { ok = false; resultsEl.appendChild(h("p", { cls: "err", text: t.invalid })); }
-      else out.forEach(function (n) { resultsEl.appendChild(n); });
+      else {
+        var hlEl = userHeadline(t, v);
+        if (hlEl) resultsEl.appendChild(hlEl);
+        out.forEach(function (n) { resultsEl.appendChild(n); });
+      }
       var m = document.getElementById("method");
       m.textContent = "";
       (t.method || []).forEach(function (l) { m.appendChild(l.charAt(0) === "•" ? h("p", { cls: "note", text: l.slice(1).trim() }) : h("div", { cls: "formula", text: l })); });

@@ -84,8 +84,21 @@
     return rows.slice(0, 5);
   }
 
+  function headline(v, t) {
+    var zh = window.SiteLang ? window.SiteLang.get() !== "en" : document.documentElement.lang !== "en";
+    if (![v.birth, v.pia, v.life].every(isFinite) || v.birth < 1900 || v.birth > 2100 || v.pia <= 0) return "";
+    var fra = E.fraMonths(Math.floor(v.birth));
+    var fraTxt = t.ym.replace("{y}", Math.floor(fra / 12)).replace("{m}", fra % 12);
+    var a = Number(v.cA), c = Number(v.cC);
+    var fa = E.factor(a * 12, fra), fc = E.factor(c * 12, fra);
+    return zh
+      ? v.birth + " 年出生，完全退休年龄 " + fraTxt + "；" + a + " 岁领每月 " + fmt(v.pia * fa) + "，" + c + " 岁领每月 " + fmt(v.pia * fc) + "。"
+      : "Born " + v.birth + ", full retirement age " + fraTxt + ": claiming at " + a + " pays " + fmt(v.pia * fa) + "/month, at " + c + " pays " + fmt(v.pia * fc) + "/month.";
+  }
+
   A.mount({
-    I18N: I18N, fields: fields, render: render, summary: summary,
+    I18N: I18N, fields: fields, render: render, summary: summary, headline: headline,
+    pitch: { zh: "美国社安金到底几岁领最划算？这个工具把 62、67、70 岁的差别摆给你看，免费：", en: "What is the best age to claim US Social Security? This tool lays out 62 vs 67 vs 70 side by side. Free:" },
     next: [{ href: "/planner/withdrawal/", key: "nWithdraw" }],
     after: function () {
       var c = document.getElementById("ssChart"); if (!c || !cv) return;

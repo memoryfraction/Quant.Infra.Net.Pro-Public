@@ -120,8 +120,25 @@
     return rows.slice(0, 5);
   }
 
+  function headline(v, t) {
+    var zh = window.SiteLang ? window.SiteLang.get() !== "en" : document.documentElement.lang !== "en";
+    var target = v.preset === "custom" ? { base: v.cBase, lev: v.cLev, cash: v.cCash } : AE.PRESETS[v.preset];
+    if (!target || ![target.base, target.lev, target.cash].every(isFinite)) return "";
+    if (![v.base, v.lev, v.cash, v.levStart, v.levNew, v.lock, v.down].every(isFinite)) return "";
+    var s = E.smart({ p: { base: v.base, lev: v.lev, cash: v.cash }, levStart: v.levStart, levNew: v.levNew, lockRatio: v.lock, downRate: v.down, pledged: v.pledged, initialTotal: v.initial });
+    if (!s.ok) return "";
+    var nm = NAMES[v.region] || [t.tBase, t.tLev, t.tCash];
+    var act;
+    if (!s.action) act = t.doNone;
+    else if (s.type === "up") act = t.doUp.replace("{a}", fmt(s.action.amount)).replace("{from}", nm[1]).replace("{to}", nm[2]);
+    else act = t.doDown.replace("{a}", fmt(s.action.amount)).replace("{to_}", nm[2]).replace("{lev}", nm[1]);
+    var ty = { up: t.up, down: t.downY, flat: t.flat }[s.type];
+    return zh ? "今年是" + ty + "，" + act + "。" : "This is an " + ty.toLowerCase() + ": " + act.charAt(0).toLowerCase() + act.slice(1) + ".";
+  }
+
   A.mount({
-    I18N: I18N, fields: fields, render: render, summary: summary,
+    I18N: I18N, fields: fields, render: render, summary: summary, headline: headline,
+    pitch: { zh: "玩杠杆 ETF 的：今年到底该卖哪个、买哪个、各多少？这个再平衡工具直接给答案，免费：", en: "Holding leveraged ETFs? This rebalancing tool tells you what to sell and buy this year, and how much. Free:" },
     next: [{ href: "/planner/withdrawal/", key: "nWithdraw" }]
   });
 })();

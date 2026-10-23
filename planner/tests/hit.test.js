@@ -162,6 +162,21 @@ module.exports = function (t) {
     t.ok(!("junk" in b), "hit: unknown query params dropped");
   }
 
+  // ---- 2b. ?via= sign-off from a shared link --------------------------------
+  {
+    const ok = parse(api(boot({ search: "?from=share&via=Rex" }))[0]);
+    t.eq(ok.via, "Rex", "hit: via sign-off is reported");
+    t.eq(ok.c, "share", "hit: from=share still reported next to via");
+    const zh = parse(api(boot({ search: "?via=" + encodeURIComponent("小明 · A") }))[0]);
+    t.eq(zh.via, "小明 · A", "hit: unicode sign-off allowed");
+    const dirty = parse(api(boot({ search: "?via=" + encodeURIComponent("<script>alert(1)</script>") }))[0]);
+    t.ok(!("via" in dirty), "hit: dirty via dropped whole");
+    const long = parse(api(boot({ search: "?via=" + "a".repeat(33) }))[0]);
+    t.ok(!("via" in long), "hit: over-long via dropped");
+    const none = parse(api(boot({ search: "?from=share" }))[0]);
+    t.ok(!("via" in none), "hit: no via when the URL has none");
+  }
+
   // ---- 3. dirty params are dropped, not sent ----------------------------
   {
     const win = boot({ search: "?utm_source=" + encodeURIComponent("<script>alert(1)</script>") + "&from=hack" });

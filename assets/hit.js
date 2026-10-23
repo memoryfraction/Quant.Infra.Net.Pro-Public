@@ -103,6 +103,15 @@
       return ["card", "share", "wechat", "email", "join"].indexOf(v) >= 0 ? v : "";
     } catch (e) { return ""; }
   }
+  // ?via=<sign-off> from a shared link: letters/digits/space and · - _ ' only, 32 max.
+  // A value with anything else is dropped whole rather than "cleaned" into something misleading.
+  function viaOf(search) {
+    try {
+      var v = new URLSearchParams(search || "").get("via") || "";
+      if (!v || v.length > 32) return "";
+      return /^[\p{L}\p{N} ·\-_']+$/u.test(v) ? v.trim() : "";
+    } catch (e) { return ""; }
+  }
   function blang(nav) {
     return clean(String((nav && nav.language) || ""), 12, "A-Za-z0-9-");
   }
@@ -252,6 +261,7 @@
       if (u.um) b.um = u.um;
       if (u.uc) b.uc = u.uc;
       var c = h.campaign(); if (c) b.c = c;
+      var via = viaOf(location.search); if (via) b.via = via;
       var w = window.innerWidth;
       if (isFinite(w) && w >= 0 && w <= 10000) b.vw = Math.round(w);
       var bl = blang(window.navigator); if (bl) b.bl = bl;

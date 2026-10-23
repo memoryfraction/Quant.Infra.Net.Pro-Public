@@ -361,4 +361,16 @@ module.exports = function (t) {
     t.ok(/protected by copyright \(see the LICENSE file\)/.test(terms), "terms: en IP clause");
     t.ok(/受版权保护（见仓库中的 LICENSE 文件）/.test(terms), "terms: zh IP clause");
   }
+
+  // ------------------------------------------------------------------ tool pages load qr.js before common.js
+  {
+    ["fi", "allocation", "margin", "rebalance", "withdrawal", "mortgage", "social-security"].forEach((tool) => {
+      const html = read("planner/" + tool + "/index.html");
+      const qi = html.indexOf("/planner/assets/qr.js"), ci = html.indexOf("/planner/assets/common.js");
+      t.ok(qi > 0 && ci > qi, "tool page loads qr.js before common.js: " + tool);
+    });
+    const alloc = read("planner/allocation/index.html");
+    t.ok(alloc.indexOf("/planner/allocation/regime.js") > alloc.indexOf("/planner/allocation/engine.js") &&
+      alloc.indexOf("/planner/allocation/regime.js") < alloc.indexOf("/planner/allocation/ui.js"), "allocation: regime.js between engine.js and ui.js");
+  }
 };

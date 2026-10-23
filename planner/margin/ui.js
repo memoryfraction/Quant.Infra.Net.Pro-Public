@@ -136,8 +136,20 @@
     return rows.slice(0, 5);
   }
 
+  function headline(v, t) {
+    var zh = window.SiteLang ? window.SiteLang.get() !== "en" : document.documentElement.lang !== "en";
+    if (![v.collateral, v.loan, v.renew, v.warn, v.call].every(isFinite) || v.collateral <= 0 || v.loan < 0) return "";
+    var cur = E.current({ collateral: v.collateral, loan: v.loan, th: { renew: v.renew, warn: v.warn, call: v.call } });
+    if (cur.status === "no_loan") return zh ? "没有借款，不存在被追缴的风险。" : "No loan, so no margin-call risk.";
+    var below = function (d) { return d < 0 ? t.already : pct(d, 1); };
+    return zh
+      ? "借 " + fmt(v.loan) + "、担保品 " + fmt(v.collateral) + "：维持率 " + pct(cur.ratio, 0) + "（" + t[cur.status] + "）；再跌 " + below(cur.dWarn) + " 触及警示线，跌 " + below(cur.dCall) + " 被断头。"
+      : "Borrowing " + fmt(v.loan) + " against " + fmt(v.collateral) + ": ratio " + pct(cur.ratio, 0) + " (" + t[cur.status] + "); a further fall of " + below(cur.dWarn) + " hits the warning line, " + below(cur.dCall) + " the margin call.";
+  }
+
   A.mount({
-    I18N: I18N, fields: fields, render: render, summary: summary,
+    I18N: I18N, fields: fields, render: render, summary: summary, headline: headline,
+    pitch: { zh: "做股票质押借款的注意：大盘跌多少你会被追缴？这个工具一算就知道，借钱的都该看一眼，免费：", en: "Borrowing against stock? Find out how far the market can fall before you get a margin call. Free and quick:" },
     next: [{ href: "/planner/rebalance/", key: "nRebal" }],
     after: function () {
       var cv = document.getElementById("projChart"); if (!cv || !lastProj) return;

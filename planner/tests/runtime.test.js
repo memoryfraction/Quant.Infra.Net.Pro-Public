@@ -212,6 +212,8 @@ module.exports = function (t) {
     if (tool === "rebalance") run(path.join(ROOT, "allocation", "engine.js"));
     const eng = path.join(ROOT, tool, "engine.js");
     if (fs.existsSync(eng)) run(eng);
+    run(path.join(ROOT, "assets", "qr.js"));         // AWLQR (optional in prod)
+    if (tool === "allocation") run(path.join(ROOT, "allocation", "regime.js"));
     run(path.join(ROOT, tool, "ui.js"));
     return win;
   }
@@ -539,5 +541,87 @@ module.exports = function (t) {
     t.eq(get(cn, "preset").value, "703", "allocation: 'I live off my portfolio' selects 703");
     t.eq(get(cn, "withdrawing").checked, true, "allocation: ... and ticks 'draw living costs from the portfolio'");
     t.eq(get(cn, "salaried").checked, false, "allocation: ... and clears 'steady salary'");
+  }
+
+  // ---- 16. every tool leads with a one-line result that can be shared as "sentence + link" ----
+  {
+    const findAll = (node, cls, acc) => {
+      if (String(node.className || "").split(/\s+/).indexOf(cls) >= 0) acc.push(node);
+      node.children.forEach((x) => findAll(x, cls, acc));
+      return acc;
+    };
+    ["fi", "allocation", "margin", "rebalance", "withdrawal", "mortgage", "social-security"].forEach((tool) => {
+      ["zh", "en"].forEach((lang) => {
+        const win = bootPage({ tool, lang, language: lang === "zh" ? "zh-CN" : "en-US" });
+        const results = get(win, "results");
+        const card = findAll(results, "awl-headline", [])[0];
+        t.ok(!!card, "headline: " + tool + "/" + lang + " has a result card");
+        if (!card) return;
+        const sentence = findAll(card, "awl-hl-t", [])[0].textContent;
+        t.ok(sentence.length > 15 && /\d/.test(sentence), "headline: " + tool + "/" + lang + " sentence has numbers");
+        t.ok(!/NaN|undefined|Infinity/.test(sentence), "headline: " + tool + "/" + lang + " sentence is clean");
+        if (lang === "zh") t.ok(/[一-鿿]/.test(sentence), "headline: " + tool + " zh sentence is Chinese");
+        else t.ok(!/[一-鿿]/.test(sentence), "headline: " + tool + " en sentence has no Chinese");
+        if (tool === "fi" && lang === "zh") {
+          let copied = "";
+          win.navigator.clipboard = { writeText: (x) => { copied = x; return Promise.resolve(); } };
+          const btn = card.children.find((n) => /awl-actions/.test(n.attrs && n.attrs.cls || "")).children[0];
+          btn.fire("click");
+          t.ok(/财务自由/.test(copied) && /from=share/.test(copied), "headline: copy shares the tool pitch + a link");
+          t.ok(copied.indexOf(sentence) < 0 && !/\?s=/.test(copied) && !/\d{4,}/.test(copied.split("\n")[0]), "headline: nothing personal (no result sentence, no ?s= state, no figures) is shared");
+          t.ok(copied.indexOf("\n") > 0, "headline: sentence and link are on separate lines");
+        }
+        if (tool === "allocation" && lang === "zh") t.ok(/压力测试/.test(sentence) && /互联网泡沫|金融危机|新冠|加息/.test(sentence) && /\d+%/.test(sentence), "headline: allocation names the worst real bear market and a loss");
+      });
+    });
+  }
+
+  // ---- 17. sharing: tool-only by default, own plan only when ticked, sign-off, QR, incoming badge ----
+  {
+    const findAll = (node, pred, acc) => { if (pred(node)) acc.push(node); node.children.forEach((x) => findAll(x, pred, acc)); return acc; };
+    const byCls = (cls) => (n) => String(n.className || "").split(/\s+/).indexOf(cls) >= 0;
+    const boot = (opts) => {
+      const win = bootPage(Object.assign({ tool: "allocation", lang: "zh", language: "zh-CN" }, opts || {}));
+      let copied = "";
+      win.navigator.clipboard = { writeText: (x) => { copied = x; return Promise.resolve(); } };
+      const card = findAll(get(win, "results"), byCls("awl-headline"), [])[0];
+      const click = () => findAll(card, (n) => n.tagName === "BUTTON" && /分享给朋友|Share with a friend/.test(n.textContent), [])[0].fire("click");
+      return { win, card, click, copied: () => copied };
+    };
+
+    // default: percentage line + invite + clean link; no ages, no amounts, no ?s=
+    const d = boot();
+    d.click();
+    const msg = d.copied(), first = msg.split(String.fromCharCode(10))[0];
+    t.ok(/约亏 \d+%/.test(first) && /你也来测测/.test(first), "share: default message is one percentage and an invite");
+    t.ok(!/\?s=/.test(msg) && /from=share/.test(msg), "share: default link has no ?s= plan state");
+    t.ok(!/1,000,000|50,000|40 岁/.test(msg), "share: default message has no amounts or age");
+
+    // opt in: full sentence + link that re-opens the inputs
+    const p = boot();
+    const chk = findAll(p.card, byCls("awl-plan-chk"), [])[0];
+    chk.checked = true; chk.fire("change");
+    p.click();
+    t.ok(/1,000,000/.test(p.copied()) && /40 岁/.test(p.copied()), "share: ticking 'include my plan' sends the full sentence");
+    t.ok(/\?s=[A-Za-z0-9_-]+&from=share/.test(p.copied()), "share: ... and a link carrying the plan");
+
+    // sign-off lands in the link, sanitised
+    const v = boot();
+    const inp = findAll(v.card, byCls("awl-via-in"), [])[0];
+    inp.value = "Rex <b>"; inp.fire("input");
+    v.click();
+    t.ok(/&via=Rex%20b$/.test(v.copied()), "share: sign-off is sanitised and URL-encoded in the link (" + v.copied().split(String.fromCharCode(10))[1] + ")");
+
+    // recipient sees the badge
+    const r = boot({ search: "?from=share&via=Rex" });
+    const badge = findAll(r.card, byCls("awl-via"), [])[0];
+    t.ok(!!badge && /来自 Rex 的分享/.test(badge.textContent), "share: recipient sees 'shared by Rex'");
+    t.ok(findAll(boot().card, byCls("awl-via"), []).length === 0, "share: no badge when there is no via");
+    const en = boot({ lang: "en", language: "en-US", search: "?via=Rex" });
+    t.ok(/Shared by Rex/.test(findAll(en.card, byCls("awl-via"), [])[0].textContent), "share: badge in English");
+
+    // image card draws (with and without the QR encoder) without throwing
+    const withQr = bootPage({ tool: "allocation", lang: "zh" });
+    t.ok(!!withQr.AWLQR && typeof withQr.AWLQR.encode === "function", "share: AWLQR is available to the page");
   }
 };

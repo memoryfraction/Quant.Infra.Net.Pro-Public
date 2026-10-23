@@ -109,3 +109,10 @@ a.card:hover,a.card:focus-visible{border-color:var(--teal);box-shadow:0 2px 10px
 /* WeChat "add to Favorites" tip */
 .awl-wxfav{margin-top:10px;padding:10px 12px;border:1px dashed var(--teal);border-radius:8px;background:var(--teal-soft)}
 .awl-wxfav .awl-hint{margin:0 0 6px;color:var(--ink)}
+.awl-headline{margin:0 0 14px;padding:14px 16px;border:1px solid var(--line,#d9d4c5);border-left:5px solid #0F5C55;border-radius:10px;background:var(--card,#fff)}
+.awl-hl-k{font-size:.8rem;letter-spacing:.04em;color:#0F5C55;font-weight:700;margin-bottom:4px}
+.awl-hl-t{margin:0 0 10px;font-size:1.08rem;line-height:1.6;font-weight:600}
+.awl-via{display:inline-block;margin:0 0 8px;padding:3px 10px;border-radius:999px;background:#0F5C55;color:#fff;font-size:.82rem;font-weight:600}
+.awl-share-opts{margin-top:10px;display:grid;gap:8px}
+.awl-via-in{max-width:320px;padding:7px 10px;border:1px solid var(--line,#d9d4c5);border-radius:8px;font:inherit}
+.awl-plan-lab{font-size:.9rem;display:flex;gap:6px;align-items:flex-start}

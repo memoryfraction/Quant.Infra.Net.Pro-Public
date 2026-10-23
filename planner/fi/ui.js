@@ -114,8 +114,29 @@
     return rows.slice(0, 5);
   }
 
+  // One plain-language sentence for the share card.
+  function headline(v, t) {
+    var zh = window.SiteLang ? window.SiteLang.get() !== "en" : document.documentElement.lang !== "en";
+    var now = v.mode === "now";
+    var years = now ? 0 : v.years, rep = now ? 1 : v.replace, other = now ? 0 : v.otherF;
+    var ta = E.targetAssets({ expenseNow: v.expenseNow, inflation: v.inflation, years: years, replaceRatio: rep, rentNow: v.rentNow, otherPassiveFuture: other, swr: v.swr });
+    if (!ta.ok || !isFinite(v.current) || !isFinite(v.r)) return "";
+    var gp = E.gap({ F: ta.F, current: v.current, r: v.r, years: years });
+    var y = E.yearsToFI({ s: v.s, g: v.g, w: v.w, a0: v.a0 });
+    var yrs = y.ok ? (y.years === null ? null : fmt(y.years, 1)) : null;
+    if (zh) {
+      var a = now ? "按现在的开销，财务自由需要 " + fmt(ta.F) + " 的金融资产" : years + " 年后退休，需要 " + fmt(ta.F) + " 的金融资产";
+      var b = gp.D <= 0 ? "，你现有的资产已经够了" : (now ? "，还差 " + fmt(gp.D) : "，每年要投入 " + fmt(E.yearlyNeeded({ D: gp.D, r: v.r, years: years })) + "（按年化 " + pct(v.r, 1) + "）");
+      return a + b + "。" + (yrs ? "按 " + pct(v.s, 0) + " 的储蓄率，约还要工作 " + yrs + " 年。" : "");
+    }
+    var a2 = now ? "At today's spending you need " + fmt(ta.F) + " in financial assets" : "To retire in " + years + " years you need " + fmt(ta.F) + " in financial assets";
+    var b2 = gp.D <= 0 ? " — what you have already covers it" : (now ? ", a gap of " + fmt(gp.D) : ", investing " + fmt(E.yearlyNeeded({ D: gp.D, r: v.r, years: years })) + " a year (at " + pct(v.r, 1) + " return)");
+    return a2 + b2 + "." + (yrs ? " At a " + pct(v.s, 0) + " savings rate that is about " + yrs + " more years of work." : "");
+  }
+
   A.mount({
-    I18N: I18N, fields: fields, render: render, summary: summary,
+    I18N: I18N, fields: fields, render: render, summary: summary, headline: headline,
+    pitch: { zh: "我刚测了下自己离财务自由还差多少、还要干几年，结果有点扎心。你也测一下，1 分钟，免费不用注册：", en: "I just checked how far I am from financial freedom and how many more years I have to work — sobering. Try yours, free, 1 minute, no sign-up:" },
     next: [{ href: "/planner/allocation/", key: "nAlloc" }]
   });
 })();

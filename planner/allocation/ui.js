@@ -13,7 +13,9 @@
     en: {
       title: "433 Allocation & Beta Check",
       subtitle: "Split your money between an index fund, a 2x leveraged ETF and cash. See the portfolio's beta (how many times as volatile as the market) and whether the split follows sensible cash and leverage rules.",
-      s1: "1 · Cash first", s2: "2 · Pick a mix", s3: "3 · Household exposure",
+      s1: "1 · Cash first", s2: "2 · Pick a mix", s3: "3 · Household exposure", s4: "4 · Stress test: past bear markets",
+      stWin: "Bear market", stSpx: "S&P 500", stNdx: "Nasdaq-100", stLossSpx: "Your mix (S&P basis)", stLossNdx: "Your mix (Nasdaq basis)",
+      stNote: "Peak-to-trough moves of index closing prices (price return). 2x funds are approximated as twice the move, floored at -100%; real 2x ETFs reset daily and usually lose more. Nasdaq 2007–09 is approximate. Sources: dqydj.com, shibui.finance.",
       assets: "Total investable assets (USD)", expense: "Yearly spending (USD)",
       age: "Age", salaried: "Steady salary (not living off the portfolio)", withdrawing: "I need to draw living costs from the portfolio", pledge: "Pledge-loan line is set up", novice: "First time investing",
       region: "Labels", rGen: "Generic", rUS: "US tickers", rTW: "Taiwan tickers", rCN: "Mainland China tickers",
@@ -48,7 +50,9 @@
     zh: {
       title: "433 配置与 Beta 体检",
       subtitle: "把资金分配到「大盘指数基金、二倍杠杆 ETF、现金」三类资产里，算出组合的 Beta（波动相当于大盘的几倍），并检查现金和杠杆比例是否合理。",
-      s1: "1 · 先留现金", s2: "2 · 选阵型", s3: "3 · 全家资产曝险",
+      s1: "1 · 先留现金", s2: "2 · 选阵型", s3: "3 · 全家资产曝险", s4: "4 · 压力测试：重演历史熊市",
+      stWin: "熊市", stSpx: "标普 500", stNdx: "纳指 100", stLossSpx: "你的组合（标普口径）", stLossNdx: "你的组合（纳指口径）",
+      stNote: "指数收盘价从高点到低点的跌幅（价格口径，不含股息）。二倍 ETF 按两倍跌幅近似、最多亏 100%；真实的二倍 ETF 每天重置，通常亏得更多。纳指 2007–09 数据为近似值。来源：dqydj.com、shibui.finance。",
       assets: "可投资总资产（美元）", expense: "年开销（美元）",
       age: "年龄", salaried: "有稳定工资（不靠组合生活）", withdrawing: "需要从投资组合里拿生活费", pledge: "已开通质押额度", novice: "第一次投资",
       region: "标的名称", rGen: "通用", rUS: "美股标的", rTW: "台股标的", rCN: "大陆标的",
@@ -175,6 +179,7 @@
     e.flags.forEach(function (f) { p3.push(A.badge(t["f_" + f], "warn")); });
     p3.push(A.note(t.exNote));
     out.push(A.panel(t.s3, p3));
+    if (sumOk) out.push(stressPanel(w, c.investable, t, zh));
     return out;
   }
   // Compact summary for the share link / saved plan / /api/calc report (<=5 rows).
@@ -194,8 +199,61 @@
     return rows.slice(0, 5);
   }
 
+  // ---- stress test against four real bear markets (data and caveats live in regime.js) ----
+  function pctText(x) { return (x * 100).toFixed(0) + "%"; }
+  function stressPanel(w, inv, t, zh) {
+    var R = window.AllocRegime;
+    if (!R) return A.panel(t.s4, []);
+    var rows = R.WINDOWS.map(function (win) {
+      var a = R.simulate(w, inv, win.spxDrop), n = R.simulate(w, inv, win.ndxDrop);
+      return [
+        (zh ? win.label.zh : win.label.en) + "\n" + win.period,
+        pctText(win.spxDrop), pctText(win.ndxDrop) + (win.ndxApprox ? "≈" : ""),
+        fmt(Math.abs(a.amount)) + " (" + pctText(a.rate) + ")",
+        fmt(Math.abs(n.amount)) + " (" + pctText(n.rate) + ")"
+      ];
+    });
+    return A.panel(t.s4, [A.table([t.stWin, t.stSpx, t.stNdx, t.stLossSpx, t.stLossNdx], rows), A.note(t.stNote)]);
+  }
+  function stressCtx(v) {
+    var c = E.cashFloor({ assets: v.assets, annualExpense: v.expense });
+    if (!c.ok || !isFinite(v.age) || !window.AllocRegime) return null;
+    var w = v.preset === "custom" ? { base: v.cBase, lev: v.cLev, cash: v.cCash } : E.PRESETS[v.preset];
+    if (![w.base, w.lev, w.cash].every(isFinite) || Math.abs(w.base + w.lev + w.cash - 1) > 0.001) return null;
+    // US tickers -> Nasdaq-100 basis (QQQ-style); everything else -> S&P 500.
+    var series = v.region === "US" ? "ndx" : "spx";
+    return { c: c, w: w, series: series, worst: window.AllocRegime.worst(w, c.investable, series) };
+  }
+  function isZh() { return window.SiteLang ? window.SiteLang.get() !== "en" : document.documentElement.lang !== "en"; }
+  function basisName(series, zh) { return series === "ndx" ? (zh ? "纳指 100 口径" : "Nasdaq-100 basis") : (zh ? "标普 500 口径" : "S&P 500 basis"); }
+
+  // The full sentence: shown to the person, and shared only when they tick "include my plan".
+  function headline(v, t) {
+    var zh = isZh(), x = stressCtx(v);
+    if (!x) return "";
+    var w = x.w, mix = Math.round(w.base * 100) + "/" + Math.round(w.lev * 100) + "/" + Math.round(w.cash * 100);
+    var rules = E.checkRules({ w: w, age: v.age, salaried: v.salaried, withdrawing: v.withdrawing, pledge: v.pledge });
+    var bad = rules.filter(function (r) { return r.level !== "good"; }).length;
+    var lw = x.worst, name = zh ? lw.window.label.zh : lw.window.label.en;
+    return zh
+      ? v.age + " 岁、" + fmt(v.assets) + " 资产、年支出 " + fmt(v.expense) + "，配置 " + mix + "（Beta " + fmt(E.beta(w), 2) + "），" + (bad ? "有 " + bad + " 条规则提醒" : "规则全部通过") +
+        "。压力测试：重演「" + name + "」（" + basisName(x.series, zh) + "）约少 " + fmt(Math.abs(lw.amount)) + "（" + pctText(lw.rate) + "）；二倍 ETF 按两倍近似，实际可能更多。"
+      : "Age " + v.age + ", " + fmt(v.assets) + " in assets, " + fmt(v.expense) + " a year of spending, mix " + mix + " (beta " + fmt(E.beta(w), 2) + "): " + (bad ? bad + " rule warning(s)" : "all rules pass") +
+        ". Stress test: a repeat of the " + name + " (" + basisName(x.series, zh) + ") costs about " + fmt(Math.abs(lw.amount)) + " (" + pctText(lw.rate) + "); 2x funds approximated, real losses can be larger.";
+  }
+  // The default share sentence: no ages, no amounts, only a percentage.
+  function shareLine(v, t) {
+    var zh = isZh(), x = stressCtx(v);
+    if (!x) return "";
+    var lw = x.worst, name = zh ? lw.window.label.zh : lw.window.label.en;
+    return zh
+      ? "我的配置如果重演「" + name + "」，约亏 " + pctText(Math.abs(lw.rate)) + "（" + basisName(x.series, zh) + "）。"
+      : "My mix would lose about " + pctText(Math.abs(lw.rate)) + " in a repeat of the " + name + " (" + basisName(x.series, zh) + ").";
+  }
+
   ui = A.mount({
-    I18N: I18N, fields: fields, render: render, summary: summary,
+    I18N: I18N, fields: fields, render: render, summary: summary, headline: headline, shareLine: shareLine,
+    pitch: { zh: "如果 2008 年的行情重演，你的资产会亏多少？我拿这个工具测了自己的配置，你敢不敢测一下？免费，不用注册：", en: "If 2008 happened again, how much would your portfolio lose? I ran my mix through this free tool — dare you to run yours? No sign-up:" },
     next: [{ href: "/planner/margin/", key: "nMargin" }, { href: "/planner/rebalance/", key: "nRebal" }]
   });
 })();

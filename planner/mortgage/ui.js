@@ -98,8 +98,20 @@
     return rows.slice(0, 5);
   }
 
+  function headline(v, t) {
+    var zh = window.SiteLang ? window.SiteLang.get() !== "en" : document.documentElement.lang !== "en";
+    if (![v.i, v.t, v.pi, v.r, v.X, v.Y, v.P, v.cg, v.R, v.D, v.dp].every(isFinite) || v.Y < 1 || v.Y > 80) return "";
+    var y = E.yearlyExtra({ X: v.X, Y: v.Y, r: v.r, i: v.i, t: v.t });
+    var real = E.realRate(v.i, v.t, v.pi);
+    var ahead = y.diff >= 0;
+    return zh
+      ? "房贷税后实际利率 " + pct(real, 2) + "。每年多出 " + fmt(v.X) + "，" + v.Y + " 年后「" + (ahead ? "拿去投资" : "提前还贷") + "」多 " + fmt(Math.abs(y.diff)) + "。"
+      : "After-tax real mortgage rate: " + pct(real, 2) + ". With " + fmt(v.X) + " extra a year, " + (ahead ? "investing" : "prepaying") + " ends " + fmt(Math.abs(y.diff)) + " ahead after " + v.Y + " years.";
+  }
+
   A.mount({
-    I18N: I18N, fields: fields, render: render, summary: summary,
+    I18N: I18N, fields: fields, render: render, summary: summary, headline: headline,
+    pitch: { zh: "房贷到底该提前还，还是拿去投资？这个工具把两条路 N 年后的差额算给你看，免费：", en: "Prepay the mortgage or invest the cash? This tool shows the gap between the two paths after N years. Free:" },
     next: [{ href: "/planner/fi/", key: "nFI" }]
   });
 })();
