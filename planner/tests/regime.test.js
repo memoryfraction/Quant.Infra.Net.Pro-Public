@@ -35,4 +35,11 @@ module.exports = function (t) {
   t.close(wst.rate, Math.min.apply(null, all), 1e-12, "regime: worst() is the minimum rate");
   t.eq(R.worst({ base: 0, lev: 0, cash: 1 }, inv, "spx").rate, 0, "regime: worst() of cash is zero");
   t.ok(R.worst(w433, inv, "spx").amount < 0, "regime: worst() amount is negative");
+  // values recomputed from daily closes (^GSPC / ^NDX), peak to trough
+  const exp = { y2000: [-0.4915, -0.8290], y2007: [-0.5678, -0.5371], y2020: [-0.3392, -0.2803], y2022: [-0.2543, -0.3556] };
+  R.WINDOWS.forEach((w) => {
+    t.close(w.spxDrop, exp[w.id][0], 1e-4, "regime: " + w.id + " S&P drop matches the daily-close computation");
+    t.close(w.ndxDrop, exp[w.id][1], 1e-4, "regime: " + w.id + " Nasdaq-100 drop matches the daily-close computation");
+    t.eq(w.ndxApprox, false, "regime: " + w.id + " nothing is flagged approximate any more");
+  });
 };
